@@ -1,4 +1,4 @@
-package com.furstd.web_api;
+package org.furstd.web_api;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
