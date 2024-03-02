@@ -9,7 +9,6 @@ import org.furstd.web_api.model.book.Language;
 
 @Entity
 @NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
 public class Book {
@@ -40,4 +39,13 @@ public class Book {
     @JoinColumn(nullable = false)
     @ToString.Exclude
     private BookQuantity quantity;
+
+    public Book(String title, Author author, Genre genre, Language language, int pages, int publicationYear) {
+        this.title = title;
+        this.author = author;
+        this.genre = genre;
+        this.language = language;
+        this.pages = pages;
+        this.publicationYear = publicationYear;
+    }
 }

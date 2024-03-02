@@ -8,7 +8,6 @@ import java.util.List;
 
 @Entity
 @NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
 public class Reservation {
@@ -19,7 +18,7 @@ public class Reservation {
     @ManyToOne()
     @JoinColumn(nullable = false)
     @ToString.Exclude
-    private User user;
+    private AppUser appUser;
 
     @ManyToMany
     @JoinTable(
@@ -38,4 +37,12 @@ public class Reservation {
     @OneToOne()
     @ToString.Exclude
     private Penalty penalty;
+
+    public Reservation(AppUser appUser, List<Book> books, Date reservationDate, Date returnDate) {
+        this.appUser = appUser;
+        this.books = books;
+        this.reservationDate = reservationDate;
+        this.returnDate = returnDate;
+        this.penalty = null;
+    }
 }

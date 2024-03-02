@@ -14,7 +14,6 @@ import java.util.List;
 
 @Entity
 @NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
 public class Author {
@@ -35,4 +34,11 @@ public class Author {
 
     @OneToMany(mappedBy = "author")
     private final List<Book> books = Collections.emptyList();
+
+    public Author(String firstName, String lastName, Date birthDate, Nationality nationality) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.birthDate = birthDate;
+        this.nationality = nationality;
+    }
 }

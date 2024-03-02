@@ -7,7 +7,6 @@ import java.util.Date;
 
 @Entity
 @NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
 public class Penalty {
@@ -27,4 +26,10 @@ public class Penalty {
     @OneToOne()
     @ToString.Exclude
     private Reservation reservation;
+
+    public Penalty(Date creationDate, Date paymentDate) {
+        this.creationDate = creationDate;
+        this.paymentDate = paymentDate;
+        this.paid = false;
+    }
 }
