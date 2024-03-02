@@ -1,0 +1,16 @@
+server:
+  servlet:
+    context-path: /api/v1
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/nnpia
+    username: nnpia
+    password: nnpia
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
