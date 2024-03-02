@@ -35,12 +35,10 @@ public class Book {
 
     private int publicationYear;
 
-    @OneToOne()
-    @JoinColumn(nullable = false)
-    @ToString.Exclude
-    private BookQuantity quantity;
+    @Column(nullable = false)
+    private int quantity;
 
-    public Book(String title, Author author, Genre genre, Language language, int pages, int publicationYear) {
+    public Book(String title, Author author, Genre genre, Language language, int pages, int publicationYear, int quantity) {
         this.title = title;
         this.author = author;
         this.genre = genre;

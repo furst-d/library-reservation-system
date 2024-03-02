@@ -23,10 +23,6 @@ public class Penalty {
     @Column(nullable = false)
     private boolean paid;
 
-    @OneToOne()
-    @ToString.Exclude
-    private Reservation reservation;
-
     public Penalty(Date creationDate, Date paymentDate) {
         this.creationDate = creationDate;
         this.paymentDate = paymentDate;
