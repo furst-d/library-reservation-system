@@ -1,20 +1,20 @@
 package org.furstd.web_api.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
-@Entity
+@Data
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
-public class AppUser {
+@Entity
+public class AppUser implements UserDetails {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private int id;
@@ -34,16 +34,18 @@ public class AppUser {
     @Column(nullable = false)
     private Date birthDate;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JsonIgnore
+    @ToString.Exclude
     @JoinTable(
             name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
-    private List<Role> roles = new ArrayList<>();
+    private final List<Role> roles = new ArrayList<>();
 
     @OneToMany(mappedBy = "appUser")
-    private final List<Reservation> reservations = Collections.emptyList();
+    private final List<Reservation> reservations = new ArrayList<>();
 
     public AppUser(String email, String password, String firstName, String lastName, Date birthDate) {
         this.email = email;
@@ -55,5 +57,42 @@ public class AppUser {
 
     public void addRole(Role role) {
         roles.add(role);
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return roles.stream()
+                .map(role -> new SimpleGrantedAuthority(role.getName()))
+                .toList();
+    }
+
+    @Override
+    @JsonIgnore
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    @JsonIgnore
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    @JsonIgnore
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    @JsonIgnore
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    @JsonIgnore
+    public boolean isEnabled() {
+        return true;
     }
 }
