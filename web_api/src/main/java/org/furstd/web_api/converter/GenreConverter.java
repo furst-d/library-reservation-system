@@ -19,6 +19,6 @@ public class GenreConverter implements AttributeConverter<Genre, Integer> {
         if (id == null) {
             return null;
         }
-        return Genre.getById(id);
+        return Genre.getById(id).orElse(null);
     }
 }

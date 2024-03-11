@@ -5,6 +5,7 @@ import lombok.Getter;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @AllArgsConstructor
 @Getter
@@ -29,7 +30,7 @@ public enum Language {
         }
     }
 
-    public static Language getById(int id) {
-        return BY_ID.get(id);
+    public static Optional<Language> getById(int id) {
+        return Optional.ofNullable(BY_ID.get(id));
     }
 }

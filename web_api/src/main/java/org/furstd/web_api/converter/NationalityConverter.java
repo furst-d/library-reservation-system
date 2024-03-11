@@ -19,6 +19,6 @@ public class NationalityConverter implements AttributeConverter<Nationality, Int
         if (id == null) {
             return null;
         }
-        return Nationality.getById(id);
+        return Nationality.getById(id).orElse(null);
     }
 }

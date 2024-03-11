@@ -19,6 +19,6 @@ public class LanguageConverter implements AttributeConverter<Language, Integer> 
         if (id == null) {
             return null;
         }
-        return Language.getById(id);
+        return Language.getById(id).orElse(null);
     }
 }
