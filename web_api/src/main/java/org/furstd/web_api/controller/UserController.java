@@ -20,9 +20,17 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     private final IUserService userService;
 
+    private static final String NOT_FOUND_MESSAGE = "User not found!";
+
     @RequestMapping("{id}")
-    public AppUser getUser(@PathVariable int id) {
-        return userService.findById(id).orElseThrow(() -> new NotFoundException("User not found!"));
+    public ResponseEntity<Object> getUser(@PathVariable int id) {
+        return ResponseEntity.ok(userService.findById(id).orElseThrow(() -> new NotFoundException(NOT_FOUND_MESSAGE)));
+    }
+
+    @RequestMapping("{id}/reservations")
+    public ResponseEntity<Object> getUserReservations(@PathVariable int id) {
+        AppUser user = userService.findById(id).orElseThrow(() -> new NotFoundException(NOT_FOUND_MESSAGE));
+        return ResponseEntity.ok(user.getReservations());
     }
 
     @PostMapping("register")
