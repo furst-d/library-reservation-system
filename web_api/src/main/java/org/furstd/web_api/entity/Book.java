@@ -38,12 +38,17 @@ public class Book {
     @Column(nullable = false)
     private int quantity;
 
-    public Book(String title, Author author, Genre genre, Language language, int pages, int publicationYear, int quantity) {
+    @Column(nullable = false)
+    private String coverImageLink;
+
+    public Book(String title, Author author, Genre genre, Language language, int pages, int publicationYear, int quantity, String coverImageLink) {
         this.title = title;
         this.author = author;
         this.genre = genre;
         this.language = language;
         this.pages = pages;
         this.publicationYear = publicationYear;
+        this.quantity = quantity;
+        this.coverImageLink = coverImageLink;
     }
 }

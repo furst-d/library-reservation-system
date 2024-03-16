@@ -39,7 +39,9 @@ public enum Genre {
     BIOGRAPHIES(28, "Biografie"),
     AUTOBIOGRAPHIES(29, "Autobiografie"),
     FAIRYTALE(30, "Pohádka"),
-    DETECTIVE_NOVEL(31, "Detektivní román");
+    DETECTIVE_NOVEL(31, "Detektivní román"),
+    DRAMA(32, "Drama"),
+    SATIRE(33, "Satira");
 
     private final int id;
     private final String label;

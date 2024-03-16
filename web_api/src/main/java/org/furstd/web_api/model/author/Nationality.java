@@ -38,7 +38,8 @@ public enum Nationality {
     SLOVENIAN(26,"Slovinská"),
     RUSSIAN(27,"Ruská"),
     BRITISH(28,"Britská"),
-    AMERICAN(29,"Americká");
+    AMERICAN(29,"Americká"),
+    JAPANESE(30, "Japonská");
 
     private final int id;
     private final String label;
