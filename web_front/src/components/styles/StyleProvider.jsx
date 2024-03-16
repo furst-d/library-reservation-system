@@ -32,9 +32,9 @@ export default StyleProvider;
 
 export const theme = {
     bg: "#323232",
-    primary: "#3da2f3",
+    primary: "#0096FF",
     secondary: "#3f3f3f",
-    third: "#f3fff3",
+    third: "#fff",
     text_light: "#f3fff3",
     text_dark: "#111",
 };

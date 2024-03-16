@@ -3,20 +3,25 @@ import styled from "styled-components";
 import HamburgerMenu from "../styles/material-ui/icons/HamburgerMenu";
 import BurgerNavStyle from "../styles/navbar/BurgerNav";
 import CloseButton from "../styles/material-ui/icons/CloseButton";
-import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
 import {NavLink} from "react-router-dom";
 
 const NavItemsSection = ({openHamburgerMenu, setOpenHamburgerMenu}) => {
     const mapPages = () => {
         return (
-        <>
-            <li>
-                <StyledLinkStyle to="/" onClick={() => setOpenHamburgerMenu(false)}
-                                 className="link-active">
-                    Katalog
-                </StyledLinkStyle>
-            </li>
-        </>
+            <>
+                <li>
+                    <StyledLinkStyle to="/" onClick={() => setOpenHamburgerMenu(false)}
+                                     className="link-active">
+                        Seznam knih
+                    </StyledLinkStyle>
+                </li>
+                <li>
+                    <StyledLinkStyle to="/authors" onClick={() => setOpenHamburgerMenu(false)}
+                                     className="link-active">
+                        Seznam autorů
+                    </StyledLinkStyle>
+                </li>
+            </>
         );
     }
 
@@ -24,9 +29,9 @@ const NavItemsSection = ({openHamburgerMenu, setOpenHamburgerMenu}) => {
         <HeaderStyle>
             <HamburgerMenu onClick={() => {
                 setOpenHamburgerMenu(true);
-            }} />
+            }}/>
             <BurgerNavStyle show={openHamburgerMenu}>
-                <CloseButtonWrapperStyle>
+            <CloseButtonWrapperStyle>
                     <CloseButton onClick={() => setOpenHamburgerMenu(false)} />
                 </CloseButtonWrapperStyle>
                 {mapPages()}

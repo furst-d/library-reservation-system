@@ -1,17 +1,17 @@
 import React from 'react';
 import {Helmet} from "react-helmet";
 
-const BookCatalogPage = props => {
+const AuthorCatalogPage = props => {
     return (
         <>
             <Helmet>
-                <title>Seznam knih</title>
+                <title>Seznam autorů</title>
             </Helmet>
             <div>
-                Nějaká kniha
+                Nějaký autor
             </div>
         </>
     );
 };
 
-export default BookCatalogPage;
+export default AuthorCatalogPage;
