@@ -71,7 +71,7 @@ export const StyledLinkStyle = styled(NavLink)`
   cursor: pointer;
   transition: 0.3s;
 
-  &:hover {
+  &:focus {
     background-color: ${p => p.theme.primary};
   }
   

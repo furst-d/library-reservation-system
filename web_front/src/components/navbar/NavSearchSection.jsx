@@ -49,7 +49,8 @@ const SearchInputStyle = styled.input`
     line-height: 1.5;
     height: 2rem;
     border: 2px solid #f4f4f4;
-    &:hover {
+    
+    &:focus {
         border-color: ${p => p.theme.primary};
         background: #fff;
     }

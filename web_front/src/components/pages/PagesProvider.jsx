@@ -6,6 +6,8 @@ import BookCatalogPage from "../../pages/project/BookCatalogPage";
 import NotFoundPage from "../../pages/abstract/NotFoundPage";
 import AuthorCatalogPage from "../../pages/project/AuthorCatalogPage";
 import SearchPage from "../../pages/project/SearchPage";
+import ProfilePage from "../../pages/project/ProfilePage";
+import ProfileSettingsPage from "../../pages/project/ProfileSettingsPage";
 
 const PagesProvider = () => {
     return (
@@ -17,6 +19,8 @@ const PagesProvider = () => {
                         <Route path="/"  element={<BookCatalogPage />} />
                         <Route path="/authors"  element={<AuthorCatalogPage />} />
                         <Route path="/search"  element={<SearchPage />} />
+                        <Route path="/profile"  element={<ProfilePage />} />
+                        <Route path="/profile-settings"  element={<ProfileSettingsPage />} />
                         <Route path="*"  element={<NotFoundPage />} />
                     </Routes>
                 </ContentWrapper>
