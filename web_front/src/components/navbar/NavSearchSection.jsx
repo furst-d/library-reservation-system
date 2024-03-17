@@ -2,13 +2,19 @@ import React, {useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from "styled-components";
 import SearchIcon from '@mui/icons-material/Search';
+import PropTypes from "prop-types";
 
-const NavSearchSection = ({openHamburgerMenu, setOpenHamburgerMenu}) => {
+const NavSearchSection = ({setOpenHamburgerMenu}) => {
     const [searchTerm, setSearchTerm] = useState('');
     const navigate = useNavigate();
 
     const handleInputChange = (e) => {
+        setOpenHamburgerMenu(false);
         setSearchTerm(e.target.value);
+    };
+
+    const handleFocus = () => {
+        setOpenHamburgerMenu(false);
     };
 
     const handleSubmit = (e) => {
@@ -19,11 +25,15 @@ const NavSearchSection = ({openHamburgerMenu, setOpenHamburgerMenu}) => {
     return (
         <SearchFormStyle type="search" onSubmit={handleSubmit}>
             <SearchIconStyle />
-            <SearchInputStyle type="search" placeholder="Hledat..." value={searchTerm} onChange={handleInputChange} />
+            <SearchInputStyle type="search" placeholder="Hledat..." value={searchTerm} onFocus={handleFocus} onChange={handleInputChange} />
             <SearchButtonStyle type="submit">Hledat</SearchButtonStyle>
         </SearchFormStyle>
     );
 };
+
+NavSearchSection.propTypes = {
+    setOpenHamburgerMenu: PropTypes.func.isRequired,
+}
 
 export default NavSearchSection;
 

@@ -8,6 +8,8 @@ import AuthorCatalogPage from "../../pages/project/AuthorCatalogPage";
 import SearchPage from "../../pages/project/SearchPage";
 import ProfilePage from "../../pages/project/ProfilePage";
 import ProfileSettingsPage from "../../pages/project/ProfileSettingsPage";
+import LoginPage from "../../pages/project/LoginPage";
+import RegisterPage from "../../pages/project/RegisterPage";
 
 const PagesProvider = () => {
     return (
@@ -21,6 +23,8 @@ const PagesProvider = () => {
                         <Route path="/search"  element={<SearchPage />} />
                         <Route path="/profile"  element={<ProfilePage />} />
                         <Route path="/profile-settings"  element={<ProfileSettingsPage />} />
+                        <Route path="/login" element={<LoginPage />} />
+                        <Route path="register" element={<RegisterPage />} />
                         <Route path="*"  element={<NotFoundPage />} />
                     </Routes>
                 </ContentWrapper>
@@ -45,4 +49,9 @@ const ContentWrapper = styled.div`
     justify-content: center;
     max-width: 90em;
     width: 100%;
+
+    @media (min-width: 768px) {
+        justify-content: flex-start;
+        padding: 0 2em;
+    }
 `

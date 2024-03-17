@@ -1,5 +1,5 @@
 import React from 'react';
-import {Helmet} from "react-helmet";
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 import {useLocation} from "react-router-dom";
 
 const useQuery = () => {
@@ -11,14 +11,14 @@ const SearchPage = props => {
     const searchTerm = query.get('phrase');
 
     return (
-        <>
+        <HelmetProvider>
             <Helmet>
                 <title>Výsledky hledání</title>
             </Helmet>
             <div>
                 Hledám: {searchTerm}
             </div>
-        </>
+        </HelmetProvider>
     );
 };
 

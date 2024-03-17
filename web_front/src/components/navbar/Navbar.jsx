@@ -16,7 +16,7 @@ const Navbar = () => {
             <TopRowStyle>
                 <NavItemsSection openHamburgerMenu={openHamburgerMenu} setOpenHamburgerMenu={updateOpenHamburgerMenu}/>
                 <NavSearchWrapperStyle>
-                    <NavSearchSection />
+                    <NavSearchSection setOpenHamburgerMenu={updateOpenHamburgerMenu} />
                 </NavSearchWrapperStyle>
                 <NavUserSection setOpenHamburgerMenu={updateOpenHamburgerMenu}/>
             </TopRowStyle>

@@ -12,7 +12,7 @@ const BurgerNavStyle = styled.div`
   display: flex;
   flex-direction: column;
   padding: 20px;
-  transform: ${props => props.show ? 'translateX(0)' : 'translateX(-100%)'};
+  transform: ${props => props.$show ? 'translateX(0)' : 'translateX(-100%)'};
   transition: transform 0.2s;
   overflow-y:scroll;
   

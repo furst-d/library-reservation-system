@@ -1,16 +1,16 @@
 import React from 'react';
-import {Helmet} from "react-helmet";
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 
-const AuthorCatalogPage = props => {
+const AuthorCatalogPage = () => {
     return (
-        <>
+        <HelmetProvider>
             <Helmet>
                 <title>Seznam autorů</title>
             </Helmet>
             <div>
                 Nějaký autor
             </div>
-        </>
+        </HelmetProvider>
     );
 };
 

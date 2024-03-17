@@ -3,23 +3,24 @@ import styled from "styled-components";
 import HamburgerMenu from "../styles/material-ui/icons/HamburgerMenu";
 import BurgerNavStyle from "../styles/navbar/BurgerNav";
 import CloseButton from "../styles/material-ui/icons/CloseButton";
-import {NavLink} from "react-router-dom";
+import {NavbarLinkStyle} from "../styles/navbar/Navbar";
+import PropTypes from "prop-types";
 
 const NavItemsSection = ({openHamburgerMenu, setOpenHamburgerMenu}) => {
     const mapPages = () => {
         return (
             <>
                 <li>
-                    <StyledLinkStyle to="/" onClick={() => setOpenHamburgerMenu(false)}
+                    <NavbarLinkStyle to="/" onClick={() => setOpenHamburgerMenu(false)}
                                      className="link-active">
                         Seznam knih
-                    </StyledLinkStyle>
+                    </NavbarLinkStyle>
                 </li>
                 <li>
-                    <StyledLinkStyle to="/authors" onClick={() => setOpenHamburgerMenu(false)}
+                    <NavbarLinkStyle to="/authors" onClick={() => setOpenHamburgerMenu(false)}
                                      className="link-active">
                         Seznam autorů
-                    </StyledLinkStyle>
+                    </NavbarLinkStyle>
                 </li>
             </>
         );
@@ -30,7 +31,7 @@ const NavItemsSection = ({openHamburgerMenu, setOpenHamburgerMenu}) => {
             <HamburgerMenu onClick={() => {
                 setOpenHamburgerMenu(true);
             }}/>
-            <BurgerNavStyle show={openHamburgerMenu}>
+            <BurgerNavStyle $show={openHamburgerMenu}>
             <CloseButtonWrapperStyle>
                     <CloseButton onClick={() => setOpenHamburgerMenu(false)} />
                 </CloseButtonWrapperStyle>
@@ -42,6 +43,11 @@ const NavItemsSection = ({openHamburgerMenu, setOpenHamburgerMenu}) => {
         </HeaderStyle>
     );
 };
+
+NavItemsSection.propTypes = {
+    openHamburgerMenu: PropTypes.bool.isRequired,
+    setOpenHamburgerMenu: PropTypes.func.isRequired,
+}
 
 export default NavItemsSection;
 
@@ -61,26 +67,4 @@ const MenuStyle = styled.ul`
 const CloseButtonWrapperStyle = styled.div`
   display: flex;
   justify-content: flex-end;
-`
-
-export const StyledLinkStyle = styled(NavLink)`
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 15px 12px;
-  cursor: pointer;
-  transition: 0.3s;
-
-  &:focus {
-    background-color: ${p => p.theme.primary};
-  }
-  
-  &:-webkit-any-link {
-    color: unset;
-    text-decoration: none;
-  }
-  
-  &.active {
-    background: ${p => p.theme.primary};
-  }
 `

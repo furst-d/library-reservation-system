@@ -1,16 +1,17 @@
 import React from 'react';
-import {Helmet} from "react-helmet";
-import styled from "styled-components";
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 import {ContentStyle} from "../../components/styles/content/Content";
 
-const NotFoundPage = props => {
+const NotFoundPage = () => {
     return (
-        <ContentStyle>
-            <Helmet>
-                <title>Stránka nenalezena</title>
-            </Helmet>
-            Nenalezeno
-        </ContentStyle>
+        <HelmetProvider>
+            <ContentStyle>
+                <Helmet>
+                    <title>Stránka nenalezena</title>
+                </Helmet>
+                Nenalezeno
+            </ContentStyle>
+        </HelmetProvider>
     );
 };
 

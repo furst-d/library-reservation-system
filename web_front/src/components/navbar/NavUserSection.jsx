@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import styled from "styled-components";
 import {NavLink} from "react-router-dom";
 import Menu from "../styles/material-ui/components/menu/Menu";
@@ -8,11 +8,14 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutIcon from '@mui/icons-material/Logout';
 import {Divider} from "@mui/material";
 import Avatar from "../styles/material-ui/components/avatar/Avatar";
+import {checkAuth} from "../../utils/auth/AuthManager";
+import {NavbarLinkStyle} from "../styles/navbar/Navbar";
+import PropTypes from "prop-types";
 
 const NavUserSection = ({setOpenHamburgerMenu}) => {
-
-    const [anchorProfile, setAnchorProfile] = React.useState(null);
+    const [anchorProfile, setAnchorProfile] = useState(null);
     const openProfile = Boolean(anchorProfile);
+
     const handleClickProfile = (event) => {
         setAnchorProfile(event.currentTarget);
         setOpenHamburgerMenu(false);
@@ -27,36 +30,43 @@ const NavUserSection = ({setOpenHamburgerMenu}) => {
 
     return (
         <UserSectionStyle>
-            {/*{avatar*/}
-            {/*    ?*/}
-            {/*    <Avatar src={process.env.REACT_APP_BASE_URL + "/images/" + avatar} onClick={handleClickProfile} />*/}
-            {/*    :*/}
-            {/*    <Avatar onClick={handleClickProfile} />*/}
-            {/*}*/}
-            <Avatar onClick={handleClickProfile} />
-            <Menu
-                anchorEl={anchorProfile}
-                open={openProfile}
-                onClose={handleCloseProfile}>
-                <StyledLinkStyle to="/profile">
-                    <MenuItem onClick={handleCloseProfile} disableRipple>
-                        <AccountBoxIcon />Profil
-                    </MenuItem>
-                </StyledLinkStyle>
-                <StyledLinkStyle to="/profile-settings">
-                    <MenuItem onClick={handleCloseProfile} disableRipple>
-                        <SettingsIcon />Nastavení
-                    </MenuItem>
-                </StyledLinkStyle>
-                <Divider />
-                <MenuItem onClick={handleLogout} disableRipple>
-                    <LogoutIcon style={{color: "red"}} />
-                    <span style={{color: "red"}}> Odhlásit se</span>
-                </MenuItem>
-            </Menu>
+            {checkAuth()
+                ?
+                <>
+                    <Avatar onClick={handleClickProfile} />
+                    <Menu
+                        anchorEl={anchorProfile}
+                        open={openProfile}
+                        onClose={handleCloseProfile}>
+                        <StyledLinkStyle to="/profile">
+                            <MenuItem onClick={handleCloseProfile} disableRipple>
+                                <AccountBoxIcon />Profil
+                            </MenuItem>
+                        </StyledLinkStyle>
+                        <StyledLinkStyle to="/profile-settings">
+                            <MenuItem onClick={handleCloseProfile} disableRipple>
+                                <SettingsIcon />Nastavení
+                            </MenuItem>
+                        </StyledLinkStyle>
+                        <Divider />
+                        <MenuItem onClick={handleLogout} disableRipple>
+                            <LogoutIcon style={{color: "red"}} />
+                            <span style={{color: "red"}}> Odhlásit se</span>
+                        </MenuItem>
+                    </Menu>
+                </>
+                :
+                <NavbarLinkStyle to="/login" className="link-active">
+                    Přihlásit se
+                </NavbarLinkStyle>
+            }
         </UserSectionStyle>
     );
 };
+
+NavUserSection.propTypes = {
+    setOpenHamburgerMenu: PropTypes.func.isRequired,
+}
 
 export default NavUserSection;
 
@@ -76,3 +86,4 @@ export const StyledLinkStyle = styled(NavLink)`
     text-decoration: none;
   }
 `
+

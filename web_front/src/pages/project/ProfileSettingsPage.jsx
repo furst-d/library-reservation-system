@@ -1,17 +1,17 @@
 import React from 'react';
-import {Helmet} from "react-helmet";
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 
-const ProfileSettingsPage = props => {
+const ProfileSettingsPage = () => {
 
     return (
-        <>
+        <HelmetProvider>
             <Helmet>
                 <title>Uživatelské nastavení</title>
             </Helmet>
             <div>
                 Uživatelské nastavení
             </div>
-        </>
+        </HelmetProvider>
     );
 };
 
