@@ -29,28 +29,27 @@ public class AuthorController {
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_MESSAGE)));
     }
 
+    @PostMapping("")
+    public ResponseEntity<Object> createAuthor(@RequestBody AuthorDTO authorDTO) {
+        Nationality nationality = Nationality.getById(authorDTO.getNationalityId())
+                .orElseThrow(() -> new NotFoundException("Nationality not found!"));
+
+        Author author = new Author(authorDTO.getFirstName(), authorDTO.getLastName(), authorDTO.getBirthDate(), nationality);
+        authorService.updateAuthor(author);
+        return ResponseEntity.ok(new Msg("Author was created successfully!"));
+    }
+
     @PutMapping("{id}")
     public ResponseEntity<Object> updateAuthor(@PathVariable int id, @RequestBody AuthorDTO authorDTO) {
         Author author = authorService.findById(id)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_MESSAGE));
+        Nationality nationality = Nationality.getById(authorDTO.getNationalityId())
+                .orElseThrow(() -> new NotFoundException("Nationality not found!"));
 
-        if (authorDTO.getFirstName() != null) {
-            author.setFirstName(authorDTO.getFirstName());
-        }
-
-        if (authorDTO.getLastName() != null) {
-            author.setFirstName(authorDTO.getLastName());
-        }
-
-        if (authorDTO.getNationalityId() != 0) {
-            Nationality nationality = Nationality.getById(authorDTO.getNationalityId())
-                    .orElseThrow(() -> new NotFoundException("Genre not found!"));
-            author.setNationality(nationality);
-        }
-
-        if (authorDTO.getBirthDate() != null) {
-            author.setBirthDate(authorDTO.getBirthDate());
-        }
+        author.setFirstName(authorDTO.getFirstName());
+        author.setLastName(authorDTO.getLastName());
+        author.setNationality(nationality);
+        author.setBirthDate(authorDTO.getBirthDate());
 
         authorService.updateAuthor(author);
         return ResponseEntity.ok(new Msg("Author was updated successfully!"));

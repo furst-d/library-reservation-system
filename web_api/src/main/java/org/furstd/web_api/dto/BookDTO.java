@@ -1,6 +1,7 @@
 package org.furstd.web_api.dto;
 
-import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,24 +9,29 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class BookDTO {
+    @NotBlank(message = "Title cannot be null or blank")
     @Size(max = 255, message = "Title cannot exceed 255 characters")
     private String title;
 
-    @PositiveOrZero(message = "Author id must be a positive number")
+    @Positive(message = "Author id must be a positive number")
     private int authorId;
 
-    @PositiveOrZero(message = "Genre id must be a positive number")
+    @Positive(message = "Genre id must be a positive number")
     private int genreId;
 
-    @PositiveOrZero(message = "Language id must be a positive number")
+    @Positive(message = "Language id must be a positive number")
     private int languageId;
 
-    @PositiveOrZero(message = "Pages must be a positive number")
+    @Positive(message = "Pages must be a positive number")
     private int pages;
 
-    @PositiveOrZero(message = "Publication year must be a positive number")
+    @Positive(message = "Publication year must be a positive number")
     private int publicationYear;
 
-    @PositiveOrZero(message = "Quantity must be a positive number")
+    @Positive(message = "Quantity must be a positive number")
     private int quantity;
+
+    @NotBlank(message = "Cover image link cannot be null or blank")
+    @Size(max = 255, message = "Cover image link cannot exceed 255 characters")
+    private String coverImageLink;
 }

@@ -27,7 +27,7 @@ public class UserService implements IUserService {
 
     @Override
     public void createUser(AppUser appUser) {
-        Role role = roleRepository.findByName("user").orElseThrow(() -> new NotFoundException("Role not found"));
+        Role role = roleRepository.findByName("USER").orElseThrow(() -> new NotFoundException("Role not found"));
         appUser.addRole(role);
         appUser.setPassword(passwordEncoder.encode(appUser.getPassword()));
         userRepository.save(appUser);

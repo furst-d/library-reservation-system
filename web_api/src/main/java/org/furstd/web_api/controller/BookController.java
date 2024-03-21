@@ -32,44 +32,39 @@ public class BookController {
         return ResponseEntity.ok(bookService.findById(id).orElseThrow(() -> new NotFoundException(NOT_FOUND_MESSAGE)));
     }
 
+    @PostMapping("")
+    public ResponseEntity<Object> createBook(@RequestBody BookDTO bookDTO) {
+        Author author = authorService.findById(bookDTO.getAuthorId())
+                .orElseThrow(() -> new NotFoundException("Author not found!"));
+        Genre genre = Genre.getById(bookDTO.getGenreId())
+                .orElseThrow(() -> new NotFoundException("Genre not found!"));
+        Language language = Language.getById(bookDTO.getLanguageId())
+                .orElseThrow(() -> new NotFoundException("Language not found!"));
+
+        Book book = new Book(bookDTO.getTitle(), author, genre, language, bookDTO.getPages(), bookDTO.getPublicationYear(), bookDTO.getQuantity(), bookDTO.getCoverImageLink());
+        bookService.updateBook(book);
+        return ResponseEntity.ok(new Msg("Book was created successfully!"));
+    }
+
     @PutMapping("{id}")
     public ResponseEntity<Object> updateBook(@PathVariable int id, @RequestBody BookDTO bookDTO) {
         Book book = bookService.findById(id)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_MESSAGE));
 
-        if (bookDTO.getTitle() != null) {
-            book.setTitle(bookDTO.getTitle());
-        }
+        Author author = authorService.findById(bookDTO.getAuthorId())
+                .orElseThrow(() -> new NotFoundException("Author not found!"));
+        Genre genre = Genre.getById(bookDTO.getGenreId())
+                .orElseThrow(() -> new NotFoundException("Genre not found!"));
+        Language language = Language.getById(bookDTO.getLanguageId())
+                .orElseThrow(() -> new NotFoundException("Language not found!"));
 
-        if (bookDTO.getAuthorId() != 0) {
-            Author author = authorService.findById(bookDTO.getAuthorId())
-                    .orElseThrow(() -> new NotFoundException("Author not found!"));
-            book.setAuthor(author);
-        }
-
-        if (bookDTO.getGenreId() != 0) {
-            Genre genre = Genre.getById(bookDTO.getGenreId())
-                    .orElseThrow(() -> new NotFoundException("Genre not found!"));
-            book.setGenre(genre);
-        }
-
-        if (bookDTO.getLanguageId() != 0) {
-            Language language = Language.getById(bookDTO.getLanguageId())
-                    .orElseThrow(() -> new NotFoundException("Language not found!"));
-            book.setLanguage(language);
-        }
-
-        if (bookDTO.getPages() != 0) {
-            book.setPages(bookDTO.getPages());
-        }
-
-        if (bookDTO.getPublicationYear() != 0) {
-            book.setPublicationYear(bookDTO.getPublicationYear());
-        }
-
-        if (bookDTO.getQuantity() != 0) {
-            book.setQuantity(bookDTO.getQuantity());
-        }
+        book.setTitle(bookDTO.getTitle());
+        book.setAuthor(author);
+        book.setGenre(genre);
+        book.setLanguage(language);
+        book.setPages(bookDTO.getPages());
+        book.setPublicationYear(bookDTO.getPublicationYear());
+        book.setQuantity(bookDTO.getQuantity());
 
         bookService.updateBook(book);
         return ResponseEntity.ok(new Msg("Book was updated successfully!"));

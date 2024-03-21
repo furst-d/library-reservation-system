@@ -48,6 +48,6 @@ public class UserController {
     @PostMapping("login")
     public ResponseEntity<Object> login(@Valid @RequestBody LoginDTO loginDTO) {
         AuthenticationResponseDTO response = userService.login(loginDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        return ResponseEntity.ok(response);
     }
 }

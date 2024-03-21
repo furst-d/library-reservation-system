@@ -31,6 +31,7 @@ public class SecurityConfiguration {
                                 "/authors/**"
 
                         ).permitAll()
+                        .requestMatchers(HttpMethod.POST, "/books/**", "/authors/**").hasAuthority("EDITOR")
                         .requestMatchers(
                                 "/users/register",
                                 "/users/login"
@@ -40,6 +41,7 @@ public class SecurityConfiguration {
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationprovider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+
 
 
         return http.build();

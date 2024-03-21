@@ -29,14 +29,26 @@ public class DatabaseRunner implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        Role admin = new Role("admin");
-        Role user = new Role("user");
-        roleRepository.save(admin);
-        roleRepository.save(user);
+        Role adminRole = new Role("ADMIN");
+        Role editorRole = new Role("EDITOR");
+        Role userRole = new Role("USER");
 
-        AppUser adminUser = new AppUser("admin@test.cz", "test", "Dominik", "Fűrst", Date.from(LocalDate.of(2000, 4, 3).atStartOfDay(ZoneId.systemDefault()).toInstant()));
-        adminUser.addRole(admin);
+        roleRepository.save(userRole);
+        roleRepository.save(editorRole);
+        roleRepository.save(adminRole);
+
+        Date birthDate = Date.from(LocalDate.of(2000, 4, 3).atStartOfDay(ZoneId.systemDefault()).toInstant());
+        AppUser adminUser = new AppUser("admin@test.cz", "test", "Admin", "Adminovič", birthDate);
+        adminUser.addRole(editorRole);
+        adminUser.addRole(adminRole);
         userService.createUser(adminUser);
+
+        AppUser editor = new AppUser("editor@test.cz", "test", "Editor", "Editovič", birthDate);
+        editor.addRole(editorRole);
+        userService.createUser(editor);
+
+        AppUser user = new AppUser("user@test.cz", "test", "User", "Userovič", birthDate);
+        userService.createUser(user);
 
         Author tolkien = new Author("J.R.R.", "Tolkien", Date.from(LocalDate.of(1892, 1, 3).atStartOfDay(ZoneId.systemDefault()).toInstant()), Nationality.BRITISH);
         Author capek = new Author("Karel", "Capek", Date.from(LocalDate.of(1890, 1, 9).atStartOfDay(ZoneId.systemDefault()).toInstant()), Nationality.CZECH);
