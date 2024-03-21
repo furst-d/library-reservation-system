@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.Date;
 
-@RequestMapping("reservations")
+@RequestMapping("profile/reservations")
 @RestController
-public class ProfileReservationController extends ProfileController {
+public class ProfileReservationController extends PrivateController {
     private final IReservationService reservationService;
 
     public ProfileReservationController(IUserService userService, IReservationService reservationService) {
