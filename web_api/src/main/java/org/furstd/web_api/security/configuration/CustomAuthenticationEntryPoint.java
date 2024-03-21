@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.Setter;
+import org.furstd.web_api.model.util.Msg;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 
@@ -25,7 +26,7 @@ public class CustomAuthenticationEntryPoint implements org.springframework.secur
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("status", "error");
         body.put("code", HttpServletResponse.SC_UNAUTHORIZED);
-        body.put("message", message);
+        body.put("payload", new Msg(message));
 
         response.setContentType("application/json");
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);

@@ -5,6 +5,7 @@ import org.furstd.web_api.entity.Book;
 import org.furstd.web_api.model.author.Nationality;
 import org.furstd.web_api.model.book.Genre;
 import org.furstd.web_api.model.book.Language;
+import org.furstd.web_api.security.configuration.CustomAuthenticationEntryPoint;
 import org.furstd.web_api.security.configuration.SecurityConfiguration;
 import org.furstd.web_api.service.author.IAuthorService;
 import org.furstd.web_api.service.book.IBookService;
@@ -44,6 +45,9 @@ class BookControllerTest {
 
     @MockBean
     private AuthenticationProvider authenticationprovider;
+
+    @MockBean
+    private CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
     @Test
     void getBooksTest() throws Exception {

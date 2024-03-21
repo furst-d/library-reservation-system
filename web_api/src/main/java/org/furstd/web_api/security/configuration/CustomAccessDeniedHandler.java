@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.furstd.web_api.model.util.Msg;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 
@@ -17,7 +18,7 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("status", "error");
         body.put("code", HttpServletResponse.SC_FORBIDDEN);
-        body.put("message", "Insufficient permissions");
+        body.put("payload", new Msg("Insufficient permissions"));
 
         response.setContentType("application/json");
         response.setStatus(HttpServletResponse.SC_FORBIDDEN);
