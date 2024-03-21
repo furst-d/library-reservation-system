@@ -42,11 +42,30 @@ This application uses PostgreSQL, running in a Docker container for database ser
 
 This will start a PostgreSQL instance with the database `nnpia`, accessible on `localhost:5432` with username and password both set to `nnpia`.
 
-## Database Scheme
+## Database Scheme and Initialization
 
 The database schema is visualized in the following diagram:
 
 ![Database Schema](docs/database-diagram.png)
+
+### Database Initialization
+
+Upon application startup, the `DatabaseRunner` component automatically creates a new schema and populates the database with predefined data, including roles, users, authors, and books. This functionality ensures a ready-to-use application environment for immediate exploration or development.
+
+The initialization process involves creating roles such as `ADMIN`, `EDITOR`, and `USER`, along with sample users for each role. Additionally, it populates the database with a variety of authors and books, setting the foundation for the library's catalog.
+
+### Configuring Entity Persistence
+
+In the `application.yml` file, the `jpa.hibernate.ddl-auto` property can be set to manage the schema generation and update behavior automatically. This property supports values such as `create`, `create-drop`, `validate`, and `update`, providing flexibility in how Hibernate interacts with the database schema:
+
+- `create`: Builds a new database schema on every application startup.
+- `update`: Updates the schema based on entity changes without destroying existing data.
+- `create-drop`: Creates the schema upon startup and drops it when the application shuts down.
+- `validate`: Validates the schema against the entity mappings without making changes to the database.
+
+For development purposes, setting `jpa.hibernate.ddl-auto` to `update` or `create` might be useful for automatically applying entity changes to the database schema. However, for production environments, `validate` is often preferred to avoid unintended schema modifications.
+
+Remember, the `DatabaseRunner` and `jpa.hibernate.ddl-auto` configuration work together to streamline the initial setup and ongoing management of your application's data model.
 
 ## Configuration
 
