@@ -1,5 +1,6 @@
 package org.furstd.web_api.security.configuration;
 
+import io.jsonwebtoken.MalformedJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,6 +24,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final IJwtService jwtService;
     private final UserDetailsService userDetailsService;
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
     @Override
     protected void doFilterInternal(
@@ -34,24 +36,35 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String jwt;
         final String username;
 
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            filterChain.doFilter(request, response);
+        try {
+            if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+                filterChain.doFilter(request, response);
+                return;
+            }
+            jwt = authHeader.substring(7);
+            username = jwtService.extractUsername(jwt);
+            if(username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
+                if(jwtService.isTokenValid(jwt, userDetails)) {
+                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                            userDetails,
+                            null,
+                            userDetails.getAuthorities()
+                    );
+                    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContextHolder.getContext().setAuthentication(authToken);
+                }
+            }
+        } catch (MalformedJwtException e) {
+            customAuthenticationEntryPoint.setMessage("Invalid token");
+            customAuthenticationEntryPoint.commence(request, response, null);
+            return;
+
+        } catch (Exception e) {
+            customAuthenticationEntryPoint.commence(request, response, null);
             return;
         }
-        jwt = authHeader.substring(7);
-        username = jwtService.extractUsername(jwt);
-        if(username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
-            if(jwtService.isTokenValid(jwt, userDetails)) {
-                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                        userDetails,
-                        null,
-                        userDetails.getAuthorities()
-                );
-                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authToken);
-            }
-        }
+
         filterChain.doFilter(request, response);
     }
 }

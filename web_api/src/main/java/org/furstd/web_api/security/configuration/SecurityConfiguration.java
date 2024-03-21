@@ -24,6 +24,10 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
+                .exceptionHandling(exceptionHandling -> {
+                    exceptionHandling.authenticationEntryPoint(new CustomAuthenticationEntryPoint());
+                    exceptionHandling.accessDeniedHandler(new CustomAccessDeniedHandler());
+                })
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.GET, "/books/**", "/authors/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/users/register", "/users/login").permitAll()
