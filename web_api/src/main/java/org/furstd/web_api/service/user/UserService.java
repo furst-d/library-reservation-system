@@ -14,6 +14,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -31,6 +32,16 @@ public class UserService implements IUserService {
         appUser.addRole(role);
         appUser.setPassword(passwordEncoder.encode(appUser.getPassword()));
         userRepository.save(appUser);
+    }
+
+    @Override
+    public void updateUser(AppUser appUser) {
+        userRepository.save(appUser);
+    }
+
+    @Override
+    public void deleteUser(AppUser appUser) {
+        userRepository.delete(appUser);
     }
 
     @Override
@@ -57,5 +68,12 @@ public class UserService implements IUserService {
     @Override
     public Optional<AppUser> findByEmail(String email) {
         return userRepository.findByEmail(email);
+    }
+
+    @Override
+    public void setRoles(AppUser appUser, List<Role> roles) {
+        for (Role role : roles) {
+            appUser.addRole(role);
+        }
     }
 }

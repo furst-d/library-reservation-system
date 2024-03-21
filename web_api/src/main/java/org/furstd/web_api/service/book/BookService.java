@@ -23,6 +23,11 @@ public class BookService implements IBookService {
     }
 
     @Override
+    public List<Book> findByIds(List<Integer> ids) {
+        return bookRepository.findByIds(ids);
+    }
+
+    @Override
     public void updateBook(Book book) {
         bookRepository.save(book);
     }

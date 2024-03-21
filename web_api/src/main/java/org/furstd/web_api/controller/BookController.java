@@ -10,6 +10,7 @@ import org.furstd.web_api.model.book.Language;
 import org.furstd.web_api.model.util.Msg;
 import org.furstd.web_api.service.author.IAuthorService;
 import org.furstd.web_api.service.book.IBookService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,7 +44,7 @@ public class BookController {
 
         Book book = new Book(bookDTO.getTitle(), author, genre, language, bookDTO.getPages(), bookDTO.getPublicationYear(), bookDTO.getQuantity(), bookDTO.getCoverImageLink());
         bookService.updateBook(book);
-        return ResponseEntity.ok(new Msg("Book was created successfully!"));
+        return ResponseEntity.status(HttpStatus.CREATED).body(new Msg("Book was created successfully!"));
     }
 
     @PutMapping("{id}")

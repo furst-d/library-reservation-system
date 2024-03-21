@@ -7,6 +7,7 @@ import org.furstd.web_api.exceptions.NotFoundException;
 import org.furstd.web_api.model.author.Nationality;
 import org.furstd.web_api.model.util.Msg;
 import org.furstd.web_api.service.author.IAuthorService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,7 +37,7 @@ public class AuthorController {
 
         Author author = new Author(authorDTO.getFirstName(), authorDTO.getLastName(), authorDTO.getBirthDate(), nationality);
         authorService.updateAuthor(author);
-        return ResponseEntity.ok(new Msg("Author was created successfully!"));
+        return ResponseEntity.status(HttpStatus.CREATED).body(new Msg("Author was created successfully!"));
     }
 
     @PutMapping("{id}")

@@ -1,10 +1,17 @@
 package org.furstd.web_api.service.reservation;
 
 import lombok.RequiredArgsConstructor;
+import org.furstd.web_api.entity.AppUser;
+import org.furstd.web_api.entity.Book;
 import org.furstd.web_api.entity.Reservation;
+import org.furstd.web_api.exceptions.ConflictException;
+import org.furstd.web_api.exceptions.ForbiddenException;
+import org.furstd.web_api.exceptions.NotFoundException;
 import org.furstd.web_api.repository.IReservationRepository;
+import org.furstd.web_api.service.book.IBookService;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,6 +19,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ReservationService implements IReservationService {
     private final IReservationRepository reservationRepository;
+    private final IBookService bookService;
 
     @Override
     public List<Reservation> findAll() {
@@ -24,6 +32,25 @@ public class ReservationService implements IReservationService {
     }
 
     @Override
+    public Reservation createReservation(AppUser appUser, List<Integer> bookIds, Date reservationDate, Date returnDate) {
+        List<Book> books = bookService.findByIds(bookIds);
+        if (books.isEmpty()) {
+            throw new NotFoundException("Books not found!");
+        }
+        for (Book book : books) {
+            if (!book.isAvailable()) {
+                throw new ConflictException("Book " + book.getTitle() + " is not available!");
+            }
+        }
+
+        checkDates(reservationDate, returnDate);
+
+        Reservation reservation = new Reservation(appUser, books, reservationDate, returnDate);
+        updateReservation(reservation);
+        return reservation;
+    }
+
+    @Override
     public void updateReservation(Reservation reservation) {
         reservationRepository.save(reservation);
     }
@@ -31,5 +58,14 @@ public class ReservationService implements IReservationService {
     @Override
     public void deleteReservation(Reservation reservation) {
         reservationRepository.delete(reservation);
+    }
+
+    public void checkDates(Date reservationDate, Date returnDate) {
+        Date now = new Date();
+        if (reservationDate.before(now) || returnDate.before(now)) {
+            throw new ForbiddenException("Reservation and return dates must be in the future!");
+        } else if (returnDate.before(reservationDate)) {
+            throw new ForbiddenException("Return date must be after reservation date!");
+        }
     }
 }

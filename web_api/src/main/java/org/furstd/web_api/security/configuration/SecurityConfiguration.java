@@ -25,17 +25,17 @@ public class SecurityConfiguration {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(
-                                HttpMethod.GET,
-                                "/books/**",
-                                "/authors/**"
+                        .requestMatchers(HttpMethod.GET, "/books/**", "/authors/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/users/register", "/users/login").permitAll()
 
-                        ).permitAll()
-                        .requestMatchers(HttpMethod.POST, "/books/**", "/authors/**").hasAuthority("EDITOR")
-                        .requestMatchers(
-                                "/users/register",
-                                "/users/login"
-                        ).permitAll()
+                        .requestMatchers(HttpMethod.GET, "/users/**", "/reservations/**").hasAuthority("EDITOR")
+                        .requestMatchers(HttpMethod.POST, "/books", "/authors", "/reservations").hasAuthority("EDITOR")
+                        .requestMatchers(HttpMethod.PUT, "/books/**", "/authors/**", "/reservations/**").hasAuthority("EDITOR")
+                        .requestMatchers(HttpMethod.DELETE, "/books/**", "/authors/**", "/reservations/**").hasAuthority("EDITOR")
+
+                        .requestMatchers(HttpMethod.POST, "/users").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/users/**").hasAuthority("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/users/**").hasAuthority("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

@@ -39,6 +39,9 @@ public class Book {
     private int quantity;
 
     @Column(nullable = false)
+    private int availableQuantity;
+
+    @Column(nullable = false)
     private String coverImageLink;
 
     public Book(String title, Author author, Genre genre, Language language, int pages, int publicationYear, int quantity, String coverImageLink) {
@@ -49,6 +52,11 @@ public class Book {
         this.pages = pages;
         this.publicationYear = publicationYear;
         this.quantity = quantity;
+        this.availableQuantity = quantity;
         this.coverImageLink = coverImageLink;
+    }
+
+    public boolean isAvailable() {
+        return availableQuantity > 0;
     }
 }
