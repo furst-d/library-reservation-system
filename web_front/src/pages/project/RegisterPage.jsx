@@ -1,15 +1,15 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import ErrorForm, {ErrorItemStyle, ErrorListStyle} from "../../components/form/ErrorForm";
 import axios from "../../api/axios";
-import {setTokens} from "../../utils/auth/AuthManager";
+import {checkAuth, setTokens} from "../../utils/auth/AuthManager";
 import {FormStyle, LeftFormStyle} from "../../components/styles/form/Form";
 import {TextField} from "@mui/material";
 import LoginIcon from '@mui/icons-material/Login';
 import Button from "../../components/styles/material-ui/components/Button";
 import Form from "../../components/form/Form";
-import styled from "styled-components";
 import {isValidEmail} from "../../utils/validator/Validator";
+import {useNavigate} from "react-router-dom";
 
 const LoginPage = () => {
     const [loading, setLoading] = useState(false);
@@ -22,14 +22,25 @@ const LoginPage = () => {
     const [firstNameError, setFirstNameError] = useState(false);
     const [lastName, setLastName] = useState("");
     const [lastNameError, setLastNameError] = useState(false);
+    const [birthDate, setBirthDate] = useState("");
+    const [birthDateError, setBirthDateError] = useState(false);
     const [errors, setErrors] = useState([]);
     const [status, setStatus] = useState(200);
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if(checkAuth()) {
+            navigate("/");
+        }
+    }, [navigate]);
 
     const handleError = () => {
         switch (status) {
             case 401:
-            case 400:
                 return (<ErrorItemStyle>Chybné uživatelské jméno nebo email.</ErrorItemStyle>)
+            case 403:
+                return (<ErrorItemStyle>Účet s tímto emailem již existuje.</ErrorItemStyle>)
             default:
                 return (<ErrorItemStyle>Při zpracování požadavku došlo k chybě.</ErrorItemStyle>)
         }
@@ -73,6 +84,11 @@ const LoginPage = () => {
             setErrors(old => [...old, "Příjmení musí být vyplněno."]);
             setLastNameError(true);
         }
+        if(!birthDate) {
+            error = true;
+            setErrors(old => [...old, "Datum narození musí být vyplněno."]);
+            setBirthDateError(true);
+        }
 
         if(!error) {
             setLoading(true);
@@ -82,11 +98,14 @@ const LoginPage = () => {
 
     const handleRegister = () => {
         axios.post(`/users/register`, {
-            username: username,
-            password: password
+            email: username,
+            password: password,
+            firstName: firstName,
+            lastName: lastName,
+            birthDate: birthDate
         })
             .then(res => {
-                setTokens(res.data.access_token, res.data.refresh_token);
+                setTokens(res.data.payload.token);
                 localStorage.setItem("toast", "Registrace byla úspěšná");
                 window.location.reload();
             })
@@ -107,6 +126,7 @@ const LoginPage = () => {
                 <TextField onChange={e => setPasswordConfirm(e.target.value)} error={passwordError} required label="Heslo znovu"  type="password" />
                 <TextField onChange={e => setFirstName(e.target.value)} error={firstNameError} required label="Křestní jméno" />
                 <TextField onChange={e => setLastName(e.target.value)} error={lastNameError} required label="Příjmení" />
+                <TextField onChange={e => setBirthDate(e.target.value)} error={birthDateError} required InputLabelProps={{ shrink: true }} label="Datum narození" type="date" />
                 <ErrorForm errors={errors} />
                 {status !== 200 && (
                     <ErrorListStyle>
@@ -131,7 +151,3 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
-
-const RegistrationLinkStyle = styled.div`
-    font-size: 14px;
-`

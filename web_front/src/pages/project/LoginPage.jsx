@@ -1,15 +1,15 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import ErrorForm, {ErrorItemStyle, ErrorListStyle} from "../../components/form/ErrorForm";
 import axios from "../../api/axios";
-import {setTokens} from "../../utils/auth/AuthManager";
+import {checkAuth, setTokens} from "../../utils/auth/AuthManager";
 import {FormStyle, LeftFormStyle} from "../../components/styles/form/Form";
 import {TextField} from "@mui/material";
 import LoginIcon from '@mui/icons-material/Login';
 import Button from "../../components/styles/material-ui/components/Button";
 import Form from "../../components/form/Form";
 import styled from "styled-components";
-import {NavLink} from "react-router-dom";
+import {NavLink, useNavigate} from "react-router-dom";
 import {isValidEmail} from "../../utils/validator/Validator";
 
 const LoginPage = () => {
@@ -20,11 +20,17 @@ const LoginPage = () => {
     const [passwordError, setPasswordError] = useState(false);
     const [errors, setErrors] = useState([]);
     const [status, setStatus] = useState(200);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if(checkAuth()) {
+            navigate("/");
+        }
+    }, [navigate]);
 
     const handleError = () => {
         switch (status) {
             case 401:
-            case 400:
                 return (<ErrorItemStyle>Přihlášení se nezdařilo.</ErrorItemStyle>)
             default:
                 return (<ErrorItemStyle>Při zpracování požadavku došlo k chybě.</ErrorItemStyle>)
@@ -61,11 +67,11 @@ const LoginPage = () => {
 
     const handleLogin = () => {
         axios.post(`/users/login`, {
-            username: username,
+            email: username,
             password: password
         })
             .then(res => {
-                setTokens(res.data.access_token, res.data.refresh_token);
+                setTokens(res.data.payload.token);
                 localStorage.setItem("toast", "Přihlášení bylo úspěšné");
                 window.location.reload();
             })

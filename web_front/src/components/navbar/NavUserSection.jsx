@@ -26,6 +26,9 @@ const NavUserSection = ({setOpenHamburgerMenu}) => {
 
     const handleLogout = () => {
         handleCloseProfile();
+        localStorage.removeItem("auth_token");
+        localStorage.setItem("toast", "Odhlášení bylo úspěšné");
+        window.location.reload();
     }
 
     return (

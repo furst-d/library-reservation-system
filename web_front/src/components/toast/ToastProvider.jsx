@@ -6,8 +6,9 @@ const ToastProvider = ({children}) => {
     useEffect(() => {
         const toastMessage = localStorage.getItem("toast");
         if(toastMessage) {
-            toast.success(toastMessage);
-            localStorage.removeItem("toast");
+            toast.success(toastMessage, {
+                onClose: () => localStorage.removeItem("toast")
+            });
         }
     }, []);
 

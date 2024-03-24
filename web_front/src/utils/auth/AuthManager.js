@@ -26,16 +26,9 @@ export function removeTokens() {
     localStorage.removeItem("auth_token");
 }
 
-export function setTokens (accessToken, refToken) {
+export function setTokens (accessToken) {
     const tokens = {
         access_token: accessToken,
-        refresh_token: refToken
     }
-    localStorage.setItem("auth_token", encrypt(JSON.stringify(tokens)));
-}
-
-export function updateAccessToken (accessToken) {
-    const tokens =  getTokens();
-    tokens.access_token = accessToken;
     localStorage.setItem("auth_token", encrypt(JSON.stringify(tokens)));
 }
