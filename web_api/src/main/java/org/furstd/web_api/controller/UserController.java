@@ -77,7 +77,8 @@ public class UserController {
         AppUser appUser = new AppUser(userDTO.getEmail(), userDTO.getPassword(), userDTO.getFirstName(), userDTO.getLastName(), userDTO.getBirthDate());
         userService.createUser(appUser);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(new Msg("User was registered successfully!"));
+        AuthenticationResponseDTO response = userService.login(new LoginDTO(userDTO.getEmail(), userDTO.getPassword()));
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PostMapping("login")
