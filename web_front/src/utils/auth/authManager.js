@@ -14,11 +14,19 @@ export const checkAuth = () => {
     return false;
 }
 
-export const hasAdminRole = (user) => {
+export const hasRole = (user, role) => {
     if (!user) {
         return false;
     }
-    return user.authorities.some(authority => authority.authority === "ADMIN");
+    return user.authorities.some(authority => authority.authority === role);
+}
+
+export const isEditor = (user) => {
+    return hasRole(user, "EDITOR")
+}
+
+export const isAdmin = (user) => {
+    return hasRole(user, "ADMIN")
 }
 
 export function getTokens() {

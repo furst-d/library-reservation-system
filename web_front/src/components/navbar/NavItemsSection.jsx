@@ -5,6 +5,7 @@ import BurgerNavStyle from "../styles/navbar/BurgerNav";
 import CloseButton from "../styles/material-ui/icons/CloseButton";
 import {NavbarLinkStyle} from "../styles/navbar/Navbar";
 import PropTypes from "prop-types";
+import {isEditor} from "../../utils/auth/authManager";
 
 const NavItemsSection = ({openHamburgerMenu, setOpenHamburgerMenu, loggedUser}) => {
     const mapPages = () => {
@@ -23,7 +24,7 @@ const NavItemsSection = ({openHamburgerMenu, setOpenHamburgerMenu, loggedUser}) 
                     </NavbarLinkStyle>
                 </li>
 
-                {loggedUser &&
+                {isEditor(loggedUser) &&
                 <li>
                     <NavbarLinkStyle to="/admin" onClick={() => setOpenHamburgerMenu(false)}
                                      className="link-active">

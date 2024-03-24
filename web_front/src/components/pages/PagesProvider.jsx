@@ -11,7 +11,7 @@ import ProfileSettingsPage from "../../pages/project/ProfileSettingsPage";
 import LoginPage from "../../pages/project/LoginPage";
 import RegisterPage from "../../pages/project/RegisterPage";
 import AdminPanelPage from "../../pages/project/AdminPanelPage";
-import {hasAdminRole} from "../../utils/auth/authManager";
+import {isEditor} from "../../utils/auth/authManager";
 
 const PagesProvider = ({loggedUser}) => {
     return (
@@ -28,7 +28,7 @@ const PagesProvider = ({loggedUser}) => {
                         <Route path="/login" element={<LoginPage loggedUser={loggedUser} />} />
                         <Route path="/register" element={<RegisterPage loggedUser={loggedUser} />} />
                         <Route path="*" element={<NotFoundPage />} />
-                        {hasAdminRole(loggedUser) && <Route path="/admin" element={<AdminPanelPage loggedUser={loggedUser} />} />}
+                        {isEditor(loggedUser) && <Route path="/admin" element={<AdminPanelPage loggedUser={loggedUser} />} />}
                     </Routes>
                 </ContentWrapper>
             </Container>
