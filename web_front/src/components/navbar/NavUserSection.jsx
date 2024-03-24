@@ -8,7 +8,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutIcon from '@mui/icons-material/Logout';
 import {Divider} from "@mui/material";
 import Avatar from "../styles/material-ui/components/avatar/Avatar";
-import {checkAuth} from "../../utils/auth/AuthManager";
+import {checkAuth} from "../../utils/auth/authManager";
 import {NavbarLinkStyle} from "../styles/navbar/Navbar";
 import PropTypes from "prop-types";
 

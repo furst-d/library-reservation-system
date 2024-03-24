@@ -6,7 +6,7 @@ import CloseButton from "../styles/material-ui/icons/CloseButton";
 import {NavbarLinkStyle} from "../styles/navbar/Navbar";
 import PropTypes from "prop-types";
 
-const NavItemsSection = ({openHamburgerMenu, setOpenHamburgerMenu}) => {
+const NavItemsSection = ({openHamburgerMenu, setOpenHamburgerMenu, loggedUser}) => {
     const mapPages = () => {
         return (
             <>
@@ -22,6 +22,15 @@ const NavItemsSection = ({openHamburgerMenu, setOpenHamburgerMenu}) => {
                         Seznam autorů
                     </NavbarLinkStyle>
                 </li>
+
+                {loggedUser &&
+                <li>
+                    <NavbarLinkStyle to="/admin" onClick={() => setOpenHamburgerMenu(false)}
+                                     className="link-active">
+                        Admin panel
+                    </NavbarLinkStyle>
+                </li>
+                }
             </>
         );
     }
@@ -32,8 +41,8 @@ const NavItemsSection = ({openHamburgerMenu, setOpenHamburgerMenu}) => {
                 setOpenHamburgerMenu(true);
             }}/>
             <BurgerNavStyle $show={openHamburgerMenu}>
-            <CloseButtonWrapperStyle>
-                    <CloseButton onClick={() => setOpenHamburgerMenu(false)} />
+                <CloseButtonWrapperStyle>
+                <CloseButton onClick={() => setOpenHamburgerMenu(false)} />
                 </CloseButtonWrapperStyle>
                 {mapPages()}
             </BurgerNavStyle>

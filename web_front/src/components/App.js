@@ -4,15 +4,18 @@ import StyleProvider from "./styles/StyleProvider";
 import {BrowserRouter as Router} from "react-router-dom";
 import PagesProvider from "./pages/PagesProvider";
 import ToastProvider from "./toast/ToastProvider";
+import AuthProvider from "./auth/AuthProvider";
 
 function App() {
   return (
     <StyleProvider>
         <ApplicationStyle>
             <ToastProvider>
-                <Router>
-                    <PagesProvider />
-                </Router>
+                    <Router>
+                        <AuthProvider>
+                            <PagesProvider />
+                        </AuthProvider>
+                    </Router>
             </ToastProvider>
         </ApplicationStyle>
     </StyleProvider>

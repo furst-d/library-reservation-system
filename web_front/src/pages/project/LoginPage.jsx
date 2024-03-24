@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import ErrorForm, {ErrorItemStyle, ErrorListStyle} from "../../components/form/ErrorForm";
 import axios from "../../api/axios";
-import {checkAuth, setTokens} from "../../utils/auth/AuthManager";
+import {checkAuth, setTokens} from "../../utils/auth/authManager";
 import {FormStyle, LeftFormStyle} from "../../components/styles/form/Form";
 import {TextField} from "@mui/material";
 import LoginIcon from '@mui/icons-material/Login';

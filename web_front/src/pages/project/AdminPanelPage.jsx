@@ -1,18 +1,18 @@
 import React from 'react';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 
-const ProfilePage = () => {
+const AdminPanelPage = () => {
 
     return (
         <HelmetProvider>
             <Helmet>
-                <title>Profil</title>
+                <title>Admin panel</title>
             </Helmet>
             <div>
-                Profil
+                Admin panel
             </div>
         </HelmetProvider>
     );
 };
 
-export default ProfilePage;
+export default AdminPanelPage;

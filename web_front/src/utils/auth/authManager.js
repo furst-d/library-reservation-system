@@ -14,6 +14,13 @@ export const checkAuth = () => {
     return false;
 }
 
+export const hasAdminRole = (user) => {
+    if (!user) {
+        return false;
+    }
+    return user.authorities.some(authority => authority.authority === "ADMIN");
+}
+
 export function getTokens() {
     const tokens =  localStorage.getItem("auth_token");
     if(tokens) {

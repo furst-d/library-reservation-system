@@ -4,7 +4,7 @@ import styled from "styled-components";
 import NavUserSection from "./NavUserSection";
 import NavSearchSection from "./NavSearchSection";
 
-const Navbar = () => {
+const Navbar = ({loggedUser}) => {
     const [openHamburgerMenu, setOpenHamburgerMenu] = useState(false);
 
     const updateOpenHamburgerMenu = (value) => {
@@ -14,7 +14,7 @@ const Navbar = () => {
     return (
         <NavWrapperStyle>
             <TopRowStyle>
-                <NavItemsSection openHamburgerMenu={openHamburgerMenu} setOpenHamburgerMenu={updateOpenHamburgerMenu}/>
+                <NavItemsSection openHamburgerMenu={openHamburgerMenu} setOpenHamburgerMenu={updateOpenHamburgerMenu} loggedUser={loggedUser}/>
                 <NavSearchWrapperStyle>
                     <NavSearchSection setOpenHamburgerMenu={updateOpenHamburgerMenu} />
                 </NavSearchWrapperStyle>

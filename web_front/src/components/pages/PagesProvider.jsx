@@ -10,22 +10,25 @@ import ProfilePage from "../../pages/project/ProfilePage";
 import ProfileSettingsPage from "../../pages/project/ProfileSettingsPage";
 import LoginPage from "../../pages/project/LoginPage";
 import RegisterPage from "../../pages/project/RegisterPage";
+import AdminPanelPage from "../../pages/project/AdminPanelPage";
+import {hasAdminRole} from "../../utils/auth/authManager";
 
-const PagesProvider = () => {
+const PagesProvider = ({loggedUser}) => {
     return (
         <>
-            <Navbar />
+            <Navbar loggedUser={loggedUser} />
             <Container>
                 <ContentWrapper>
                     <Routes>
-                        <Route path="/"  element={<BookCatalogPage />} />
-                        <Route path="/authors"  element={<AuthorCatalogPage />} />
-                        <Route path="/search"  element={<SearchPage />} />
-                        <Route path="/profile"  element={<ProfilePage />} />
-                        <Route path="/profile-settings"  element={<ProfileSettingsPage />} />
-                        <Route path="/login" element={<LoginPage />} />
-                        <Route path="register" element={<RegisterPage />} />
-                        <Route path="*"  element={<NotFoundPage />} />
+                        <Route path="/" element={<BookCatalogPage />} />
+                        <Route path="/authors" element={<AuthorCatalogPage />} />
+                        <Route path="/search" element={<SearchPage />} />
+                        <Route path="/profile" element={<ProfilePage loggedUser={loggedUser} />} />
+                        <Route path="/profile-settings" element={<ProfileSettingsPage />} />
+                        <Route path="/login" element={<LoginPage loggedUser={loggedUser} />} />
+                        <Route path="/register" element={<RegisterPage loggedUser={loggedUser} />} />
+                        <Route path="*" element={<NotFoundPage />} />
+                        {hasAdminRole(loggedUser) && <Route path="/admin" element={<AdminPanelPage loggedUser={loggedUser} />} />}
                     </Routes>
                 </ContentWrapper>
             </Container>
