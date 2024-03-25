@@ -23,7 +23,7 @@ const PagesProvider = ({loggedUser}) => {
                         <Route path="/" element={<BookCatalogPage />} />
                         <Route path="/authors" element={<AuthorCatalogPage />} />
                         <Route path="/search" element={<SearchPage />} />
-                        <Route path="/profile" element={<ProfilePage loggedUser={loggedUser} />} />
+                        <Route path="/profile/*" element={<ProfilePage loggedUser={loggedUser} />} />
                         <Route path="/profile-settings" element={<ProfileSettingsPage />} />
                         <Route path="/login" element={<LoginPage loggedUser={loggedUser} />} />
                         <Route path="/register" element={<RegisterPage loggedUser={loggedUser} />} />

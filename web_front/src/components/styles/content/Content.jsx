@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import {NavbarLinkStyle} from "../navbar/Navbar";
 
 export const ContentStyle = styled.div`
   background-color: ${p => p.theme.third};
@@ -39,15 +40,23 @@ export const SubMenuStyle = styled.ul`
 `
 
 export const SubContentStyle = styled.div`
-  background-color: ${p => p.theme.secondary};
   flex: 1 1 auto;
   border-radius: 10px;
   padding: 20px;
+  border: 1px solid ${p => p.theme.secondary};  
 `
 
-// export const SubMenuStyledLink = styled(StyledLink)`
-//   border-bottom: 1px solid ${p => p.theme.primary};
-// `
+export const SubMenuStyledLink = styled(NavbarLinkStyle)`
+    border-bottom: 1px solid ${p => p.theme.primary};
+
+    &:hover {
+        color: ${p => p.theme.text_light};
+    }
+
+    &.active {
+        color: ${p => p.theme.text_light};
+    }
+`
 
 export const ControlPanelWrapperStyle = styled.div`
   display: flex;
@@ -59,11 +68,4 @@ export const ControlPanelWrapperStyle = styled.div`
     flex-direction: row;
     justify-content: space-between;
   }
-`
-
-export const ControlPanelStyle = styled.ul`
-  list-style: none;
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
 `
