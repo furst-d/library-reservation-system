@@ -4,15 +4,14 @@ import {
     ContentWrapperStyle,
     SubContentStyle,
     SubMenuStyle,
-    SubMenuStyledLink
+    SubMenuStyledLink, SubMenuWrapper
 } from "../../components/styles/content/Content";
-import styled from "styled-components";
-import AutoStoriesIcon from '@mui/icons-material/AutoStories';
 import ProfileDetail from "../../components/profile/ProfileDetail";
 import Person2Icon from '@mui/icons-material/Person2';
 import {Navigate, Route, Routes, useNavigate} from "react-router-dom";
 import ProfileReservations from "../../components/profile/ProfileReservations";
 import {checkAuth} from "../../utils/auth/authManager";
+import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
 
 const ProfilePage = () => {
     const navigate = useNavigate();
@@ -45,7 +44,7 @@ const ProfilePage = () => {
                                 to="/profile/reservations"
                                 className={({isActive}) => isActive ? "link-active" : ""}
                             >
-                                <AutoStoriesIcon/> Moje rezervace
+                                <LibraryBooksIcon/> Moje rezervace
                             </SubMenuStyledLink>
                         </li>
                     </SubMenuStyle>
@@ -63,13 +62,3 @@ const ProfilePage = () => {
 };
 
 export default ProfilePage;
-
-const SubMenuWrapper = styled.div`
-    display: flex;
-    flex-direction: column;
-    gap: 25px;
-
-    @media (min-width: 768px) {
-      gap: 50px;
-    }
-`

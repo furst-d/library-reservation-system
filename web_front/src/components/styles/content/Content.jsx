@@ -58,14 +58,12 @@ export const SubMenuStyledLink = styled(NavbarLinkStyle)`
     }
 `
 
-export const ControlPanelWrapperStyle = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 20px;
-  gap: 20px;
+export const SubMenuWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
 
-  @media (min-width: 768px) {
-    flex-direction: row;
-    justify-content: space-between;
-  }
+    @media (min-width: 768px) {
+      gap: 50px;
+    }
 `
