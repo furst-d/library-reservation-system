@@ -60,20 +60,12 @@ public class BookService implements IBookService {
 
     private List<Genre> findTopGenresForUser(AppUser user) {
         Pageable pageable = PageRequest.of(0, 3);
-        List<Object[]> results = bookRepository.findTopGenresForUser(user, pageable);
-
-        return results.stream()
-                .map(result -> (Genre) result[0])
-                .toList();
+        return bookRepository.findTopGenresForUser(user, pageable);
     }
 
     private List<Author> findTopAuthorsForUser(AppUser user) {
         Pageable pageable = PageRequest.of(0, 3);
-        List<Object[]> results = bookRepository.findTopAuthorsForUser(user, pageable);
-
-        return results.stream()
-                .map(result -> (Author) result[0])
-                .toList();
+        return bookRepository.findTopAuthorsForUser(user, pageable);
     }
 
     private List<Book> findTopBooksForGenresNotReadByUser(List<Genre> genres, AppUser user) {
@@ -85,7 +77,7 @@ public class BookService implements IBookService {
 
     private List<Book> findTopBooksForAuthorsNotReadByUser(List<Author> authors, AppUser user) {
         Pageable pageable = PageRequest.of(0, 5);
-        return bookRepository.findTopBooksForAuthors(authors, user, pageable);
+        return bookRepository.findTopBooksForAuthorsNotReadByUser(authors, user, pageable);
     }
 
     private List<Book> findTopGloballyReservedBooks() {

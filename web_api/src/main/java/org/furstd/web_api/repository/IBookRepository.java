@@ -22,19 +22,20 @@ public interface IBookRepository extends JpaRepository<Book, Integer> {
     @Query("SELECT b FROM Book b WHERE b.id IN :ids")
     List<Book> findByIds(List<Integer> ids);
 
-    @Query("SELECT b.genre, COUNT(b.genre) as genreCount " +
+    @Query("SELECT b.genre " +
             "FROM Reservation r JOIN r.books b " +
             "WHERE r.appUser = :user " +
             "GROUP BY b.genre " +
-            "ORDER BY genreCount DESC")
-    List<Object[]> findTopGenresForUser(@Param("user") AppUser user, Pageable pageable);
+            "ORDER BY COUNT(b.genre) DESC")
+    List<Genre> findTopGenresForUser(@Param("user") AppUser user, Pageable pageable);
 
-    @Query("SELECT b.author, COUNT(b.author) as authorCount " +
+
+    @Query("SELECT b.author " +
             "FROM Reservation r JOIN r.books b " +
             "WHERE r.appUser = :user " +
             "GROUP BY b.author " +
-            "ORDER BY authorCount DESC")
-    List<Object[]> findTopAuthorsForUser(@Param("user") AppUser user, Pageable pageable);
+            "ORDER BY COUNT(b.author) DESC")
+    List<Author> findTopAuthorsForUser(@Param("user") AppUser user, Pageable pageable);
 
     @Query(value = "SELECT b.*, COUNT(rb.reservation_id) AS reservation_count " +
             "FROM book b " +
@@ -55,7 +56,7 @@ public interface IBookRepository extends JpaRepository<Book, Integer> {
             "AND b.id NOT IN (SELECT rb.id FROM Reservation r JOIN r.books rb WHERE r.appUser = :user) " +
             "GROUP BY b.id " +
             "ORDER BY COUNT(b.id) DESC")
-    List<Book> findTopBooksForAuthors(@Param("authors") List<Author> authors, @Param("user") AppUser user, Pageable pageable);
+    List<Book> findTopBooksForAuthorsNotReadByUser(@Param("authors") List<Author> authors, @Param("user") AppUser user, Pageable pageable);
 
     @Query(value = "SELECT b.* FROM book b " +
             "JOIN reservation_book rb ON b.id = rb.book_id " +

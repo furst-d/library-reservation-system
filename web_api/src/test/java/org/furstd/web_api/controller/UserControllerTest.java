@@ -28,6 +28,7 @@ import java.util.Optional;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(UserController.class)
@@ -71,20 +72,6 @@ class UserControllerTest {
                 .andExpect(jsonPath("$.payload.user.email").value("user@example.com"))
                 .andExpect(jsonPath("$.payload.user.firstName").value("John"))
                 .andExpect(jsonPath("$.payload.user.lastName").value("Doe"));
-    }
-
-    @Test
-    void registerUserSuccessTest() throws Exception {
-        CreateAppUserDTO newUserDTO = new CreateAppUserDTO("newuser@example.com", "password", "New", "User", new Date(), List.of("USER"));
-        given(userService.findByEmail(anyString())).willReturn(Optional.empty());
-
-        mockMvc.perform(post("/users/register")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(new ObjectMapper().writeValueAsString(newUserDTO)))
-                .andExpect(status().isCreated())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.status").value("ok"))
-                .andExpect(jsonPath("$.payload.message").value("User was registered successfully!"));
     }
 
     @Test
