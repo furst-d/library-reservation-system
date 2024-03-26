@@ -1,5 +1,7 @@
 package org.furstd.web_api.service.book;
 
+import org.furstd.web_api.dto.BookRecommendationsDTO;
+import org.furstd.web_api.entity.AppUser;
 import org.furstd.web_api.entity.Book;
 
 import java.util.List;
@@ -16,4 +18,6 @@ public interface IBookService {
     void updateBook(Book book);
 
     void deleteBook(Book book);
+
+    BookRecommendationsDTO generateRecommendations(AppUser user);
 }
