@@ -75,6 +75,7 @@ public class DatabaseRunner implements CommandLineRunner {
         Book fellowship = new Book("Společenstvo prstenu", tolkien, Genre.FANTASY, Language.CZECH, 423, 1954, 3, "https://www.databazeknih.cz/img/books/9_/2/bmid_pan-prstenu-spolecenstvo-prstenu-7Bu-2.jpg");
         Book twoTowers = new Book("Dvě věže", tolkien, Genre.FANTASY, Language.CZECH, 352, 1954, 4, "https://www.databazeknih.cz/img/books/29_/29869/bmid_pan-prstenu-dve-veze-geI-29869.jpg");
         Book returnKing = new Book("Návrat krále", tolkien, Genre.FANTASY, Language.CZECH, 416, 1955, 4, "https://www.databazeknih.cz/img/books/26_/260/bmid_navrat-krale-A2D-260.png");
+        returnKing.setAvailableQuantity(0);
         Book silmarillion = new Book("Silmarillion", tolkien, Genre.FANTASY, Language.CZECH, 365, 1977, 5, "https://www.databazeknih.cz/img/books/28_/286/bmid_silmarillion-VYZ-286.png");
         Book aroundWorld = new Book("Cesta kolem světa za 80 dní", verne, Genre.ROMANCE, Language.CZECH, 256, 1873, 5, "https://www.databazeknih.cz/img/books/61_/61513/bmid_cesta-kolem-sveta-za-osmdesat-dni-BV8-61513.png");
         Book twentyThousand = new Book("20 000 mil pod mořem", verne, Genre.SCIENCE_FICTION, Language.CZECH, 256, 1870, 4, "https://www.databazeknih.cz/img/books/30_/301/bmid_dvacet-tisic-mil-pod-morem-bgw-301.png");

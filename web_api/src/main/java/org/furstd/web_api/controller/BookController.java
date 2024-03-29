@@ -1,7 +1,11 @@
 package org.furstd.web_api.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.furstd.web_api.dto.BookDTO;
+import org.furstd.web_api.dto.ListResponseDTO;
 import org.furstd.web_api.entity.Author;
 import org.furstd.web_api.entity.Book;
 import org.furstd.web_api.exceptions.NotFoundException;
@@ -10,9 +14,21 @@ import org.furstd.web_api.model.book.Language;
 import org.furstd.web_api.model.util.Msg;
 import org.furstd.web_api.service.author.IAuthorService;
 import org.furstd.web_api.service.book.IBookService;
+import org.furstd.web_api.specification.BookSpecifications;
+import org.furstd.web_api.util.FilterCriteria;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.Map;
 
 @RequestMapping("books")
 @RestController
@@ -24,8 +40,24 @@ public class BookController {
     private static final String NOT_FOUND_MESSAGE = "Book not found!";
 
     @RequestMapping("")
-    public ResponseEntity<Object> getBooks() {
-        return ResponseEntity.ok(bookService.findAll());
+    public ResponseEntity<Object> getBooks(@RequestParam(required = false) String filters,
+                                           @PageableDefault(sort = "id", direction = Sort.Direction.ASC) Pageable pageable) throws JsonProcessingException {
+        Specification<Book> spec = Specification.where(null);
+
+        if (filters != null && !filters.isEmpty()) {
+            String decodedFilters = URLDecoder.decode(filters, StandardCharsets.UTF_8);
+            ObjectMapper mapper = new ObjectMapper();
+            List<FilterCriteria> filterCriteriaList = null;
+            filterCriteriaList = mapper.readValue(decodedFilters, new TypeReference<>() {});
+
+
+            for (FilterCriteria criteria : filterCriteriaList) {
+                spec = bookService.applyFilter(spec, criteria);
+            }
+        }
+
+        ListResponseDTO<Book> bookListDTO = bookService.findAll(spec, pageable);
+        return ResponseEntity.ok(bookListDTO);
     }
 
     @RequestMapping("{id}")

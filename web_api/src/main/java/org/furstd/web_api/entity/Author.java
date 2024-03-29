@@ -1,5 +1,6 @@
 package org.furstd.web_api.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -33,6 +34,7 @@ public class Author {
     private Nationality nationality;
 
     @OneToMany(mappedBy = "author")
+    @JsonIgnore
     private final List<Book> books = Collections.emptyList();
 
     public Author(String firstName, String lastName, Date birthDate, Nationality nationality) {

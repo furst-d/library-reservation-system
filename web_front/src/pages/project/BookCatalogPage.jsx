@@ -1,5 +1,6 @@
 import React from 'react';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
+import BookCatalog from "../../components/book/BookCatalog";
 
 const BookCatalogPage = () => {
     return (
@@ -7,9 +8,7 @@ const BookCatalogPage = () => {
             <Helmet>
                 <title>Seznam knih</title>
             </Helmet>
-            <div>
-                Nějaká kniha
-            </div>
+            <BookCatalog />
         </HelmetProvider>
     );
 };

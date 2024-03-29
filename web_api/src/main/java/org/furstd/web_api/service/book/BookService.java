@@ -2,13 +2,18 @@ package org.furstd.web_api.service.book;
 
 import lombok.RequiredArgsConstructor;
 import org.furstd.web_api.dto.BookRecommendationsDTO;
+import org.furstd.web_api.dto.ListResponseDTO;
 import org.furstd.web_api.entity.AppUser;
 import org.furstd.web_api.entity.Author;
 import org.furstd.web_api.entity.Book;
 import org.furstd.web_api.model.book.Genre;
 import org.furstd.web_api.repository.IBookRepository;
+import org.furstd.web_api.specification.BookSpecifications;
+import org.furstd.web_api.util.FilterCriteria;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -18,8 +23,9 @@ import java.util.*;
 public class BookService implements IBookService {
     private final IBookRepository bookRepository;
 
-    public List<Book> findAll() {
-        return bookRepository.findAll();
+    public ListResponseDTO<Book> findAll(Specification<Book> spec, Pageable pageable) {
+        Page<Book> books = bookRepository.findAll(spec, pageable);
+        return new ListResponseDTO<>(books.getTotalElements(), books.getContent());
     }
 
     @Override
@@ -56,6 +62,26 @@ public class BookService implements IBookService {
                 authorBasedRecommendations,
                 topBooks
         );
+    }
+
+    @Override
+    public Specification<Book> applyFilter(Specification<Book> spec, FilterCriteria criteria) {
+        if (!criteria.getValue().isEmpty()) {
+            switch (criteria.getName()) {
+                case "title":
+                    return spec.and(BookSpecifications.hasTitle(criteria.getValue()));
+                case "author":
+                    return spec.and(BookSpecifications.hasAuthor(criteria.getValue()));
+                case "inStock":
+                    if (Boolean.parseBoolean(criteria.getValue())) {
+                        return spec.and(BookSpecifications.isInStock());
+                    }
+                    return spec;
+                default:
+                    return spec;
+            }
+        }
+        return spec;
     }
 
     private List<Genre> findTopGenresForUser(AppUser user) {
