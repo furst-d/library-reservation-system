@@ -51,7 +51,7 @@ public class DatabaseRunner implements CommandLineRunner {
         userService.createUser(user);
 
         Author tolkien = new Author("J.R.R.", "Tolkien", Date.from(LocalDate.of(1892, 1, 3).atStartOfDay(ZoneId.systemDefault()).toInstant()), Nationality.BRITISH);
-        Author capek = new Author("Karel", "Capek", Date.from(LocalDate.of(1890, 1, 9).atStartOfDay(ZoneId.systemDefault()).toInstant()), Nationality.CZECH);
+        Author capek = new Author("Karel", "Čapek", Date.from(LocalDate.of(1890, 1, 9).atStartOfDay(ZoneId.systemDefault()).toInstant()), Nationality.CZECH);
         Author king = new Author("Stephen", "King", Date.from(LocalDate.of(1947, 9, 21).atStartOfDay(ZoneId.systemDefault()).toInstant()), Nationality.AMERICAN);
         Author christie = new Author("Agatha", "Christie", Date.from(LocalDate.of(1890, 9, 15).atStartOfDay(ZoneId.systemDefault()).toInstant()), Nationality.BRITISH);
         Author rowling = new Author("J.K.", "Rowling", Date.from(LocalDate.of(1965, 7, 31).atStartOfDay(ZoneId.systemDefault()).toInstant()), Nationality.BRITISH);

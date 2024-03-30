@@ -4,6 +4,7 @@ import DataGrid from "../data-grid/DataGrid";
 import Filter from "../data-grid/Filter";
 import LoadingSpinner from "../styles/material-ui/components/LoadingSpinner";
 import useFilter from "../../hooks/useFilter";
+import BookPreview from "./BookPreview";
 
 const BookCatalog = () => {
     const [books, setBooks] = useState([]);
@@ -14,12 +15,6 @@ const BookCatalog = () => {
     const [genres, setGenres] = useState([]);
     const [languages, setLanguages] = useState([]);
     const LIMIT = 10;
-
-    const columns = [
-        { header: 'Název knihy', accessor: 'title' },
-        { header: 'Příjmení autora', accessor: 'authorLastName' },
-        { header: 'Rok vydání', accessor: 'publicationYear' },
-    ];
 
     const initialFiltersAndSorters = useMemo(() => [
         { name: 'title', type: 'text', value: '', placeholder: 'Název knihy' },
@@ -98,13 +93,23 @@ const BookCatalog = () => {
             ) : (
                 <DataGrid
                     data={books}
-                    columns={columns}
                     filterComponent={<Filter onFilterChange={handleFilterChange}
                                              initialFilters={initialFiltersAndSorters} />}
                     onPageChange={(newPage) => setPage(newPage - 1)}
                     pageSize={LIMIT}
                     currentPage={page + 1}
                     totalPages={Math.ceil(totalRecords / LIMIT)}
+                    renderType="flex"
+                    renderRow={(row) => (
+                        <BookPreview
+                            id={row.id}
+                            title={row.title}
+                            authorId={row.author.id}
+                            authorFirstName={row.author.firstName}
+                            authorLastName={row.author.lastName}
+                            coverImageLink={row.coverImageLink}
+                        />
+                    )}
                 />
             )}
         </>

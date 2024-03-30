@@ -11,9 +11,7 @@ const convertFiltersToApiFormat = (filters) => {
 const UseFilter = (initialFilters) => {
     const [filters, setFilters] = useState(initialFilters);
 
-    // Převod na formát API při změně filtrů
     const apiFilters = convertFiltersToApiFormat(filters);
-
 
     const updateFilters = useCallback((updatedFilters) => {
         setFilters(updatedFilters);
