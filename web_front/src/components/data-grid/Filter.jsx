@@ -1,7 +1,17 @@
 import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import {TextField, Checkbox, Button, FormControlLabel, styled as styledMUI} from '@mui/material';
+import {
+    TextField,
+    Checkbox,
+    Button,
+    FormControlLabel,
+    styled as styledMUI,
+    InputLabel,
+    Select,
+    FormControl
+} from '@mui/material';
+import MenuItem from "../styles/material-ui/components/menu/MenuItem";
 
 const Filter = ({ onFilterChange, initialFilters, onSortChange, sortOptions }) => {
     const [filters, setFilters] = useState(initialFilters);
@@ -13,7 +23,6 @@ const Filter = ({ onFilterChange, initialFilters, onSortChange, sortOptions }) =
                 i === index ? { ...filter, value: value } : filter
             )
         );
-        console.log(filters);
     };
 
     const handleCheckboxChange = (event, index) => {
@@ -39,7 +48,17 @@ const Filter = ({ onFilterChange, initialFilters, onSortChange, sortOptions }) =
     };
 
     const handleSortOptionChange = (event) => {
+        console.log(event.target.name, event.target.value)
         onSortChange(event.target.name, event.target.value);
+    };
+
+    const handleSelectChange = (event, index) => {
+        const { name, value } = event.target;
+        setFilters(prevFilters =>
+            prevFilters.map((filter, i) =>
+                i === index ? { ...filter, value: value } : filter
+            )
+        );
     };
 
     const filtersArray = Object.keys(filters).map(key => ({
@@ -51,44 +70,80 @@ const Filter = ({ onFilterChange, initialFilters, onSortChange, sortOptions }) =
         <FilterContainerStyle>
             <h3>Filtr</h3>
             <form onSubmit={handleSubmit}>
-                {filtersArray.map((filter, index) =>
-                    filter.type === 'text' ? (
-                        <StyledTextField
-                            key={index}
-                            name={filter.name}
-                            value={filter.value}
-                            onChange={(e) => handleInputChange(e, index)}
-                            placeholder={filter.placeholder}
-                            variant="outlined"
-                            size="small"
-                            margin="normal"
-                            fullWidth
-                        />
-                    ) : filter.type === 'checkbox' ? (
-                        <StyledFormControlLabel
-                            key={index}
-                            control={
-                                <Checkbox
-                                    name={filter.name}
-                                    checked={filter.value}
-                                    onChange={(e) => handleCheckboxChange(e, index)}
-                                />
-                            }
-                            label={filter.placeholder}
-                        />
-                    ) : null
-                )}
+                {filtersArray.map((filter, index) => {
+                    switch (filter.type) {
+                        case 'text':
+                            return (<StyledTextField
+                                key={index}
+                                name={filter.name}
+                                value={filter.value}
+                                onChange={(e) => handleInputChange(e, index)}
+                                placeholder={filter.placeholder}
+                                variant="outlined"
+                                size="small"
+                                margin="normal"
+                                fullWidth
+                            />);
+                        case 'select':
+                            return (
+                                <StyledFormControl fullWidth key={index} variant="outlined" size="small" margin="normal">
+                                    <InputLabel id={`${filter.name}-label`}>{filter.placeholder}</InputLabel>
+                                    <Select
+                                        labelId={`${filter.name}-label`}
+                                        id={`${filter.name}-select`}
+                                        name={filter.name}
+                                        value={filter.value}
+                                        onChange={(e) => handleSelectChange(e, index)}
+                                        label={filter.placeholder}
+                                        fullWidth
+                                    >
+
+                                        <MenuItem value="">
+                                            <em>Žádný</em>
+                                        </MenuItem>
+                                        {filter.options.map(option => (
+                                            <MenuItem key={option.value} value={option.value}>
+                                                {option.label}
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                </StyledFormControl>
+                            );
+                        case 'checkbox':
+                            return (<StyledFormControlLabel
+                                key={index}
+                                control={
+                                    <Checkbox
+                                        name={filter.name}
+                                        checked={filter.value}
+                                        onChange={(e) => handleCheckboxChange(e, index)}
+                                    />
+                                }
+                                label={filter.placeholder}
+                            />);
+                        default:
+                            return null;
+                    }
+                })}
+
                 {sortOptions.map((option) => (
-                    <div key={option.name}>
-                        <label htmlFor={option.name}>{option.label}</label>
-                        <select name={option.name} onChange={handleSortOptionChange}>
+                    <StyledFormControl fullWidth variant="outlined" size="small" margin="normal" key={option.name}>
+                        <InputLabel id={`${option.name}-label`}>{option.label}</InputLabel>
+                        <Select
+                            labelId={`${option.name}-label`}
+                            id={`${option.name}-select`}
+                            name={option.name}
+                            value={filters[option.name] || ''}
+                            onChange={handleSortOptionChange}
+                            label={option.label}
+                        >
                             {option.values.map((value) => (
-                                <option key={value.value} value={value.value}>
+                                <MenuItem key={value.value} value={value.value}>
                                     {value.label}
-                                </option>
+                                </MenuItem>
                             ))}
-                        </select>
-                    </div>
+                        </Select>
+                    </StyledFormControl>
                 ))}
 
                 <ButtonGroupStyle>
@@ -145,19 +200,39 @@ const StyledTextField = styledMUI(TextField)`
 
 const StyledFormControlLabel = styledMUI(FormControlLabel)`
     margin-bottom: 5px;
-    
+
     & .MuiTypography-root {
         font-size: 0.875rem;
     }
 
     & .MuiCheckbox-root {
         padding-top: 0px;
+        padding-bottom: 0px;
     }
 `;
+
+const StyledFormControl = styledMUI(FormControl)`
+    margin-top: 5px;
+    
+    & .MuiInputLabel-root {
+        font-size: 0.875rem;
+        top: -4px;
+    }
+    
+    & .MuiInputBase-root {
+        max-width: 20em;
+    }
+    
+    & .MuiOutlinedInput-input {
+        padding-top: 3px;
+        padding-bottom: 3px;
+    }
+`
 
 const ButtonGroupStyle = styled.div`
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
     margin-bottom: 20px;
+    margin-top: 5px;
 `;

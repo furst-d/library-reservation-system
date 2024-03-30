@@ -12,11 +12,15 @@ const BookCatalog = () => {
     const [sortBy, setSortBy] = useState('id');
     const [sortDir, setSortDir] = useState('asc');
     const [totalRecords, setTotalRecords] = useState(0);
+    const [genres, setGenres] = useState([]);
+    const [languages, setLanguages] = useState([]);
     const LIMIT = 10;
 
     const initialFilters = [
         { name: 'title', type: 'text', value: '', placeholder: 'Název knihy' },
         { name: 'author', type: 'text', value: '', placeholder: 'Jméno autora' },
+        { name: 'genre', type: 'select', value: '', options: genres, placeholder: 'Vyberte žánr' },
+        { name: 'language', type: 'select', value: '', options: languages, placeholder: 'Vyberte jazyk' },
         { name: 'inStock', type: 'checkbox', value: true, placeholder: 'Skladem' }
     ];
 
@@ -68,6 +72,25 @@ const BookCatalog = () => {
             setLoading(false);
         });
     }, [apiFilters, books, page, sortBy, sortDir]);
+
+    useEffect(() => {
+        axios.get('/books/genres')
+            .then(response => {
+                setGenres(response.data.payload.map(g => ({ value: g.id, label: g.label })));
+            })
+            .catch(error => {
+                console.error('Error loading genres:', error);
+            });
+
+        axios.get('/books/languages')
+            .then(response => {
+                setLanguages(response.data.payload.map(l => ({ value: l.id, label: l.label })));
+            })
+            .catch(error => {
+                console.error('Error loading languages:', error);
+            });
+    }, []);
+
 
     const handleFilterChange = (newFilters) => {
         updateFilters(newFilters);

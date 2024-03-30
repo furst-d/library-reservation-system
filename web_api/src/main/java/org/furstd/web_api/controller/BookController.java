@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.furstd.web_api.dto.BookDTO;
+import org.furstd.web_api.dto.EnumValueDTO;
 import org.furstd.web_api.dto.ListResponseDTO;
 import org.furstd.web_api.entity.Author;
 import org.furstd.web_api.entity.Book;
@@ -27,8 +28,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RequestMapping("books")
 @RestController
@@ -63,6 +66,22 @@ public class BookController {
     @RequestMapping("{id}")
     public ResponseEntity<Object> getBook(@PathVariable int id) {
         return ResponseEntity.ok(bookService.findById(id).orElseThrow(() -> new NotFoundException(NOT_FOUND_MESSAGE)));
+    }
+
+    @RequestMapping("genres")
+    public ResponseEntity<Object> getGenres() {
+        List<EnumValueDTO> genres = Arrays.stream(Genre.values())
+                .map(genre -> new EnumValueDTO(genre.getId(), genre.getLabel()))
+                .toList();
+        return ResponseEntity.ok(genres);
+    }
+
+    @RequestMapping("languages")
+    public ResponseEntity<Object> getLanguages() {
+        List<EnumValueDTO> languages = Arrays.stream(Language.values())
+                .map(language -> new EnumValueDTO(language.getId(), language.getLabel()))
+                .toList();
+        return ResponseEntity.ok(languages);
     }
 
     @PostMapping("")
