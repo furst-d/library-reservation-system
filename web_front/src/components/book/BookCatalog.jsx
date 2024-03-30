@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import axios from "../../api/axios";
 import DataGrid from "../data-grid/DataGrid";
 import Filter from "../data-grid/Filter";
@@ -9,22 +9,11 @@ const BookCatalog = () => {
     const [books, setBooks] = useState([]);
     const [loading, setLoading] = useState(true);
     const [page, setPage] = useState(0);
-    const [sortBy, setSortBy] = useState('id');
-    const [sortDir, setSortDir] = useState('asc');
+    const [sort, setSort] = useState('id,asc');
     const [totalRecords, setTotalRecords] = useState(0);
     const [genres, setGenres] = useState([]);
     const [languages, setLanguages] = useState([]);
     const LIMIT = 10;
-
-    const initialFilters = [
-        { name: 'title', type: 'text', value: '', placeholder: 'Název knihy' },
-        { name: 'author', type: 'text', value: '', placeholder: 'Jméno autora' },
-        { name: 'genre', type: 'select', value: '', options: genres, placeholder: 'Vyberte žánr' },
-        { name: 'language', type: 'select', value: '', options: languages, placeholder: 'Vyberte jazyk' },
-        { name: 'inStock', type: 'checkbox', value: true, placeholder: 'Skladem' }
-    ];
-
-    const [apiFilters, updateFilters] = useFilter(initialFilters);
 
     const columns = [
         { header: 'Název knihy', accessor: 'title' },
@@ -32,38 +21,41 @@ const BookCatalog = () => {
         { header: 'Rok vydání', accessor: 'publicationYear' },
     ];
 
-    const sortOptions = [
-        {
-            name: 'sortBy',
-            label: 'Řadit dle',
-            values: [
-                { value: 'title', label: 'Název' },
-                { value: 'authorLastName', label: 'Příjmení autora' },
-            ],
+    const initialFiltersAndSorters = useMemo(() => [
+        { name: 'title', type: 'text', value: '', placeholder: 'Název knihy' },
+        { name: 'author', type: 'text', value: '', placeholder: 'Jméno autora' },
+        { name: 'genre', type: 'select', value: '', nullable: true, options: genres, placeholder: 'Vyberte žánr' },
+        { name: 'language', type: 'select', value: '', nullable: true, options: languages, placeholder: 'Vyberte jazyk' },
+        { name: 'inStock', type: 'checkbox', value: true, placeholder: 'Skladem' },
+        { name: 'sortBy', type: 'select', value: 'id', nullable: false, placeholder: 'Řadit dle',  options:
+                [
+                    { value: 'id', label: 'Výchozí' },
+                    { value: 'title', label: 'Název' },
+                    { value: 'authorLastName', label: 'Příjmení autora' }
+                ]
         },
-        {
-            name: 'sortDir',
-            label: 'Směr řazení',
-            values: [
-                { value: 'asc', label: 'Vzestupně' },
-                { value: 'desc', label: 'Sestupně' },
-            ],
-        },
-    ];
+        { name: 'sortDir', type: 'select', value: 'asc', placeholder: 'Směr řazení', options:
+                [
+                    { value: 'asc', label: 'A-Z' },
+                    { value: 'desc', label: 'Z-A' }
+                ]
+        }
+    ], [genres, languages])
+
+    const [apiFilters, updateFilters] = useFilter(initialFiltersAndSorters.filter(f => f.name !== 'sortBy' && f.name !== 'sortDir'));
 
     useEffect(() => {
         axios.get(`/books`, {
             params: {
                 page: page,
                 size: LIMIT,
-                sortBy: sortBy,
-                sortDir: sortDir,
+                sort: sort,
                 filters: encodeURIComponent(JSON.stringify(apiFilters))
             }
         }).then(response => {
             const booksLoc = response.data.payload.data;
             if (JSON.stringify(booksLoc) !== JSON.stringify(books)) {
-                setBooks(booksLoc);
+                setBooks(response.data.payload.data);
                 setTotalRecords(response.data.payload.totalCount);
             }
         }).catch(error => {
@@ -71,7 +63,8 @@ const BookCatalog = () => {
         }).finally(() => {
             setLoading(false);
         });
-    }, [apiFilters, books, page, sortBy, sortDir]);
+
+    }, [apiFilters, books, page, sort]);
 
     useEffect(() => {
         axios.get('/books/genres')
@@ -92,14 +85,10 @@ const BookCatalog = () => {
     }, []);
 
 
-    const handleFilterChange = (newFilters) => {
-        updateFilters(newFilters);
+    const handleFilterChange = (filters, sort) => {
+        setSort(sort);
+        updateFilters(filters);
         setPage(0);
-    };
-
-    const handleSortChange = (sortField, sortOrder) => {
-        setSortBy(sortField);
-        setSortDir(sortOrder);
     };
 
     return (
@@ -111,9 +100,7 @@ const BookCatalog = () => {
                     data={books}
                     columns={columns}
                     filterComponent={<Filter onFilterChange={handleFilterChange}
-                                             initialFilters={initialFilters}
-                                             onSortChange={handleSortChange}
-                                             sortOptions={sortOptions} />}
+                                             initialFilters={initialFiltersAndSorters} />}
                     onPageChange={(newPage) => setPage(newPage - 1)}
                     pageSize={LIMIT}
                     currentPage={page + 1}

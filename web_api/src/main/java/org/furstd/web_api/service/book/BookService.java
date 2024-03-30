@@ -67,19 +67,20 @@ public class BookService implements IBookService {
     @Override
     public Specification<Book> applyFilter(Specification<Book> spec, FilterCriteria criteria) {
         if (!criteria.getValue().isEmpty()) {
-            switch (criteria.getName()) {
-                case "title":
-                    return spec.and(BookSpecifications.hasTitle(criteria.getValue()));
-                case "author":
-                    return spec.and(BookSpecifications.hasAuthor(criteria.getValue()));
-                case "inStock":
-                    if (Boolean.parseBoolean(criteria.getValue())) {
-                        return spec.and(BookSpecifications.isInStock());
+            String value = criteria.getValue();
+            return switch (criteria.getName()) {
+                case "title" -> spec.and(BookSpecifications.hasTitle(value));
+                case "author" -> spec.and(BookSpecifications.hasAuthor(value));
+                case "genre" -> spec.and(BookSpecifications.hasGenre(Integer.parseInt(value)));
+                case "language" -> spec.and(BookSpecifications.hasLanguage(Integer.parseInt(value)));
+                case "inStock" -> {
+                    if (Boolean.parseBoolean(value)) {
+                        yield spec.and(BookSpecifications.isInStock());
                     }
-                    return spec;
-                default:
-                    return spec;
-            }
+                    yield spec;
+                }
+                default -> spec;
+            };
         }
         return spec;
     }

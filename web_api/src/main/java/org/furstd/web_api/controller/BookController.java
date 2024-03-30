@@ -50,9 +50,7 @@ public class BookController {
         if (filters != null && !filters.isEmpty()) {
             String decodedFilters = URLDecoder.decode(filters, StandardCharsets.UTF_8);
             ObjectMapper mapper = new ObjectMapper();
-            List<FilterCriteria> filterCriteriaList = null;
-            filterCriteriaList = mapper.readValue(decodedFilters, new TypeReference<>() {});
-
+            List<FilterCriteria> filterCriteriaList = mapper.readValue(decodedFilters, new TypeReference<>() {});
 
             for (FilterCriteria criteria : filterCriteriaList) {
                 spec = bookService.applyFilter(spec, criteria);

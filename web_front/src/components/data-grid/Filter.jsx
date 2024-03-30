@@ -13,7 +13,7 @@ import {
 } from '@mui/material';
 import MenuItem from "../styles/material-ui/components/menu/MenuItem";
 
-const Filter = ({ onFilterChange, initialFilters, onSortChange, sortOptions }) => {
+const Filter = ({ onFilterChange, initialFilters }) => {
     const [filters, setFilters] = useState(initialFilters);
 
     const handleInputChange = (event, index) => {
@@ -36,24 +36,31 @@ const Filter = ({ onFilterChange, initialFilters, onSortChange, sortOptions }) =
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        onFilterChange(filters.map(filter => ({
-            name: filter.name,
-            value: filter.value
-        })));
+
+        const filterParams = filters.filter(filter => filter.name !== 'sortBy' && filter.name !== 'sortDir');
+        const sortParams = filters.find(filter => filter.name === 'sortBy');
+        const directionParams = filters.find(filter => filter.name === 'sortDir');
+        const direction = directionParams ? directionParams.value : 'asc';
+
+        const sortValue = sortParams ? `${sortParams.value},${direction}` : '';
+
+        onFilterChange(
+            filterParams.map(filter => ({
+                name: filter.name,
+                value: filter.value
+            })),
+            sortValue
+        );
     };
+
 
     const handleReset = () => {
         setFilters(initialFilters);
         onFilterChange(initialFilters);
     };
 
-    const handleSortOptionChange = (event) => {
-        console.log(event.target.name, event.target.value)
-        onSortChange(event.target.name, event.target.value);
-    };
-
     const handleSelectChange = (event, index) => {
-        const { name, value } = event.target;
+        const { value } = event.target;
         setFilters(prevFilters =>
             prevFilters.map((filter, i) =>
                 i === index ? { ...filter, value: value } : filter
@@ -97,10 +104,11 @@ const Filter = ({ onFilterChange, initialFilters, onSortChange, sortOptions }) =
                                         label={filter.placeholder}
                                         fullWidth
                                     >
-
-                                        <MenuItem value="">
-                                            <em>Žádný</em>
-                                        </MenuItem>
+                                        {filter.nullable && (
+                                            <MenuItem value="">
+                                                <em>Zrušit výběr</em>
+                                            </MenuItem>
+                                        )}
                                         {filter.options.map(option => (
                                             <MenuItem key={option.value} value={option.value}>
                                                 {option.label}
@@ -126,26 +134,6 @@ const Filter = ({ onFilterChange, initialFilters, onSortChange, sortOptions }) =
                     }
                 })}
 
-                {sortOptions.map((option) => (
-                    <StyledFormControl fullWidth variant="outlined" size="small" margin="normal" key={option.name}>
-                        <InputLabel id={`${option.name}-label`}>{option.label}</InputLabel>
-                        <Select
-                            labelId={`${option.name}-label`}
-                            id={`${option.name}-select`}
-                            name={option.name}
-                            value={filters[option.name] || ''}
-                            onChange={handleSortOptionChange}
-                            label={option.label}
-                        >
-                            {option.values.map((value) => (
-                                <MenuItem key={value.value} value={value.value}>
-                                    {value.label}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </StyledFormControl>
-                ))}
-
                 <ButtonGroupStyle>
                     <Button type="submit" variant="contained" color="primary">
                         Filtrovat
@@ -162,15 +150,6 @@ const Filter = ({ onFilterChange, initialFilters, onSortChange, sortOptions }) =
 Filter.propTypes = {
     onFilterChange: PropTypes.func.isRequired,
     initialFilters: PropTypes.array,
-    onSortChange: PropTypes.func.isRequired,
-    sortOptions: PropTypes.arrayOf(PropTypes.shape({
-        name: PropTypes.string.isRequired,
-        label: PropTypes.string.isRequired,
-        values: PropTypes.arrayOf(PropTypes.shape({
-            value: PropTypes.string.isRequired,
-            label: PropTypes.string.isRequired,
-        })).isRequired,
-    })).isRequired,
 };
 
 Filter.defaultProps = {
