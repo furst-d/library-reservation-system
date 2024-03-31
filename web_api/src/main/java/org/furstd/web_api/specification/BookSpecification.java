@@ -5,9 +5,9 @@ import org.furstd.web_api.model.book.Genre;
 import org.furstd.web_api.model.book.Language;
 import org.springframework.data.jpa.domain.Specification;
 
-public class BookSpecifications {
+public class BookSpecification {
 
-    private BookSpecifications() {}
+    private BookSpecification() {}
 
     public static Specification<Book> hasTitle(String title) {
         return (root, query, criteriaBuilder) ->

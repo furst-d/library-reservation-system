@@ -1,18 +1,20 @@
 package org.furstd.web_api.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.furstd.web_api.dto.AppUserDTO;
-import org.furstd.web_api.dto.AuthenticationResponseDTO;
-import org.furstd.web_api.dto.CreateAppUserDTO;
-import org.furstd.web_api.dto.LoginDTO;
+import org.furstd.web_api.dto.*;
 import org.furstd.web_api.entity.Role;
 import org.furstd.web_api.exceptions.NotFoundException;
 import org.furstd.web_api.model.util.Msg;
 import org.furstd.web_api.entity.AppUser;
 import org.furstd.web_api.exceptions.ForbiddenException;
 import org.furstd.web_api.service.role.IRoleService;
-import org.furstd.web_api.service.user.IUserService;
+import org.furstd.web_api.service.user.UserService;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,11 +24,21 @@ import java.util.List;
 @RequestMapping("users")
 @RestController
 @RequiredArgsConstructor
-public class UserController {
-    private final IUserService userService;
+public class UserController extends BaseController<AppUser> {
+    private final UserService userService;
     private final IRoleService roleService;
 
     private static final String NOT_FOUND_MESSAGE = "User not found!";
+
+    @RequestMapping("")
+    public ResponseEntity<Object> getUsers(@RequestParam(required = false) String filters,
+                                           @PageableDefault(sort = "id", direction = Sort.Direction.ASC) Pageable pageable) throws JsonProcessingException {
+
+        Specification<AppUser> spec = this.processFilters(filters, userService);
+
+        ListResponseDTO<AppUser> bookListDTO = userService.findAll(spec, pageable);
+        return ResponseEntity.ok(bookListDTO);
+    }
 
     @RequestMapping("{id}")
     public ResponseEntity<Object> getUser(@PathVariable int id) {

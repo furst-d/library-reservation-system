@@ -1,8 +1,6 @@
 package org.furstd.web_api.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.furstd.web_api.dto.BookDTO;
 import org.furstd.web_api.dto.EnumValueDTO;
@@ -14,10 +12,7 @@ import org.furstd.web_api.model.book.Genre;
 import org.furstd.web_api.model.book.Language;
 import org.furstd.web_api.model.util.Msg;
 import org.furstd.web_api.service.author.IAuthorService;
-import org.furstd.web_api.service.book.IBookService;
-import org.furstd.web_api.specification.BookSpecifications;
-import org.furstd.web_api.util.FilterCriteria;
-import org.springframework.data.domain.PageRequest;
+import org.furstd.web_api.service.book.BookService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
@@ -26,18 +21,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @RequestMapping("books")
 @RestController
 @RequiredArgsConstructor
-public class BookController {
-    private final IBookService bookService;
+public class BookController extends BaseController<Book>{
+    private final BookService bookService;
     private final IAuthorService authorService;
 
     private static final String NOT_FOUND_MESSAGE = "Book not found!";
@@ -45,18 +36,8 @@ public class BookController {
     @RequestMapping("")
     public ResponseEntity<Object> getBooks(@RequestParam(required = false) String filters,
                                            @PageableDefault(sort = "id", direction = Sort.Direction.ASC) Pageable pageable) throws JsonProcessingException {
-        Specification<Book> spec = Specification.where(null);
 
-        if (filters != null && !filters.isEmpty()) {
-            String decodedFilters = URLDecoder.decode(filters, StandardCharsets.UTF_8);
-            ObjectMapper mapper = new ObjectMapper();
-            List<FilterCriteria> filterCriteriaList = mapper.readValue(decodedFilters, new TypeReference<>() {});
-
-            for (FilterCriteria criteria : filterCriteriaList) {
-                spec = bookService.applyFilter(spec, criteria);
-            }
-        }
-
+        Specification<Book> spec = this.processFilters(filters, bookService);
         ListResponseDTO<Book> bookListDTO = bookService.findAll(spec, pageable);
         return ResponseEntity.ok(bookListDTO);
     }

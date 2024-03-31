@@ -2,13 +2,20 @@ package org.furstd.web_api.service.user;
 
 import lombok.RequiredArgsConstructor;
 import org.furstd.web_api.dto.AuthenticationResponseDTO;
+import org.furstd.web_api.dto.ListResponseDTO;
 import org.furstd.web_api.dto.LoginDTO;
 import org.furstd.web_api.entity.AppUser;
 import org.furstd.web_api.entity.Role;
 import org.furstd.web_api.exceptions.NotFoundException;
 import org.furstd.web_api.repository.IAppUserRepository;
 import org.furstd.web_api.repository.IRoleRepository;
+import org.furstd.web_api.service.IFilterService;
 import org.furstd.web_api.service.jwt.JwtService;
+import org.furstd.web_api.specification.UserSpecification;
+import org.furstd.web_api.util.FilterCriteria;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,7 +26,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class UserService implements IUserService {
+public class UserService implements IUserService, IFilterService<AppUser> {
     private final IAppUserRepository userRepository;
     private final IRoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
@@ -75,5 +82,24 @@ public class UserService implements IUserService {
         for (Role role : roles) {
             appUser.addRole(role);
         }
+    }
+
+    @Override
+    public ListResponseDTO<AppUser> findAll(Specification<AppUser> spec, Pageable pageable) {
+        Page<AppUser> users = userRepository.findAll(spec, pageable);
+        return new ListResponseDTO<>(users.getTotalElements(), users.getContent());
+    }
+
+    @Override
+    public Specification<AppUser> applyFilter(Specification<AppUser> spec, FilterCriteria criteria) {
+        if (!criteria.getValue().isEmpty()) {
+            String value = criteria.getValue();
+            return switch (criteria.getName()) {
+                case "email" -> spec.and(UserSpecification.hasEmail(value));
+                case "lastName" -> spec.and(UserSpecification.hasLastName(value));
+                default -> spec;
+            };
+        }
+        return spec;
     }
 }

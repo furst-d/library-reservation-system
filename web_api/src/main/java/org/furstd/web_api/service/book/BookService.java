@@ -8,7 +8,8 @@ import org.furstd.web_api.entity.Author;
 import org.furstd.web_api.entity.Book;
 import org.furstd.web_api.model.book.Genre;
 import org.furstd.web_api.repository.IBookRepository;
-import org.furstd.web_api.specification.BookSpecifications;
+import org.furstd.web_api.service.IFilterService;
+import org.furstd.web_api.specification.BookSpecification;
 import org.furstd.web_api.util.FilterCriteria;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,7 +21,7 @@ import java.util.*;
 
 @Service
 @RequiredArgsConstructor
-public class BookService implements IBookService {
+public class BookService implements IBookService, IFilterService<Book> {
     private final IBookRepository bookRepository;
 
     public ListResponseDTO<Book> findAll(Specification<Book> spec, Pageable pageable) {
@@ -69,13 +70,13 @@ public class BookService implements IBookService {
         if (!criteria.getValue().isEmpty()) {
             String value = criteria.getValue();
             return switch (criteria.getName()) {
-                case "title" -> spec.and(BookSpecifications.hasTitle(value));
-                case "author" -> spec.and(BookSpecifications.hasAuthor(value));
-                case "genre" -> spec.and(BookSpecifications.hasGenre(Integer.parseInt(value)));
-                case "language" -> spec.and(BookSpecifications.hasLanguage(Integer.parseInt(value)));
+                case "title" -> spec.and(BookSpecification.hasTitle(value));
+                case "author" -> spec.and(BookSpecification.hasAuthor(value));
+                case "genre" -> spec.and(BookSpecification.hasGenre(Integer.parseInt(value)));
+                case "language" -> spec.and(BookSpecification.hasLanguage(Integer.parseInt(value)));
                 case "inStock" -> {
                     if (Boolean.parseBoolean(value)) {
-                        yield spec.and(BookSpecifications.isInStock());
+                        yield spec.and(BookSpecification.isInStock());
                     }
                     yield spec;
                 }
