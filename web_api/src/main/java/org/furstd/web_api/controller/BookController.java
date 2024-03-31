@@ -42,6 +42,14 @@ public class BookController extends BaseController<Book>{
         return ResponseEntity.ok(bookListDTO);
     }
 
+    @RequestMapping("search")
+    public ResponseEntity<Object> searchBooks(@RequestParam String phrase,
+                                           @PageableDefault(sort = "id", direction = Sort.Direction.ASC) Pageable pageable) throws JsonProcessingException {
+
+        ListResponseDTO<Book> bookListDTO = bookService.searchBooks(phrase.toLowerCase(), pageable);
+        return ResponseEntity.ok(bookListDTO);
+    }
+
     @RequestMapping("{id}")
     public ResponseEntity<Object> getBook(@PathVariable int id) {
         return ResponseEntity.ok(bookService.findById(id).orElseThrow(() -> new NotFoundException(NOT_FOUND_MESSAGE)));

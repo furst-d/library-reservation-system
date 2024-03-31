@@ -52,6 +52,7 @@ const ContentWrapper = styled.div`
     justify-content: center;
     max-width: 90em;
     width: 100%;
+    padding-left: 20px;
 
     @media (min-width: 768px) {
         justify-content: flex-start;

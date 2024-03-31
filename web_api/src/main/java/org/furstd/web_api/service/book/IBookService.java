@@ -23,4 +23,6 @@ public interface IBookService {
     void deleteBook(Book book);
 
     BookRecommendationsDTO generateRecommendations(AppUser user);
+
+    ListResponseDTO<Book> searchBooks(String phrase, Pageable pageable);
 }

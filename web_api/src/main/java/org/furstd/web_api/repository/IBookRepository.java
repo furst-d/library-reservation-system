@@ -71,4 +71,7 @@ public interface IBookRepository extends JpaRepository<Book, Integer>, JpaSpecif
     List<Book> findTopReservedBooks(Pageable pageable);
 
     Page<Book> findByTitleContainingIgnoreCase(String filter, Pageable pageable);
+
+    @Query("SELECT b FROM Book b WHERE LOWER(b.title) LIKE %:phrase% OR LOWER(b.author.firstName) LIKE %:phrase% OR LOWER(b.author.lastName) LIKE %:phrase%")
+    Page<Book> search(String phrase, Pageable pageable);
 }

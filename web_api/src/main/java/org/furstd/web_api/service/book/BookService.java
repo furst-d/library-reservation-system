@@ -66,6 +66,12 @@ public class BookService implements IBookService, IFilterService<Book> {
     }
 
     @Override
+    public ListResponseDTO<Book> searchBooks(String phrase, Pageable pageable) {
+        Page<Book> books = bookRepository.search(phrase, pageable);
+        return new ListResponseDTO<>(books.getTotalElements(), books.getContent());
+    }
+
+    @Override
     public Specification<Book> applyFilter(Specification<Book> spec, FilterCriteria criteria) {
         if (!criteria.getValue().isEmpty()) {
             String value = criteria.getValue();

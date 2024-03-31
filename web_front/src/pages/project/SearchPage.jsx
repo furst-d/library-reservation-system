@@ -1,6 +1,7 @@
 import React from 'react';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import {useLocation} from "react-router-dom";
+import SearchResults from "../../components/search/SearchResults";
 
 const useQuery = () => {
     return new URLSearchParams(useLocation().search);
@@ -16,7 +17,8 @@ const SearchPage = props => {
                 <title>Výsledky hledání</title>
             </Helmet>
             <div>
-                Hledám: {searchTerm}
+                <h2>Výsledky dotazu: {searchTerm}</h2>
+                <SearchResults phrase={searchTerm}/>
             </div>
         </HelmetProvider>
     );
