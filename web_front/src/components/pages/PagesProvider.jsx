@@ -11,7 +11,7 @@ import ProfileSettingsPage from "../../pages/project/ProfileSettingsPage";
 import LoginPage from "../../pages/project/LoginPage";
 import RegisterPage from "../../pages/project/RegisterPage";
 import AdminPanelPage from "../../pages/project/AdminPanelPage";
-import {isEditor} from "../../utils/auth/authManager";
+import {isAdmin, isEditor} from "../../utils/auth/authManager";
 
 const PagesProvider = ({loggedUser}) => {
     return (

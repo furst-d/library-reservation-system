@@ -2,12 +2,44 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from "styled-components";
 import Paginator from "./Paginator";
+import {Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
 
-const DataGrid = ({ data, filterComponent, onFilter, onPageChange, currentPage, totalPages, renderType = 'table', renderRow }) => {
-
+const DataGrid = ({ data, filterComponent, onFilter, onPageChange, currentPage, totalPages, renderType = 'table', renderRow, headers }) => {
     const renderContent = () => {
-        if (renderType === 'flex' && renderRow) {
-            return data.map((item, index) => <div key={index}>{renderRow(item)}</div>);
+        switch (renderType) {
+            case 'flex':
+                return (
+                    <FlexContainer>
+                        {data.map((item, index) => <FlexItem key={index}>{renderRow(item)}</FlexItem>)}
+                    </FlexContainer>
+                );
+            case 'table':
+                return (
+                    <TableContainer component={Paper}>
+                        <Table aria-label="simple table">
+                            {headers &&
+                                <TableHead>
+                                    <TableRow>
+                                        {headers.map((header, index) => (
+                                            <TableCell
+                                                {...(index === 0 ? { component: 'th', scope: 'row', sx: { fontWeight: 'bold' } } : { align: 'right', sx: { fontWeight: 'bold' }})}
+                                                key={index}
+                                            >
+                                                {header}
+                                            </TableCell>
+                                        ))}
+
+                                    </TableRow>
+                                </TableHead>
+                            }
+                            <TableBody>
+                                {data.map((item, index) => <TableRow key={index}>{renderRow(item)}</TableRow>)}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                );
+            default:
+                return null;
         }
     };
 
@@ -15,9 +47,7 @@ const DataGrid = ({ data, filterComponent, onFilter, onPageChange, currentPage, 
         <DataGridStyle>
             {filterComponent && React.cloneElement(filterComponent, { onFilter })}
 
-            <ContentContainer>
-                {renderContent()};
-            </ContentContainer>
+            {renderContent()}
 
             <Paginator currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} />
         </DataGridStyle>
@@ -37,11 +67,16 @@ DataGrid.propTypes = {
 
 export default DataGrid;
 
-const ContentContainer = styled.div`
+const FlexContainer = styled.div`
     display: flex;
     flex-wrap: wrap;
 `;
 
+const FlexItem = styled.div`
+    flex: 1;
+    padding: 10px;
+    box-sizing: border-box;
+`;
 
 const DataGridStyle = styled.div`
     display: flex;
@@ -49,3 +84,5 @@ const DataGridStyle = styled.div`
     gap: 10px;
     margin-bottom: 10px;
 `;
+
+

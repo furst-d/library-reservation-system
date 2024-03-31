@@ -161,7 +161,7 @@ export default Filter;
 const FilterContainerStyle = styled.div`
     display: flex;
     flex-direction: column;
-    padding: 10px;
+    padding: 0 10px 10px 10px;
 `;
 
 const StyledTextField = styledMUI(TextField)`

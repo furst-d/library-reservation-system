@@ -1,4 +1,4 @@
-import {useCallback, useState} from 'react';
+import {useCallback, useMemo, useState} from 'react';
 import PropTypes from 'prop-types';
 
 const convertFiltersToApiFormat = (filters) => {
@@ -11,7 +11,7 @@ const convertFiltersToApiFormat = (filters) => {
 const UseFilter = (initialFilters) => {
     const [filters, setFilters] = useState(initialFilters);
 
-    const apiFilters = convertFiltersToApiFormat(filters);
+    const apiFilters = useMemo(() => convertFiltersToApiFormat(filters), [filters]);
 
     const updateFilters = useCallback((updatedFilters) => {
         setFilters(updatedFilters);

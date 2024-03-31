@@ -22,6 +22,7 @@ export const ContentWrapperStyle = styled.div`
   gap: 20px;
   width: 100vw;
   margin: 1em;
+  overflow-x: auto;  
 
   @media (min-width: 768px) {
     flex-direction: row;
@@ -42,8 +43,8 @@ export const SubMenuStyle = styled.ul`
 export const SubContentStyle = styled.div`
   flex: 1 1 auto;
   border-radius: 10px;
-  padding: 20px;
-  border: 1px solid ${p => p.theme.secondary};  
+  padding: 0 20px 20px 20px;
+  overflow-x: auto;
 `
 
 export const SubMenuStyledLink = styled(NavbarLinkStyle)`
