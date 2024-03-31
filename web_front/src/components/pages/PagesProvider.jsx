@@ -28,7 +28,7 @@ const PagesProvider = ({loggedUser}) => {
                         <Route path="/login" element={<LoginPage loggedUser={loggedUser} />} />
                         <Route path="/register" element={<RegisterPage loggedUser={loggedUser} />} />
                         <Route path="*" element={<NotFoundPage />} />
-                        {isEditor(loggedUser) && <Route path="/admin" element={<AdminPanelPage loggedUser={loggedUser} />} />}
+                        {isEditor(loggedUser) && <Route path="/admin/*" element={<AdminPanelPage loggedUser={loggedUser} />} />}
                     </Routes>
                 </ContentWrapper>
             </Container>
@@ -55,6 +55,5 @@ const ContentWrapper = styled.div`
 
     @media (min-width: 768px) {
         justify-content: flex-start;
-        padding: 0 2em;
     }
 `

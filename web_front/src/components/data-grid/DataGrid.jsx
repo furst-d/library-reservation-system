@@ -15,7 +15,7 @@ const DataGrid = ({ data, filterComponent, onFilter, onPageChange, currentPage, 
         <DataGridStyle>
             {filterComponent && React.cloneElement(filterComponent, { onFilter })}
 
-            <ContentContainer renderType={renderType}>
+            <ContentContainer>
                 {renderContent()};
             </ContentContainer>
 
