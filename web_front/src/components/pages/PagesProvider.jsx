@@ -12,6 +12,7 @@ import LoginPage from "../../pages/project/LoginPage";
 import RegisterPage from "../../pages/project/RegisterPage";
 import AdminPanelPage from "../../pages/project/AdminPanelPage";
 import {isAdmin, isEditor} from "../../utils/auth/authManager";
+import BookDetailPage from "../../pages/project/BookDetailPage";
 
 const PagesProvider = ({loggedUser}) => {
     return (
@@ -21,6 +22,7 @@ const PagesProvider = ({loggedUser}) => {
                 <ContentWrapper>
                     <Routes>
                         <Route path="/" element={<BookCatalogPage />} />
+                        <Route path="/books/:id" element={<BookDetailPage />} />
                         <Route path="/authors" element={<AuthorCatalogPage />} />
                         <Route path="/search" element={<SearchPage />} />
                         <Route path="/profile/*" element={<ProfilePage loggedUser={loggedUser} />} />
