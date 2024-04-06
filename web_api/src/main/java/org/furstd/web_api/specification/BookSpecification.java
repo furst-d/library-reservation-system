@@ -5,6 +5,9 @@ import org.furstd.web_api.model.book.Genre;
 import org.furstd.web_api.model.book.Language;
 import org.springframework.data.jpa.domain.Specification;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class BookSpecification {
 
     private BookSpecification() {}
@@ -47,5 +50,16 @@ public class BookSpecification {
             }
             return criteriaBuilder.equal(root.get("language"), language);
         };
+    }
+
+    public static Specification<Book> hasBookIds(String value) {
+        value = value.substring(1, value.length() - 1);
+
+        List<Integer> ids = Arrays.stream(value.split(","))
+                .map(String::trim)
+                .map(Integer::valueOf)
+                .toList();
+
+        return (root, query, criteriaBuilder) -> root.get("id").in(ids);
     }
 }
