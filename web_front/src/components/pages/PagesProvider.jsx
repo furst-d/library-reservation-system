@@ -14,6 +14,7 @@ import AdminPanelPage from "../../pages/project/AdminPanelPage";
 import {isAdmin, isEditor} from "../../utils/auth/authManager";
 import BookDetailPage from "../../pages/project/BookDetailPage";
 import AuthorDetailPage from "../../pages/project/AuthorDetailPage";
+import ShoppingCartPage from "../../pages/project/ShoppingCartPage";
 
 const PagesProvider = ({loggedUser}) => {
     return (
@@ -23,7 +24,7 @@ const PagesProvider = ({loggedUser}) => {
                 <ContentWrapper>
                     <Routes>
                         <Route path="/" element={<BookCatalogPage />} />
-                        <Route path="/books/:id" element={<BookDetailPage />} />
+                        <Route path="/books/:id" element={<BookDetailPage loggedUser={loggedUser} />} />
                         <Route path="/authors" element={<AuthorCatalogPage />} />
                         <Route path="/authors/:id" element={<AuthorDetailPage />} />
                         <Route path="/search" element={<SearchPage />} />
@@ -31,6 +32,7 @@ const PagesProvider = ({loggedUser}) => {
                         <Route path="/profile-settings" element={<ProfileSettingsPage />} />
                         <Route path="/login" element={<LoginPage loggedUser={loggedUser} />} />
                         <Route path="/register" element={<RegisterPage loggedUser={loggedUser} />} />
+                        <Route path="/shopping-cart" element={<ShoppingCartPage />} />
                         <Route path="*" element={<NotFoundPage />} />
                         {isEditor(loggedUser) && <Route path="/admin/*" element={<AdminPanelPage loggedUser={loggedUser} />} />}
                     </Routes>

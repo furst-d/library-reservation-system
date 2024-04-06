@@ -4,15 +4,20 @@ import { useEffect, useState } from 'react';
 import axios from "../../api/axios";
 import LoadingSpinner from "../styles/material-ui/components/LoadingSpinner";
 import PropTypes from "prop-types";
+import Cookies from 'js-cookie';
 
-const BookDetail = ({ id }) => {
+const BookDetail = ({id, loggedUser}) => {
     const [book, setBook] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [isInCart, setIsInCart] = useState(false);
 
     useEffect(() => {
+
         axios.get(`/books/${id}`)
             .then(response => {
                 setBook(response.data.payload);
+                const cart = Cookies.get('cart') ? JSON.parse(Cookies.get('cart')) : [];
+                setIsInCart(cart.includes(id));
             })
             .catch(error => {
                 console.error('Error loading book:', error);
@@ -29,6 +34,16 @@ const BookDetail = ({ id }) => {
     if (!book) {
         return <div>Kniha nenalezena</div>;
     }
+
+    const addToCart = (id) => {
+        let cart = Cookies.get('cart') ? JSON.parse(Cookies.get('cart')) : [];
+        if (!cart.includes(id)) {
+            cart.push(id);
+            Cookies.set('cart', JSON.stringify(cart), { expires: 1/24 }); // 1 hour
+            localStorage.setItem("toast", "Kniha byla přidána do košíku");
+            window.location.reload();
+        }
+    };
 
     return (
         <BookContainer>
@@ -54,9 +69,10 @@ const BookDetail = ({ id }) => {
                     <Button
                         variant="contained"
                         color="primary"
-                        disabled={!book.available}
+                        disabled={!book.available || isInCart || !loggedUser}
+                        onClick={() => addToCart(book.id)}
                     >
-                        Přidat do košíku
+                        {loggedUser ? isInCart ? 'Kniha je již v košíku' : 'Přidat do košíku' : 'Pro přidání knihy do košíku je nutné se přihlásit'}
                     </Button>
                 </div>
             </BookDetails>
@@ -66,6 +82,7 @@ const BookDetail = ({ id }) => {
 
 BookDetail.propTypes = {
     id: PropTypes.number.isRequired,
+    loggedUser: PropTypes.object.isRequired,
 };
 
 export default BookDetail;

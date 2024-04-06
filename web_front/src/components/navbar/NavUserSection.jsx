@@ -11,6 +11,7 @@ import Avatar from "../styles/material-ui/components/avatar/Avatar";
 import {checkAuth} from "../../utils/auth/authManager";
 import {NavbarLinkStyle} from "../styles/navbar/Navbar";
 import PropTypes from "prop-types";
+import ShoppingCartBadge from "../shopping-cart/ShoppingCartBadge";
 
 const NavUserSection = ({setOpenHamburgerMenu}) => {
     const [anchorProfile, setAnchorProfile] = useState(null);
@@ -36,6 +37,7 @@ const NavUserSection = ({setOpenHamburgerMenu}) => {
             {checkAuth()
                 ?
                 <>
+                    <ShoppingCartBadge />
                     <Avatar onClick={handleClickProfile} />
                     <Menu
                         anchorEl={anchorProfile}
