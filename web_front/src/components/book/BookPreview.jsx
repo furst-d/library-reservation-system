@@ -22,7 +22,7 @@ const BookPreview = ({id, title, authorId, authorFirstName, authorLastName, cove
         <BookContainer>
             <NavLink to={`/books/${id}`}><BookImage src={coverImageLink} alt={title} /></NavLink>
             <NavLink to={`/books/${id}`}>{title}</NavLink>
-            <NavLink to={`/author/${authorId}`}>{authorFirstName} {authorLastName}</NavLink>
+            <NavLink to={`/authors/${authorId}`}>{authorFirstName} {authorLastName}</NavLink>
         </BookContainer>
     );
 };

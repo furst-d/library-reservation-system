@@ -19,6 +19,11 @@ public class BookSpecification {
                 criteriaBuilder.like(criteriaBuilder.lower(root.get("author").get("lastName")), "%" + author + "%");
     }
 
+    public static Specification<Book> hasAuthorId(int id) {
+        return (root, query, criteriaBuilder) ->
+                criteriaBuilder.equal(root.get("author").get("id"), id);
+    }
+
     public static Specification<Book> isInStock() {
         return (root, query, criteriaBuilder) ->
             criteriaBuilder.greaterThan(root.get("availableQuantity"), 0);

@@ -78,6 +78,7 @@ public class BookService implements IBookService, IFilterService<Book> {
             return switch (criteria.getName()) {
                 case "title" -> spec.and(BookSpecification.hasTitle(value));
                 case "author" -> spec.and(BookSpecification.hasAuthor(value));
+                case "authorId" -> spec.and(BookSpecification.hasAuthorId(Integer.parseInt(value)));
                 case "genre" -> spec.and(BookSpecification.hasGenre(Integer.parseInt(value)));
                 case "language" -> spec.and(BookSpecification.hasLanguage(Integer.parseInt(value)));
                 case "inStock" -> {

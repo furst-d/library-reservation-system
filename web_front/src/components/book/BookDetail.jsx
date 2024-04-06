@@ -27,7 +27,7 @@ const BookDetail = ({ id }) => {
     }
 
     if (!book) {
-        return <div>Book not found</div>;
+        return <div>Kniha nenalezena</div>;
     }
 
     return (
@@ -50,7 +50,7 @@ const BookDetail = ({ id }) => {
                 </div>
                 <div>
                     {book.available && <BookInfo>Skladem kusů: {book.availableQuantity}</BookInfo>}
-                    {!book.available && <BookInfo>Vyprodáno</BookInfo>}
+                    {!book.available && <BookInfo>Vypůjčeno</BookInfo>}
                     <Button
                         variant="contained"
                         color="primary"

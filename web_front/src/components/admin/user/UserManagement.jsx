@@ -9,6 +9,7 @@ import AddIcon from '@mui/icons-material/Add';
 import {AdminAddButton} from "../../styles/admin/Button";
 import PropTypes from "prop-types";
 import {isAdmin} from "../../../utils/auth/authManager";
+import {formatDate} from "../../../utils/date/dateFormatter";
 
 const UserManagement = ({loggedUser}) => {
     const [users, setUsers] = useState([]);
@@ -47,14 +48,6 @@ const UserManagement = ({loggedUser}) => {
         updateFilters(filters);
         setPage(0);
     };
-
-    function formatDate(dateString) {
-        const date = new Date(dateString);
-        const day = date.getDate().toString().padStart(2, '0');
-        const month = (date.getMonth() + 1).toString().padStart(2, '0');
-        const year = date.getFullYear();
-        return `${day}.${month}.${year}`;
-    }
 
     return (
         <>
