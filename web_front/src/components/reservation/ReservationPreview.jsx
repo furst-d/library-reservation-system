@@ -8,7 +8,7 @@ const ReservationPreview = ({ reservationData }) => {
     const { id, books, reservationDate, returnDate, returnedAt, penalty } = reservationData;
 
     return (
-        <ReservationContainer expired={new Date(returnDate) < new Date()} returned={returnedAt !== null}>
+        <ReservationContainer expired={new Date(returnDate) < new Date()} returned={returnedAt !== null} penalty={penalty}>
             <Grid container spacing={2}>
                 <Grid item xs={12} sm={6}>
                     <ReservationInfo>
@@ -50,9 +50,9 @@ const ReservationContainer = styled(Paper)`
   margin: 16px;
   padding: 16px;
   background-color: ${props => {
-    if (props.expired) return '#f8d7da !important';
-    if (props.returned) return '#d4edda !important';
-    return '#fff3cd !important';
+    if ((props.expired && !props.returned) || (props.penalty && !props.penalty.paid)) return '#f8d7da !important'; //red
+    if (props.returned) return '#d4edda !important'; //green
+    return '#fff3cd !important'; //yellow
 }};
 `;
 
