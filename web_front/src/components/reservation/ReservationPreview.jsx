@@ -46,7 +46,7 @@ ReservationPreview.propTypes = {
 
 export default ReservationPreview;
 
-const ReservationContainer = styled.div`
+const ReservationContainer = styled(Paper)`
   padding: 16px;
   background-color: ${props => {
     if ((props.expired && !props.returned) || (props.penalty && !props.penalty.paid)) return '#f8d7da !important'; //red
