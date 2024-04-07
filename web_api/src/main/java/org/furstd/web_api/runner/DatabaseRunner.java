@@ -1,15 +1,13 @@
 package org.furstd.web_api.runner;
 
 import lombok.RequiredArgsConstructor;
-import org.furstd.web_api.entity.Author;
-import org.furstd.web_api.entity.Book;
-import org.furstd.web_api.entity.Role;
-import org.furstd.web_api.entity.AppUser;
+import org.furstd.web_api.entity.*;
 import org.furstd.web_api.model.author.Nationality;
 import org.furstd.web_api.model.book.Genre;
 import org.furstd.web_api.model.book.Language;
 import org.furstd.web_api.repository.IAuthorRepository;
 import org.furstd.web_api.repository.IBookRepository;
+import org.furstd.web_api.repository.IReservationRepository;
 import org.furstd.web_api.repository.IRoleRepository;
 import org.furstd.web_api.service.user.IUserService;
 import org.springframework.boot.CommandLineRunner;
@@ -18,6 +16,7 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -26,9 +25,10 @@ public class DatabaseRunner implements CommandLineRunner {
     private final IRoleRepository roleRepository;
     private final IAuthorRepository authorRepository;
     private final IBookRepository bookRepository;
+    private final IReservationRepository reservationRepository;
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
         Role adminRole = new Role("ADMIN");
         Role editorRole = new Role("EDITOR");
         Role userRole = new Role("USER");
@@ -120,5 +120,24 @@ public class DatabaseRunner implements CommandLineRunner {
         bookRepository.save(animalFarm);
         bookRepository.save(nineteenEightyFour);
         bookRepository.save(crimePunishment);
+
+        LocalDate localNow = LocalDate.now();
+        LocalDate localMinusDay = localNow.minusDays(1);
+
+        Date now = new Date();
+        Date minusDay = Date.from(localMinusDay.atStartOfDay().atZone(java.time.ZoneId.systemDefault()).toInstant());
+
+        Reservation r1 = new Reservation(adminUser, List.of(norwegianWood), Date.from(LocalDate.of(2024, 3, 1).atStartOfDay(ZoneId.systemDefault()).toInstant()) , Date.from(LocalDate.of(2024, 4, 1).atStartOfDay(ZoneId.systemDefault()).toInstant()));
+        r1.setReturnedAt(now);
+        r1.setPenalty(new Penalty(minusDay, now));
+        r1.getPenalty().setPaid(true);
+        Reservation r2 = new Reservation(adminUser, List.of(hobit, twoTowers), Date.from(LocalDate.of(2024, 3, 2).atStartOfDay(ZoneId.systemDefault()).toInstant()) , Date.from(LocalDate.of(2024, 4, 2).atStartOfDay(ZoneId.systemDefault()).toInstant()));
+        r2.setReturnedAt(new Date());
+        r2.setPenalty(new Penalty(minusDay, now));
+        Reservation r3 = new Reservation(adminUser, List.of(shining, davinciCode, animalFarm), Date.from(LocalDate.of(2024, 3, 3).atStartOfDay(ZoneId.systemDefault()).toInstant()) , Date.from(LocalDate.of(2024, 4, 3).atStartOfDay(ZoneId.systemDefault()).toInstant()));
+
+        reservationRepository.save(r1);
+        reservationRepository.save(r2);
+        reservationRepository.save(r3);
     }
 }

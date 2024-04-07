@@ -37,7 +37,7 @@ public class Reservation {
     @Column
     private Date returnedAt;
 
-    @OneToOne()
+    @OneToOne(cascade = CascadeType.ALL)
     @ToString.Exclude
     private Penalty penalty;
 
