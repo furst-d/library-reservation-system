@@ -17,6 +17,8 @@ public interface IReservationService {
 
     Optional<Reservation> findById(int id);
 
+    ListResponseDTO<Reservation> findByUser(AppUser user, Pageable pageable);
+
     Reservation createReservation(AppUser appUser, List<Integer> bookIds, Date reservationDate, Date returnDate);
 
     void updateReservation(Reservation reservation);

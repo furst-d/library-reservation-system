@@ -4,12 +4,12 @@ import styled from "styled-components";
 import Paginator from "./Paginator";
 import {Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
 
-const DataGrid = ({ data, filterComponent, onFilter, onPageChange, currentPage, totalPages, renderType = 'table', renderRow, headers }) => {
+const DataGrid = ({ data, filterComponent, onFilter, onPageChange, currentPage, totalPages, renderType = 'table', flexDirection = 'row', renderRow, headers }) => {
     const renderContent = () => {
         switch (renderType) {
             case 'flex':
                 return (
-                    <FlexContainer>
+                    <FlexContainer direction={flexDirection}>
                         {data.map((item, index) => <FlexItem key={index}>{renderRow(item)}</FlexItem>)}
                     </FlexContainer>
                 );
@@ -69,6 +69,7 @@ export default DataGrid;
 
 const FlexContainer = styled.div`
     display: flex;
+    flex-direction: ${props => props.direction};
     flex-wrap: wrap;
 `;
 

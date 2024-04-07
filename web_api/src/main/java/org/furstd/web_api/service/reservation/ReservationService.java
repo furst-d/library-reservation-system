@@ -40,6 +40,12 @@ public class ReservationService implements IReservationService, IFilterService<R
     }
 
     @Override
+    public ListResponseDTO<Reservation> findByUser(AppUser user, Pageable pageable) {
+        Page<Reservation> reservations = reservationRepository.findByAppUser(user, pageable);
+        return new ListResponseDTO<>(reservations.getTotalElements(), reservations.getContent());
+    }
+
+    @Override
     public Reservation createReservation(AppUser appUser, List<Integer> bookIds, Date reservationDate, Date returnDate) {
         List<Book> books = bookService.findByIds(bookIds);
         if (books.isEmpty()) {

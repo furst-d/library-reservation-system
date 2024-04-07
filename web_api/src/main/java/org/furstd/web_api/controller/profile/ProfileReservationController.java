@@ -5,6 +5,9 @@ import org.furstd.web_api.entity.AppUser;
 import org.furstd.web_api.model.util.Msg;
 import org.furstd.web_api.service.reservation.IReservationService;
 import org.furstd.web_api.service.user.IUserService;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +23,12 @@ public class ProfileReservationController extends PrivateController {
     public ProfileReservationController(IUserService userService, IReservationService reservationService) {
         super(userService);
         this.reservationService = reservationService;
+    }
+
+    @RequestMapping("")
+    public ResponseEntity<Object> getReservations(@PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+        AppUser user = getLoggedUser();
+        return ResponseEntity.ok(reservationService.findByUser(user, pageable));
     }
 
     @PostMapping("")

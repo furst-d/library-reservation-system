@@ -33,7 +33,6 @@ const ReservationManagement = () => {
                 filters: encodeURIComponent(JSON.stringify(apiFilters))
             }
         }).then(response => {
-            console.log(response.data.payload.data);
             setReservations(response.data.payload.data);
             setTotalRecords(response.data.payload.totalCount);
         }).catch(error => {
