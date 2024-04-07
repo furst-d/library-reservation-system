@@ -20,7 +20,13 @@ public class GlobalExceptionHandler {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("status", "error");
         body.put("code", ex.getStatus().value());
-        body.put("payload", new Msg(ex.getMessage()));
+
+        Map<String, Object> payload = new LinkedHashMap<>();
+        payload.put("message", new Msg(ex.getMessage()));
+        if (ex.getData() != null) {
+            payload.put("data", ex.getData());
+        }
+        body.put("payload", payload);
 
         return new ResponseEntity<>(body, ex.getStatus());
     }

@@ -72,6 +72,11 @@ public class BookService implements IBookService, IFilterService<Book> {
     }
 
     @Override
+    public void updateBooks(List<Book> books) {
+        bookRepository.saveAll(books);
+    }
+
+    @Override
     public Specification<Book> applyFilter(Specification<Book> spec, FilterCriteria criteria) {
         if (!criteria.getValue().isEmpty()) {
             String value = criteria.getValue();

@@ -19,5 +19,5 @@ const BookDetailPage = ({loggedUser}) => {
 export default BookDetailPage;
 
 BookDetailPage.propTypes = {
-    loggedUser: PropTypes.object.isRequired,
+    loggedUser: PropTypes.object,
 };

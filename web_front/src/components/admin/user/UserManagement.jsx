@@ -88,7 +88,7 @@ const UserManagement = ({loggedUser}) => {
 };
 
 UserManagement.propTypes = {
-    loggedUser: PropTypes.object.isRequired,
+    loggedUser: PropTypes.object,
 };
 
 export default UserManagement;

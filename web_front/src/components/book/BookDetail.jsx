@@ -82,7 +82,7 @@ const BookDetail = ({id, loggedUser}) => {
 
 BookDetail.propTypes = {
     id: PropTypes.number.isRequired,
-    loggedUser: PropTypes.object.isRequired,
+    loggedUser: PropTypes.object,
 };
 
 export default BookDetail;

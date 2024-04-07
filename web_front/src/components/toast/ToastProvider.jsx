@@ -10,6 +10,13 @@ const ToastProvider = ({children}) => {
                 onClose: () => localStorage.removeItem("toast")
             });
         }
+
+        const toastErrorMessage = localStorage.getItem("toast-error");
+        if(toastErrorMessage) {
+            toast.error(toastErrorMessage, {
+                onClose: () => localStorage.removeItem("toast")
+            });
+        }
     }, []);
 
     return (

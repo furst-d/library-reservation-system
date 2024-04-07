@@ -77,7 +77,7 @@ const AdminPanelPage = ({loggedUser}) => {
 };
 
 AdminPanelPage.propTypes = {
-    loggedUser: PropTypes.object.isRequired,
+    loggedUser: PropTypes.object,
 };
 
 export default AdminPanelPage;

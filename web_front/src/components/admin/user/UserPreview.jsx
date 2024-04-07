@@ -49,7 +49,7 @@ UserPreview.propTypes = {
     roles: PropTypes.array.isRequired,
     users: PropTypes.array.isRequired,
     setUsers: PropTypes.func.isRequired,
-    loggedUser: PropTypes.object.isRequired,
+    loggedUser: PropTypes.object,
 };
 
 export default UserPreview;

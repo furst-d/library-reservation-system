@@ -25,4 +25,6 @@ public interface IBookService {
     BookRecommendationsDTO generateRecommendations(AppUser user);
 
     ListResponseDTO<Book> searchBooks(String phrase, Pageable pageable);
+
+    void updateBooks(List<Book> books);
 }
