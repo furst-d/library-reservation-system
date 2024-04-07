@@ -14,7 +14,7 @@ import Person3Icon from '@mui/icons-material/Person3';
 import UserManagement from "../../components/admin/user/UserManagement";
 import BookManagement from "../../components/admin/BookManagement";
 import AuthorManagement from "../../components/admin/AuthorManagement";
-import ReservationManagement from "../../components/admin/ReservationManagement";
+import ReservationManagement from "../../components/admin/reservation/ReservationManagement";
 import PropTypes from "prop-types";
 
 const AdminPanelPage = ({loggedUser}) => {

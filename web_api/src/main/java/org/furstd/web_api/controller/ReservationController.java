@@ -1,38 +1,43 @@
 package org.furstd.web_api.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
+import org.furstd.web_api.dto.ListResponseDTO;
 import org.furstd.web_api.dto.ReservationDTO;
 import org.furstd.web_api.entity.AppUser;
 import org.furstd.web_api.entity.Book;
 import org.furstd.web_api.entity.Reservation;
-import org.furstd.web_api.entity.Role;
-import org.furstd.web_api.exceptions.ForbiddenException;
 import org.furstd.web_api.exceptions.NotFoundException;
 import org.furstd.web_api.model.util.Msg;
 import org.furstd.web_api.service.book.IBookService;
-import org.furstd.web_api.service.reservation.IReservationService;
-import org.furstd.web_api.service.role.IRoleService;
+import org.furstd.web_api.service.reservation.ReservationService;
 import org.furstd.web_api.service.user.IUserService;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.List;
 
 @RequestMapping("reservations")
 @RestController
 @RequiredArgsConstructor
-public class ReservationController {
-    private final IReservationService reservationService;
+public class ReservationController extends BaseController<Reservation> {
+    private final ReservationService reservationService;
     private final IBookService bookService;
     private final IUserService userService;
 
     private static final String NOT_FOUND_MESSAGE = "Reservation not found!";
 
     @RequestMapping("")
-    public ResponseEntity<Object> getReservations() {
-        return ResponseEntity.ok(reservationService.findAll());
+    public ResponseEntity<Object> getReservations(@RequestParam(required = false) String filters,
+                                           @PageableDefault(sort = "id", direction = Sort.Direction.ASC) Pageable pageable) throws JsonProcessingException {
+        Specification<Reservation> spec = this.processFilters(filters, reservationService);
+        ListResponseDTO<Reservation> reservationListDTO = reservationService.findAll(spec, pageable);
+        return ResponseEntity.ok(reservationListDTO);
     }
 
     @RequestMapping("{id}")

@@ -1,18 +1,15 @@
 import React, {useEffect, useState} from 'react';
 import useFilter from "../../../hooks/useFilter";
 import {axiosPrivate} from "../../../api/axios";
-import DataGrid from "../../data-grid/DataGrid";
 import LoadingSpinner from "../../styles/material-ui/components/LoadingSpinner";
-import Filter from "../../data-grid/Filter";
-import UserPreview from "./UserPreview";
-import AddIcon from '@mui/icons-material/Add';
 import {AdminAddButton} from "../../styles/admin/Button";
-import PropTypes from "prop-types";
-import {isAdmin} from "../../../utils/auth/authManager";
-import {formatDate} from "../../../utils/date/dateFormatter";
+import AddIcon from "@mui/icons-material/Add";
+import DataGrid from "../../data-grid/DataGrid";
+import Filter from "../../data-grid/Filter";
+import ReservationPreview from "./ReservationPreview";
 
-const UserManagement = ({loggedUser}) => {
-    const [users, setUsers] = useState([]);
+const ReservationManagement = () => {
+    const [reservations, setReservations] = useState([]);
     const [loading, setLoading] = useState(true);
     const [page, setPage] = useState(0);
     const [totalRecords, setTotalRecords] = useState(0);
@@ -22,22 +19,25 @@ const UserManagement = ({loggedUser}) => {
     const initialFiltersAndSorters = [
         { name: 'email', type: 'text', value: '', placeholder: 'Email' },
         { name: 'lastName', type: 'text', value: '', placeholder: 'Příjmení' },
+        { name: 'expired', type: 'checkbox', value: false, placeholder: 'Prošlé' },
     ];
 
     const [apiFilters, updateFilters] = useFilter(initialFiltersAndSorters);
 
     useEffect(() => {
-        axiosPrivate.get(`/users`, {
+        axiosPrivate.get(`/reservations`, {
             params: {
                 page: page,
                 size: LIMIT,
+                sort: 'reservationDate,desc',
                 filters: encodeURIComponent(JSON.stringify(apiFilters))
             }
         }).then(response => {
-            setUsers(response.data.payload.data);
+            console.log(response.data.payload.data);
+            setReservations(response.data.payload.data);
             setTotalRecords(response.data.payload.totalCount);
         }).catch(error => {
-            console.error('Error loading users:', error);
+            console.error('Error loading reservations:', error);
         }).finally(() => {
             setLoading(false);
         });
@@ -55,29 +55,28 @@ const UserManagement = ({loggedUser}) => {
                 <LoadingSpinner />
             ) : (
                 <>
-                    {isAdmin(loggedUser) && (
-                        <AdminAddButton onClick={() => setOpenAddModal(true)}><AddIcon />Zaregistrovat uživatele</AdminAddButton>
-                    )}
+                    <AdminAddButton onClick={() => setOpenAddModal(true)}><AddIcon />Nová rezervace</AdminAddButton>
                     <DataGrid
-                        data={users}
+                        data={reservations}
                         filterComponent={<Filter onFilterChange={handleFilterChange}
                                                  initialFilters={initialFiltersAndSorters} />}
                         onPageChange={(newPage) => setPage(newPage - 1)}
                         pageSize={LIMIT}
                         currentPage={page + 1}
                         totalPages={Math.ceil(totalRecords / LIMIT)}
-                        headers={['Email', 'Jméno', 'Role', 'Datum narození']}
+                        headers={['Email', 'Jméno', 'Počet knih', 'Vráceno', 'Datum rezervace', 'Zarezervováno do']}
                         renderRow={(row) => (
-                            <UserPreview
+                            <ReservationPreview
                                 id={row.id}
-                                email={row.email}
-                                firstName={row.firstName}
-                                lastName={row.lastName}
-                                birthDate={formatDate(row.birthDate)}
-                                roles={row.authorities}
-                                users={users}
-                                setUsers={setUsers}
-                                loggedUser={loggedUser}
+                                email={row.appUser.email}
+                                firstName={row.appUser.firstName}
+                                lastName={row.appUser.lastName}
+                                returnedAt={row.returnedAt}
+                                reservationDate={row.reservationDate}
+                                returnDate={row.returnDate}
+                                bookCount={row.books.length}
+                                reservations={reservations}
+                                setReservations={setReservations}
                             />
                         )}
                     />
@@ -87,8 +86,4 @@ const UserManagement = ({loggedUser}) => {
     );
 };
 
-UserManagement.propTypes = {
-    loggedUser: PropTypes.object,
-};
-
-export default UserManagement;
+export default ReservationManagement;

@@ -14,7 +14,7 @@ const ToastProvider = ({children}) => {
         const toastErrorMessage = localStorage.getItem("toast-error");
         if(toastErrorMessage) {
             toast.error(toastErrorMessage, {
-                onClose: () => localStorage.removeItem("toast")
+                onClose: () => localStorage.removeItem("toast-error")
             });
         }
     }, []);

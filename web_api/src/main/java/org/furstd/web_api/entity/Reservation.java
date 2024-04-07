@@ -34,6 +34,9 @@ public class Reservation {
     @Column(nullable = false)
     private Date returnDate;
 
+    @Column
+    private Date returnedAt;
+
     @OneToOne()
     @ToString.Exclude
     private Penalty penalty;
@@ -43,6 +46,7 @@ public class Reservation {
         this.books = books;
         this.reservationDate = reservationDate;
         this.returnDate = returnDate;
+        this.returnedAt = null;
         this.penalty = null;
     }
 }

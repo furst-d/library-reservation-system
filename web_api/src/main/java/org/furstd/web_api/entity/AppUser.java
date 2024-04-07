@@ -46,6 +46,7 @@ public class AppUser implements UserDetails {
     private final List<Role> roles = new ArrayList<>();
 
     @OneToMany(mappedBy = "appUser")
+    @JsonIgnore
     private final List<Reservation> reservations = new ArrayList<>();
 
     public AppUser(String email, String password, String firstName, String lastName, Date birthDate) {

@@ -44,7 +44,7 @@ public class BookController extends BaseController<Book>{
 
     @RequestMapping("search")
     public ResponseEntity<Object> searchBooks(@RequestParam String phrase,
-                                           @PageableDefault(sort = "id", direction = Sort.Direction.ASC) Pageable pageable) throws JsonProcessingException {
+                                           @PageableDefault(sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
 
         ListResponseDTO<Book> bookListDTO = bookService.searchBooks(phrase.toLowerCase(), pageable);
         return ResponseEntity.ok(bookListDTO);

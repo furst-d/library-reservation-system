@@ -1,6 +1,7 @@
 package org.furstd.web_api.service.reservation;
 
 import lombok.RequiredArgsConstructor;
+import org.furstd.web_api.dto.ListResponseDTO;
 import org.furstd.web_api.entity.AppUser;
 import org.furstd.web_api.entity.Book;
 import org.furstd.web_api.entity.Reservation;
@@ -8,7 +9,13 @@ import org.furstd.web_api.exceptions.BookNotAvailableException;
 import org.furstd.web_api.exceptions.ForbiddenException;
 import org.furstd.web_api.exceptions.NotFoundException;
 import org.furstd.web_api.repository.IReservationRepository;
+import org.furstd.web_api.service.IFilterService;
 import org.furstd.web_api.service.book.IBookService;
+import org.furstd.web_api.specification.ReservationSpecification;
+import org.furstd.web_api.util.FilterCriteria;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -17,13 +24,14 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class ReservationService implements IReservationService {
+public class ReservationService implements IReservationService, IFilterService<Reservation> {
     private final IReservationRepository reservationRepository;
     private final IBookService bookService;
 
     @Override
-    public List<Reservation> findAll() {
-        return reservationRepository.findAll();
+    public ListResponseDTO<Reservation> findAll(Specification<Reservation> spec, Pageable pageable) {
+        Page<Reservation> reservations = reservationRepository.findAll(spec, pageable);
+        return new ListResponseDTO<>(reservations.getTotalElements(), reservations.getContent());
     }
 
     @Override
@@ -73,5 +81,24 @@ public class ReservationService implements IReservationService {
         } else if (returnDate.before(reservationDate)) {
             throw new ForbiddenException("Return date must be after reservation date!");
         }
+    }
+
+    @Override
+    public Specification<Reservation> applyFilter(Specification<Reservation> spec, FilterCriteria criteria) {
+        if (!criteria.getValue().isEmpty()) {
+            String value = criteria.getValue();
+            return switch (criteria.getName()) {
+                case "email" -> spec.and(ReservationSpecification.hasEmail(value));
+                case "lastName" -> spec.and(ReservationSpecification.hasLastName(value));
+                case "expired" -> {
+                    if (Boolean.parseBoolean(value)) {
+                        yield spec.and(ReservationSpecification.isExpired());
+                    }
+                    yield spec;
+                }
+                default -> spec;
+            };
+        }
+        return spec;
     }
 }
