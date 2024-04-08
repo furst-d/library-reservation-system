@@ -12,8 +12,8 @@ import {Navigate, Route, Routes} from "react-router-dom";
 import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
 import Person3Icon from '@mui/icons-material/Person3';
 import UserManagement from "../../components/admin/user/UserManagement";
-import BookManagement from "../../components/admin/BookManagement";
-import AuthorManagement from "../../components/admin/AuthorManagement";
+import BookManagement from "../../components/admin/book/BookManagement";
+import AuthorManagement from "../../components/admin/author/AuthorManagement";
 import ReservationManagement from "../../components/admin/reservation/ReservationManagement";
 import PropTypes from "prop-types";
 
