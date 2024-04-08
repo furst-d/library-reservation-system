@@ -6,7 +6,6 @@ import {AdminAddButton} from "../../styles/admin/Button";
 import AddIcon from "@mui/icons-material/Add";
 import DataGrid from "../../data-grid/DataGrid";
 import Filter from "../../data-grid/Filter";
-import ReservationPreview from "../reservation/ReservationPreview";
 import AuthorPreview from "./AuthorPreview";
 
 const AuthorManagement = () => {
@@ -52,7 +51,7 @@ const AuthorManagement = () => {
                 <LoadingSpinner />
             ) : (
                 <>
-                    <AdminAddButton onClick={() => setOpenAddModal(true)}><AddIcon />Nová rezervace</AdminAddButton>
+                    <AdminAddButton onClick={() => setOpenAddModal(true)}><AddIcon />Nový autor</AdminAddButton>
                     <DataGrid
                         data={authors}
                         filterComponent={<Filter onFilterChange={handleFilterChange}

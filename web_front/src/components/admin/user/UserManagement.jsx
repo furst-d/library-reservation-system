@@ -56,7 +56,7 @@ const UserManagement = ({loggedUser}) => {
             ) : (
                 <>
                     {isAdmin(loggedUser) && (
-                        <AdminAddButton onClick={() => setOpenAddModal(true)}><AddIcon />Zaregistrovat uživatele</AdminAddButton>
+                        <AdminAddButton onClick={() => setOpenAddModal(true)}><AddIcon />Nový uživatel</AdminAddButton>
                     )}
                     <DataGrid
                         data={users}
