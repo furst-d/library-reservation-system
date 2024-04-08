@@ -91,6 +91,15 @@ public class UserService implements IUserService, IFilterService<AppUser> {
     }
 
     @Override
+    public void changePassword(AppUser user, String oldPassword, String newPassword) {
+        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+            throw new NotFoundException("Old password is incorrect");
+        }
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+    }
+
+    @Override
     public Specification<AppUser> applyFilter(Specification<AppUser> spec, FilterCriteria criteria) {
         if (!criteria.getValue().isEmpty()) {
             String value = criteria.getValue();

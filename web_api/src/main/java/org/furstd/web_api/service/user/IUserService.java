@@ -23,4 +23,6 @@ public interface IUserService {
     void setRoles(AppUser appUser, List<Role> roles);
 
     ListResponseDTO<AppUser> findAll(Specification<AppUser> spec, Pageable pageable);
+
+    void changePassword(AppUser user, String oldPassword, String newPassword);
 }
