@@ -63,7 +63,7 @@ const AuthorDetail = ({ id }) => {
                 <AuthorDetails>
                     <AuthorName>{author.firstName} {author.lastName}</AuthorName>
                     <AuthorInfo>Datum narození: {formatDate(author.birthDate)}</AuthorInfo>
-                    <AuthorInfo>Národnost {author.nationality}</AuthorInfo>
+                    <AuthorInfo>Národnost: {author.nationality}</AuthorInfo>
                 </AuthorDetails>
             </AuthorContainer>
             <div>
@@ -115,6 +115,7 @@ const AuthorContainer = styled.div`
 
 const AuthorIcon = styled(PersonIcon)`
     font-size: 300px;
+    color: ${p => p.theme.bg};
 `;
 
 const AuthorDetails = styled.div`

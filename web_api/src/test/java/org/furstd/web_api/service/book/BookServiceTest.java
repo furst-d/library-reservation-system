@@ -2,7 +2,6 @@ package org.furstd.web_api.service.book;
 
 import org.furstd.web_api.dto.BookRecommendationsDTO;
 import org.furstd.web_api.entity.AppUser;
-import org.furstd.web_api.entity.Author;
 import org.furstd.web_api.entity.Book;
 import org.furstd.web_api.model.book.Genre;
 import org.furstd.web_api.repository.IBookRepository;

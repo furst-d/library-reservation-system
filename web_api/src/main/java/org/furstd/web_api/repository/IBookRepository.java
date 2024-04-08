@@ -4,9 +4,7 @@ import org.furstd.web_api.entity.AppUser;
 import org.furstd.web_api.entity.Author;
 import org.furstd.web_api.entity.Book;
 import org.furstd.web_api.model.book.Genre;
-import org.furstd.web_api.model.book.Language;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -18,10 +16,6 @@ import java.util.List;
 
 @Repository
 public interface IBookRepository extends JpaRepository<Book, Integer>, JpaSpecificationExecutor<Book> {
-    List<Book> findByAuthor(Author author);
-    List<Book> findByGenre(Genre genre);
-    List<Book> findByLanguage(Language language);
-
     @Query("SELECT b FROM Book b WHERE b.id IN :ids")
     List<Book> findByIds(List<Integer> ids);
 
@@ -69,8 +63,6 @@ public interface IBookRepository extends JpaRepository<Book, Integer>, JpaSpecif
             "ORDER BY COUNT(r.id) DESC",
             nativeQuery = true)
     List<Book> findTopReservedBooks(Pageable pageable);
-
-    Page<Book> findByTitleContainingIgnoreCase(String filter, Pageable pageable);
 
     @Query("SELECT b FROM Book b WHERE LOWER(b.title) LIKE %:phrase% OR LOWER(b.author.firstName) LIKE %:phrase% OR LOWER(b.author.lastName) LIKE %:phrase%")
     Page<Book> search(String phrase, Pageable pageable);

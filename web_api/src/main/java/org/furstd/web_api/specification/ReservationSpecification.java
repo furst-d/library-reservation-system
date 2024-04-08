@@ -2,12 +2,7 @@ package org.furstd.web_api.specification;
 
 import org.furstd.web_api.entity.Book;
 import org.furstd.web_api.entity.Reservation;
-import org.furstd.web_api.model.book.Genre;
-import org.furstd.web_api.model.book.Language;
 import org.springframework.data.jpa.domain.Specification;
-
-import java.util.Arrays;
-import java.util.List;
 
 public class ReservationSpecification {
 

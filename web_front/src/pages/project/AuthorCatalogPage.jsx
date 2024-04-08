@@ -1,5 +1,6 @@
 import React from 'react';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
+import AuthorCatalog from "../../components/author/AuthorCatalog";
 
 const AuthorCatalogPage = () => {
     return (
@@ -7,9 +8,7 @@ const AuthorCatalogPage = () => {
             <Helmet>
                 <title>Seznam autorů</title>
             </Helmet>
-            <div>
-                Nějaký autor
-            </div>
+            <AuthorCatalog />
         </HelmetProvider>
     );
 };
