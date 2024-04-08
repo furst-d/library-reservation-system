@@ -2,11 +2,11 @@ import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import axios from "../../api/axios";
 import LoadingSpinner from "../styles/material-ui/components/LoadingSpinner";
-import PersonIcon from '@mui/icons-material/Person';
 import styled from "styled-components";
 import {formatDate} from "../../utils/date/dateFormatter";
 import BookPreview from "../book/BookPreview";
 import DataGrid from "../data-grid/DataGrid";
+import {ProfileContainer, ProfileIcon, ProfileInfo, ProfileInfoSection, ProfileName} from "../styles/profile/Profile";
 
 const AuthorDetail = ({ id }) => {
     const [author, setAuthor] = useState(null);
@@ -20,7 +20,6 @@ const AuthorDetail = ({ id }) => {
         axios.get(`/authors/${id}`)
             .then(response => {
                 setAuthor(response.data.payload);
-                console.log(response.data.payload);
                 axios.get(`/books`, {
                     params: {
                         page: page,
@@ -58,14 +57,14 @@ const AuthorDetail = ({ id }) => {
 
     return (
         <ContentContainer>
-            <AuthorContainer>
-                <AuthorIcon fontSize="0" />
-                <AuthorDetails>
-                    <AuthorName>{author.firstName} {author.lastName}</AuthorName>
-                    <AuthorInfo>Datum narození: {formatDate(author.birthDate)}</AuthorInfo>
-                    <AuthorInfo>Národnost: {author.nationality}</AuthorInfo>
-                </AuthorDetails>
-            </AuthorContainer>
+            <ProfileContainer>
+                <ProfileIcon fontSize="0" />
+                <ProfileInfoSection>
+                    <ProfileName>{author.firstName} {author.lastName}</ProfileName>
+                    <ProfileInfo>Datum narození: {formatDate(author.birthDate)}</ProfileInfo>
+                    <ProfileInfo>Národnost: {author.nationality}</ProfileInfo>
+                </ProfileInfoSection>
+            </ProfileContainer>
             <div>
                 <h3>Seznam knih</h3>
                 <DataGrid
@@ -102,32 +101,3 @@ const ContentContainer = styled.div`
     flex-direction: column;
     gap: 2em;
 `
-
-const AuthorContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    gap: 2em;
-    @media (min-width: 768px) {
-        flex-direction: row;
-        gap: 5em;
-    }
-`;
-
-const AuthorIcon = styled(PersonIcon)`
-    font-size: 300px;
-    color: ${p => p.theme.bg};
-`;
-
-const AuthorDetails = styled.div`
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 10px;
-`;
-
-const AuthorName = styled.h2`
-    margin: 0 0 10px 0;
-`;
-
-const AuthorInfo = styled.p`
-    margin: 5px 0;
-`;

@@ -13,7 +13,7 @@ import ProfileReservations from "../../components/profile/ProfileReservations";
 import {checkAuth} from "../../utils/auth/authManager";
 import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
 
-const ProfilePage = () => {
+const ProfilePage = ({loggedUser}) => {
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -51,7 +51,7 @@ const ProfilePage = () => {
                 </SubMenuWrapper>
                 <SubContentStyle>
                     <Routes>
-                        <Route path="/" element={<ProfileDetail />} />
+                        <Route path="/" element={<ProfileDetail loggedUser={loggedUser} />} />
                         <Route path="reservations" element={<ProfileReservations />} />
                         <Route path="*" element={<Navigate to="/" replace />} />
                     </Routes>
