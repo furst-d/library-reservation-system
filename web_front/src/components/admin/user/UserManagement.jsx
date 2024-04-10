@@ -10,6 +10,8 @@ import {AdminAddButton} from "../../styles/admin/Button";
 import PropTypes from "prop-types";
 import {isAdmin} from "../../../utils/auth/authManager";
 import {formatDate} from "../../../utils/date/dateFormatter";
+import UserDialog from "./UserDialog";
+import {Dialog} from "@mui/material";
 
 const UserManagement = ({loggedUser}) => {
     const [users, setUsers] = useState([]);
@@ -56,7 +58,12 @@ const UserManagement = ({loggedUser}) => {
             ) : (
                 <>
                     {isAdmin(loggedUser) && (
-                        <AdminAddButton onClick={() => setOpenAddModal(true)}><AddIcon />Nový uživatel</AdminAddButton>
+                        <>
+                            <AdminAddButton onClick={() => setOpenAddModal(true)}><AddIcon />Nový uživatel</AdminAddButton>
+                            <Dialog open={openAddModal} onClose={() => setOpenAddModal(false)}>
+                                <UserDialog setOpenModel={setOpenAddModal} />
+                            </Dialog>
+                        </>
                     )}
                     <DataGrid
                         data={users}

@@ -5,3 +5,8 @@ export function formatDate(dateString) {
     const year = date.getFullYear();
     return `${day}.${month}.${year}`;
 }
+
+export function formatToISO(dateString) {
+    const date = new Date(dateString);
+    return date.toISOString().split('T')[0];
+}

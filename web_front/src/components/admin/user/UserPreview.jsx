@@ -8,6 +8,7 @@ import {toast} from "react-toastify";
 import {isAdmin} from "../../../utils/auth/authManager";
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditNoteIcon from '@mui/icons-material/EditNote';
+import UserDialog from "./UserDialog";
 
 
 const UserPreview = ({id, email, firstName, lastName, birthDate, roles, users, setUsers, loggedUser}) => {
@@ -30,6 +31,9 @@ const UserPreview = ({id, email, firstName, lastName, birthDate, roles, users, s
             {isAdmin(loggedUser) && (
                 <>
                     <TableCell align="right"><AdminEditButton onClick={() => setOpenEditModal(true)}><EditNoteIcon /></AdminEditButton></TableCell>
+                    <Dialog open={openEditModal} onClose={() => setOpenEditModal(false)}>
+                        <UserDialog setOpenModel={setOpenEditModal} userId={id} />
+                    </Dialog>
                     <TableCell align="right"><AdminDeleteButton onClick={() => setOpenDeleteModal(true)}><DeleteIcon /></AdminDeleteButton></TableCell>
                     <Dialog open={openDeleteModal} onClose={() => setOpenDeleteModal(false)}>
                         <ConfirmationDialog content={`Opravdu si přejete odebrat uživatele ${email} ?`} onAccept={removeUser} onClose={() => setOpenDeleteModal(false)} />
