@@ -48,7 +48,7 @@ const UserDialog = ({userId, setOpenModel}) => {
             .catch(() => {
                 setOpenModel(false);
             });
-    }, [userId, setOpenModel]);
+    }, [isEdit, userId, setOpenModel]);
 
     const handleError = () => {
         switch (status) {

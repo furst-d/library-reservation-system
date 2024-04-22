@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect} from 'react';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import {
     ContentWrapperStyle,
@@ -21,7 +21,7 @@ const ProfilePage = ({loggedUser}) => {
         if(!permitted) {
             navigate("/");
         }
-    }, [navigate]);
+    }, [permitted, navigate]);
 
     return (
         <>
