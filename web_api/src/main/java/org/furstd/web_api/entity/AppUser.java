@@ -57,8 +57,14 @@ public class AppUser implements UserDetails {
         this.birthDate = birthDate;
     }
 
+    public void removeRoles() {
+        roles.clear();
+    }
+
     public void addRole(Role role) {
-        roles.add(role);
+        if (!roles.contains(role)) {
+            roles.add(role);
+        }
     }
 
     @Override

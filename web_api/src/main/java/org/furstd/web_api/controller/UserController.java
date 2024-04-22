@@ -53,23 +53,28 @@ public class UserController extends BaseController<AppUser> {
 
     @PostMapping("")
     public ResponseEntity<Object> createUser(@Valid @RequestBody CreateAppUserDTO userDTO) {
+        userService.findByEmail(userDTO.getEmail()).ifPresent(appUser -> {
+            throw new ForbiddenException("Email already exists!");
+        });
+
         AppUser appUser = new AppUser(userDTO.getEmail(), userDTO.getPassword(), userDTO.getFirstName(), userDTO.getLastName(), userDTO.getBirthDate());
         List<Role> roles = roleService.findByNames(userDTO.getRoles());
-        userService.setRoles(appUser, roles);
-
-        userService.createUser(appUser);
+        userService.createUser(appUser, roles);
         return ResponseEntity.status(HttpStatus.CREATED).body(new Msg("User was created successfully!"));
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Object> updateUser(@PathVariable int id, @Valid @RequestBody AppUserDTO userDTO) {
+    public ResponseEntity<Object> updateUser(@PathVariable int id, @Valid @RequestBody CreateAppUserDTO userDTO) {
         AppUser user = userService.findById(id).orElseThrow(() -> new NotFoundException(NOT_FOUND_MESSAGE));
         user.setEmail(userDTO.getEmail());
         user.setPassword(userDTO.getPassword());
         user.setFirstName(userDTO.getFirstName());
         user.setLastName(userDTO.getLastName());
         user.setBirthDate(userDTO.getBirthDate());
+        List<Role> roles = roleService.findByNames(userDTO.getRoles());
+        userService.setRoles(user, roles);
         userService.updateUser(user);
+
         return ResponseEntity.ok(new Msg("User was updated successfully!"));
     }
 

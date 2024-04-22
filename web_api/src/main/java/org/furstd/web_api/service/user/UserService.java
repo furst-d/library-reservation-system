@@ -42,7 +42,15 @@ public class UserService implements IUserService, IFilterService<AppUser> {
     }
 
     @Override
+    public void createUser(AppUser appUser, List<Role> roles) {
+        setRoles(appUser, roles);
+        appUser.setPassword(passwordEncoder.encode(appUser.getPassword()));
+        userRepository.save(appUser);
+    }
+
+    @Override
     public void updateUser(AppUser appUser) {
+        appUser.setPassword(passwordEncoder.encode(appUser.getPassword()));
         userRepository.save(appUser);
     }
 
@@ -79,6 +87,7 @@ public class UserService implements IUserService, IFilterService<AppUser> {
 
     @Override
     public void setRoles(AppUser appUser, List<Role> roles) {
+        appUser.removeRoles();
         for (Role role : roles) {
             appUser.addRole(role);
         }

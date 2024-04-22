@@ -1,13 +1,10 @@
 import React, {useEffect, useState} from 'react';
-import {DialogActions, DialogContent, DialogTitle, TextField} from "@mui/material";
-import {FormStyle} from "../../styles/form/Form";
+import {Checkbox, DialogActions, DialogContent, DialogTitle, FormControlLabel, TextField} from "@mui/material";
 import ErrorForm, {ErrorItemStyle, ErrorListStyle} from "../../form/ErrorForm";
 import Button from "../../styles/material-ui/components/Button";
 import LoginIcon from "@mui/icons-material/Login";
 import {isValidEmail} from "../../../utils/validator/Validator";
 import axios, {axiosPrivate} from "../../../api/axios";
-import {setTokens} from "../../../utils/auth/authManager";
-import Form from "../../form/Form";
 import PropTypes from "prop-types";
 import {formatToISO} from "../../../utils/date/dateFormatter";
 
@@ -23,23 +20,34 @@ const UserDialog = ({userId, setOpenModel}) => {
     const [lastNameError, setLastNameError] = useState(false);
     const [birthDate, setBirthDate] = useState("");
     const [birthDateError, setBirthDateError] = useState(false);
+    const [userRoles, setUserRoles] = useState(['USER']);
     const [errors, setErrors] = useState([]);
     const [status, setStatus] = useState(200);
+    const [roles, setRoles] = useState([]);
     const isEdit = userId !== undefined;
 
     useEffect(() => {
-        if(isEdit) {
-            axiosPrivate.get(`/users/${userId}`)
-                .then(res => {
-                    setUsername(res.data.payload.email);
-                    setFirstName(res.data.payload.firstName);
-                    setLastName(res.data.payload.lastName);
-                    setBirthDate(formatToISO(res.data.payload.birthDate));
-                })
-                .catch(() => {
-                    setOpenModel(false);
-                });
-        }
+        axios.get("/roles")
+            .then(res => {
+                setRoles(res.data.payload);
+
+                if(isEdit) {
+                    axiosPrivate.get(`/users/${userId}`)
+                        .then(res => {
+                            setUsername(res.data.payload.email);
+                            setFirstName(res.data.payload.firstName);
+                            setLastName(res.data.payload.lastName);
+                            setBirthDate(formatToISO(res.data.payload.birthDate));
+                            setUserRoles(res.data.payload.authorities.map(auth => auth.authority));
+                        })
+                        .catch(() => {
+                            setOpenModel(false);
+                        });
+                }
+            })
+            .catch(() => {
+                setOpenModel(false);
+            });
     }, [userId, setOpenModel]);
 
     const handleError = () => {
@@ -103,30 +111,60 @@ const UserDialog = ({userId, setOpenModel}) => {
     }
 
     const handleAdd = () => {
-        // axiosPrivate.post(`/users/register`, {
-        //     email: username,
-        //     password: password,
-        //     firstName: firstName,
-        //     lastName: lastName,
-        //     birthDate: birthDate
-        // })
-        //     .then(res => {
-        //         setTokens(res.data.payload.token);
-        //         localStorage.setItem("toast", "Registrace byla úspěšná");
-        //         window.location.reload();
-        //     })
-        //
-        //     .catch((error) => {
-        //         if(error.response) {
-        //             setStatus(error.response.status);
-        //             setLoading(false);
-        //         }
-        //     });
+        console.log(userRoles)
+        axiosPrivate.post(`/users`, {
+            email: username,
+            password: password,
+            firstName: firstName,
+            lastName: lastName,
+            birthDate: birthDate,
+            roles: userRoles
+        })
+            .then(res => {
+                localStorage.setItem("toast", "Registrace byla úspěšná");
+                // window.location.reload();
+            })
+
+            .catch((error) => {
+                if(error.response) {
+                    setStatus(error.response.status);
+                    setLoading(false);
+                }
+            });
     }
 
     const handleUpdate = () => {
-
+        console.log(userRoles);
+        axiosPrivate.put(`/users/${userId}`, {
+            email: username,
+            firstName: firstName,
+            lastName: lastName,
+            password: password,
+            birthDate: birthDate,
+            roles: userRoles
+        })
+            .then(() => {
+                setOpenModel(false);
+                localStorage.setItem("toast", "Uživatel byl upraven");
+                window.location.reload();
+            })
+            .catch((error) => {
+                if(error.response) {
+                    setStatus(error.response.status);
+                    setLoading(false);
+                }
+            });
     }
+
+    const handleCheckboxChange = (role) => {
+        setUserRoles(prev => {
+            if (prev.includes(role)) {
+                return prev.filter(r => r !== role);
+            } else {
+                return [...prev, role];
+            }
+        });
+    };
 
     return (
         <>
@@ -137,6 +175,20 @@ const UserDialog = ({userId, setOpenModel}) => {
                 <TextField value={firstName} onChange={e => setFirstName(e.target.value)} error={firstNameError} required label="Křestní jméno" fullWidth margin="dense" />
                 <TextField value={lastName} onChange={e => setLastName(e.target.value)} error={lastNameError} required label="Příjmení" fullWidth margin="dense" />
                 <TextField value={birthDate} onChange={e => setBirthDate(e.target.value)} error={birthDateError} required InputLabelProps={{ shrink: true }} label="Datum narození" type="date" fullWidth margin="dense" />
+                {roles.map(role => (
+                    <FormControlLabel
+                        key={role.id}
+                        control={
+                            <Checkbox
+                                checked={userRoles.includes(role.name) || role.name === 'USER'}
+                                disabled={role.name === 'USER'}
+                                onChange={() => handleCheckboxChange(role.name)}
+                            />
+                        }
+                        label={role.name}
+                    />
+                ))}
+
                 <ErrorForm errors={errors} />
                 {status !== 200 && (
                     <ErrorListStyle>

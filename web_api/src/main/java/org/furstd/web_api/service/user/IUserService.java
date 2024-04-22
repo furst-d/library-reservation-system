@@ -13,6 +13,7 @@ import java.util.Optional;
 
 public interface IUserService {
     void createUser(AppUser appUser);
+    void createUser(AppUser appUser, List<Role> roles);
     void updateUser(AppUser appUser);
     void deleteUser(AppUser appUser);
     AuthenticationResponseDTO login(LoginDTO loginDTO);
