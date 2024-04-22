@@ -36,7 +36,7 @@ public class SecurityConfiguration {
                     exceptionHandling.accessDeniedHandler(new CustomAccessDeniedHandler());
                 })
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.GET, "/books/**", "/authors/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/books/**", "/authors/**", "/roles").permitAll()
                         .requestMatchers(HttpMethod.POST, "/users/register", "/users/login").permitAll()
 
                         .requestMatchers(HttpMethod.GET, "/users/**", "/reservations/**").hasAuthority("EDITOR")
