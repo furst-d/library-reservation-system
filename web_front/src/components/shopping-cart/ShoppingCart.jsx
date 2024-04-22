@@ -21,7 +21,6 @@ const ShoppingCart = () => {
     };
 
     const createReservation = () => {
-        console.log()
         axiosPrivate.post(`/profile/reservations`, {
             bookIds: books.map(book => book.id)
         })
@@ -35,7 +34,6 @@ const ShoppingCart = () => {
                 if(error.response) {
                     if (error.response.status === 409) {
                         const data = error.response.data.payload.data;
-                        console.log(data);
                         localStorage.setItem("toast-error", "Kniha '" + data.title + "' již není k dispozici");
                         removeFromCart(data.id);
                     } else {

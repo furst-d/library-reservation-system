@@ -3,7 +3,6 @@ import {formatDate} from "../../utils/date/dateFormatter";
 import {ProfileContainer, ProfileIcon, ProfileInfo, ProfileInfoSection, ProfileName} from "../styles/profile/Profile";
 
 const ProfileDetail = ({loggedUser}) => {
-    console.log(loggedUser);
     return (
         <ProfileContainer>
             <ProfileIcon fontSize="0" />

@@ -45,7 +45,7 @@ public class AppUser implements UserDetails {
     )
     private final List<Role> roles = new ArrayList<>();
 
-    @OneToMany(mappedBy = "appUser")
+    @OneToMany(mappedBy = "appUser", cascade = CascadeType.REMOVE)
     @JsonIgnore
     private final List<Reservation> reservations = new ArrayList<>();
 

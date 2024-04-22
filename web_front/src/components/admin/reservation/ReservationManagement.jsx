@@ -63,7 +63,7 @@ const ReservationManagement = () => {
                         pageSize={LIMIT}
                         currentPage={page + 1}
                         totalPages={Math.ceil(totalRecords / LIMIT)}
-                        headers={['Email', 'Jméno', 'Počet knih', 'Vráceno', 'Datum rezervace', 'Zarezervováno do']}
+                        headers={['Email', 'Jméno', 'Počet knih', 'Vráceno', 'Datum rezervace', 'Zarezervováno do', 'Pokuta']}
                         renderRow={(row) => (
                             <ReservationPreview
                                 id={row.id}
@@ -73,6 +73,7 @@ const ReservationManagement = () => {
                                 returnedAt={row.returnedAt}
                                 reservationDate={row.reservationDate}
                                 returnDate={row.returnDate}
+                                penalty={row.penalty ? row.penalty.amountCzk : 0}
                                 bookCount={row.books.length}
                                 reservations={reservations}
                                 setReservations={setReservations}

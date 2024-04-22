@@ -23,8 +23,6 @@ const ProfilePage = ({loggedUser}) => {
         }
     }, [navigate]);
 
-    console.log("Jsem zde 2");
-
     return (
         <>
             {permitted && (

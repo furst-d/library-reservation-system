@@ -18,6 +18,9 @@ const ReservationPreview = ({ reservationData }) => {
                         {returnedAt && <ReservationDetail>Datum vrácení: {new Date(returnedAt).toLocaleDateString()}</ReservationDetail>}
                         {penalty && (
                             <PenaltyInfo paid={penalty.paid}>
+                                <div>
+                                    Pokuta: {penalty.amountCzk} Kč
+                                </div>
                                 {penalty.paid
                                     ? `Pokuta zaplacena dne ${new Date(penalty.paymentDate).toLocaleDateString()}`
                                     : `Nezaplacená pokuta vytvořena dne ${new Date(penalty.creationDate).toLocaleDateString()}`}

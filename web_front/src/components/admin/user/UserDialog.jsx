@@ -111,7 +111,6 @@ const UserDialog = ({userId, setOpenModel}) => {
     }
 
     const handleAdd = () => {
-        console.log(userRoles)
         axiosPrivate.post(`/users`, {
             email: username,
             password: password,
@@ -122,7 +121,7 @@ const UserDialog = ({userId, setOpenModel}) => {
         })
             .then(res => {
                 localStorage.setItem("toast", "Registrace byla úspěšná");
-                // window.location.reload();
+                window.location.reload();
             })
 
             .catch((error) => {
@@ -134,7 +133,6 @@ const UserDialog = ({userId, setOpenModel}) => {
     }
 
     const handleUpdate = () => {
-        console.log(userRoles);
         axiosPrivate.put(`/users/${userId}`, {
             email: username,
             firstName: firstName,

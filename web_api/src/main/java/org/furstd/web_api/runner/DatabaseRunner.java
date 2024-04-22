@@ -129,15 +129,19 @@ public class DatabaseRunner implements CommandLineRunner {
 
         Reservation r1 = new Reservation(adminUser, List.of(norwegianWood), Date.from(LocalDate.of(2024, 3, 1).atStartOfDay(ZoneId.systemDefault()).toInstant()) , Date.from(LocalDate.of(2024, 4, 1).atStartOfDay(ZoneId.systemDefault()).toInstant()));
         r1.setReturnedAt(now);
-        r1.setPenalty(new Penalty(minusDay, now));
+        r1.setPenalty(new Penalty(100, minusDay, now));
         r1.getPenalty().setPaid(true);
         Reservation r2 = new Reservation(adminUser, List.of(hobit, twoTowers), Date.from(LocalDate.of(2024, 3, 2).atStartOfDay(ZoneId.systemDefault()).toInstant()) , Date.from(LocalDate.of(2024, 4, 2).atStartOfDay(ZoneId.systemDefault()).toInstant()));
         r2.setReturnedAt(new Date());
-        r2.setPenalty(new Penalty(minusDay, now));
+        r2.setPenalty(new Penalty(200, minusDay, now));
         Reservation r3 = new Reservation(adminUser, List.of(shining, davinciCode, animalFarm), Date.from(LocalDate.of(2024, 3, 3).atStartOfDay(ZoneId.systemDefault()).toInstant()) , Date.from(LocalDate.of(2024, 4, 3).atStartOfDay(ZoneId.systemDefault()).toInstant()));
-
+        Reservation r4 = new Reservation(user, List.of(hobit, fellowship), Date.from(LocalDate.of(2024, 3, 4).atStartOfDay(ZoneId.systemDefault()).toInstant()) , Date.from(LocalDate.of(2024, 4, 4).atStartOfDay(ZoneId.systemDefault()).toInstant()));
+        r4.setReturnedAt(now);
+        r4.setPenalty(new Penalty(300, minusDay, now));
+        r4.getPenalty().setPaid(true);
         reservationRepository.save(r1);
         reservationRepository.save(r2);
         reservationRepository.save(r3);
+        reservationRepository.save(r4);
     }
 }

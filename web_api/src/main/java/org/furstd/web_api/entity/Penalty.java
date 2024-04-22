@@ -15,6 +15,9 @@ public class Penalty {
     private int id;
 
     @Column(nullable = false)
+    private int amountCzk;
+
+    @Column(nullable = false)
     private Date creationDate;
 
     @Column(nullable = false)
@@ -23,7 +26,8 @@ public class Penalty {
     @Column(nullable = false)
     private boolean paid;
 
-    public Penalty(Date creationDate, Date paymentDate) {
+    public Penalty(int amountCzk, Date creationDate, Date paymentDate) {
+        this.amountCzk = amountCzk;
         this.creationDate = creationDate;
         this.paymentDate = paymentDate;
         this.paid = false;

@@ -10,7 +10,7 @@ import EditNoteIcon from '@mui/icons-material/EditNote';
 import {formatDate} from "../../../utils/date/dateFormatter";
 
 
-const ReservationPreview = ({id, email, firstName, lastName, returnedAt, reservationDate, returnDate, bookCount, reservations, setReservations}) => {
+const ReservationPreview = ({id, email, firstName, lastName, returnedAt, reservationDate, returnDate, penalty, bookCount, reservations, setReservations}) => {
     const [openEditModal, setOpenEditModal] = useState(false);
     const [openDeleteModal, setOpenDeleteModal] = useState(false);
 
@@ -29,6 +29,7 @@ const ReservationPreview = ({id, email, firstName, lastName, returnedAt, reserva
             <TableCell align="right">{returnedAt ? formatDate(returnedAt) : 'Nevráceno'}</TableCell>
             <TableCell align="right">{formatDate(reservationDate)}</TableCell>
             <TableCell align="right">{formatDate(returnDate)}</TableCell>
+            <TableCell align="right">{penalty} Kč</TableCell>
             <TableCell align="right"><AdminEditButton onClick={() => setOpenEditModal(true)}><EditNoteIcon /></AdminEditButton></TableCell>
             <TableCell align="right"><AdminDeleteButton onClick={() => setOpenDeleteModal(true)}><DeleteIcon /></AdminDeleteButton></TableCell>
             <Dialog open={openDeleteModal} onClose={() => setOpenDeleteModal(false)}>
@@ -47,6 +48,7 @@ ReservationPreview.propTypes = {
     reservationDate: PropTypes.string.isRequired,
     returnDate: PropTypes.string.isRequired,
     returnedAt: PropTypes.string,
+    penalty: PropTypes.number.isRequired,
     reservations: PropTypes.array.isRequired,
     setReservations: PropTypes.func.isRequired,
 };
