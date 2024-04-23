@@ -7,8 +7,9 @@ import ConfirmationDialog from "../../dialog/ConfirmationDialog";
 import {toast} from "react-toastify";
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditNoteIcon from '@mui/icons-material/EditNote';
+import BookDialog from "./BookDialog";
 
-const ReservationPreview = ({id, title, author, genre, language, pages, publicationYear, quantity, availableQuantity, books, setBooks}) => {
+const ReservationPreview = ({id, title, author, genre, language, pages, publicationYear, quantity, availableQuantity, books, setBooks, genres, languages, authors}) => {
     const [openEditModal, setOpenEditModal] = useState(false);
     const [openDeleteModal, setOpenDeleteModal] = useState(false);
 
@@ -30,6 +31,9 @@ const ReservationPreview = ({id, title, author, genre, language, pages, publicat
             <TableCell align="right">{quantity}</TableCell>
             <TableCell align="right">{availableQuantity}</TableCell>
             <TableCell align="right"><AdminEditButton onClick={() => setOpenEditModal(true)}><EditNoteIcon /></AdminEditButton></TableCell>
+            <Dialog open={openEditModal} onClose={() => setOpenEditModal(false)}>
+                <BookDialog setOpenModel={setOpenEditModal} bookId={id} genres={genres} languages={languages} authors={authors} />
+            </Dialog>
             <TableCell align="right"><AdminDeleteButton onClick={() => setOpenDeleteModal(true)}><DeleteIcon /></AdminDeleteButton></TableCell>
             <Dialog open={openDeleteModal} onClose={() => setOpenDeleteModal(false)}>
                 <ConfirmationDialog content={`Opravdu si přejete odebrat rezervaci?`} onAccept={removeReservation} onClose={() => setOpenDeleteModal(false)} />
@@ -49,7 +53,10 @@ ReservationPreview.propTypes = {
     quantity: PropTypes.number.isRequired,
     availableQuantity: PropTypes.number.isRequired,
     books: PropTypes.array.isRequired,
-    setBooks: PropTypes.func.isRequired
+    setBooks: PropTypes.func.isRequired,
+    genres: PropTypes.array.isRequired,
+    languages: PropTypes.array.isRequired,
+    authors: PropTypes.array.isRequired,
 };
 
 export default ReservationPreview;

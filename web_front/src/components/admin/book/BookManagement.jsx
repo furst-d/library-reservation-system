@@ -6,8 +6,9 @@ import {AdminAddButton} from "../../styles/admin/Button";
 import AddIcon from "@mui/icons-material/Add";
 import DataGrid from "../../data-grid/DataGrid";
 import Filter from "../../data-grid/Filter";
-import AuthorPreview from "../author/AuthorPreview";
 import BookPreview from "./BookPreview";
+import BookDialog from "./BookDialog";
+import {Dialog} from "@mui/material";
 
 const BookManagement = () => {
     const [books, setBooks] = useState([]);
@@ -17,6 +18,7 @@ const BookManagement = () => {
     const [totalRecords, setTotalRecords] = useState(0);
     const [genres, setGenres] = useState([]);
     const [languages, setLanguages] = useState([]);
+    const [authors, setAuthors] = useState([]);
     const [openAddModal, setOpenAddModal] = useState(false);
     const LIMIT = 10;
 
@@ -81,8 +83,15 @@ const BookManagement = () => {
             .catch(error => {
                 console.error('Error loading languages:', error);
             });
-    }, []);
 
+        axios.get('/authors')
+            .then(response => {
+                setAuthors(response.data.payload.data);
+            })
+            .catch(error => {
+                console.error('Error loading authors:', error);
+            });
+    }, []);
 
     const handleFilterChange = (filters, sort) => {
         setSort(sort);
@@ -97,6 +106,9 @@ const BookManagement = () => {
             ) : (
                 <>
                     <AdminAddButton onClick={() => setOpenAddModal(true)}><AddIcon />Nová kniha</AdminAddButton>
+                    <Dialog open={openAddModal} onClose={() => setOpenAddModal(false)}>
+                        <BookDialog setOpenModel={setOpenAddModal} genres={genres} languages={languages} authors={authors} />
+                    </Dialog>
                     <DataGrid
                         data={books}
                         filterComponent={<Filter onFilterChange={handleFilterChange}
@@ -111,14 +123,17 @@ const BookManagement = () => {
                                 id={row.id}
                                 title={row.title}
                                 author={row.author}
-                                genre={row.genre}
-                                language={row.language}
+                                genre={row.genre.label}
+                                language={row.language.label}
                                 pages={row.pages}
                                 publicationYear={row.publicationYear}
                                 quantity={row.quantity}
                                 availableQuantity={row.availableQuantity}
                                 books={books}
                                 setBooks={setBooks}
+                                languages={languages}
+                                genres={genres}
+                                authors={authors}
                             />
                         )}
                     />

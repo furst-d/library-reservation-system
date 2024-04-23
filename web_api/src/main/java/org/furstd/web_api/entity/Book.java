@@ -1,11 +1,14 @@
 package org.furstd.web_api.entity;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.*;
 import lombok.*;
 import org.furstd.web_api.converter.GenreConverter;
 import org.furstd.web_api.converter.LanguageConverter;
 import org.furstd.web_api.model.book.Genre;
 import org.furstd.web_api.model.book.Language;
+import org.furstd.web_api.serializer.GenreSerializer;
+import org.furstd.web_api.serializer.LanguageSerializer;
 
 @Entity
 @NoArgsConstructor
@@ -25,9 +28,11 @@ public class Book {
     private Author author;
 
     @Convert(converter = GenreConverter.class)
+    @JsonSerialize(using = GenreSerializer.class)
     private Genre genre;
 
     @Convert(converter = LanguageConverter.class)
+    @JsonSerialize(using = LanguageSerializer.class)
     private Language language;
 
     @Column(nullable = false)

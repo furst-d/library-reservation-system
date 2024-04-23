@@ -1,12 +1,15 @@
 package org.furstd.web_api.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.furstd.web_api.converter.NationalityConverter;
 import org.furstd.web_api.model.author.Nationality;
+import org.furstd.web_api.serializer.LanguageSerializer;
+import org.furstd.web_api.serializer.NationalitySerializer;
 
 import java.util.Collections;
 import java.util.Date;
@@ -30,6 +33,7 @@ public class Author {
     private Date birthDate;
 
     @Convert(converter = NationalityConverter.class)
+    @JsonSerialize(using = NationalitySerializer.class)
     private Nationality nationality;
 
     @OneToMany(mappedBy = "author")

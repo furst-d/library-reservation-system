@@ -57,8 +57,8 @@ const BookDetail = ({id, loggedUser}) => {
                         </AuthorLink>
                     </TitleAuthor>
                     <div>
-                        <BookInfo>Žánr: {book.genre}</BookInfo>
-                        <BookInfo>Jazyk: {book.language}</BookInfo>
+                        <BookInfo>Žánr: {book.genre.label}</BookInfo>
+                        <BookInfo>Jazyk: {book.language.label}</BookInfo>
                         <BookInfo>Počet stran: {book.pages}</BookInfo>
                         <BookInfo>Publikováno: {book.publicationYear}</BookInfo>
                     </div>

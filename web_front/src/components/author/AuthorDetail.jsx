@@ -62,7 +62,7 @@ const AuthorDetail = ({ id }) => {
                 <ProfileInfoSection>
                     <ProfileName>{author.firstName} {author.lastName}</ProfileName>
                     <ProfileInfo>Datum narození: {formatDate(author.birthDate)}</ProfileInfo>
-                    <ProfileInfo>Národnost: {author.nationality}</ProfileInfo>
+                    <ProfileInfo>Národnost: {author.nationality.label}</ProfileInfo>
                 </ProfileInfoSection>
             </ProfileContainer>
             <div>
