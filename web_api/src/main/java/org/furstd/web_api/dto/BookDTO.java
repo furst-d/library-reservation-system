@@ -31,6 +31,9 @@ public class BookDTO {
     @Positive(message = "Quantity must be a positive number")
     private int quantity;
 
+    @Positive(message = "Available quantity must be a positive number")
+    private int availableQuantity;
+
     @NotBlank(message = "Cover image link cannot be null or blank")
     @Size(max = 255, message = "Cover image link cannot exceed 255 characters")
     private String coverImageLink;

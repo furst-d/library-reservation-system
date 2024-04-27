@@ -81,6 +81,7 @@ public class BookController extends BaseController<Book>{
                 .orElseThrow(() -> new NotFoundException("Language not found!"));
 
         Book book = new Book(bookDTO.getTitle(), author, genre, language, bookDTO.getPages(), bookDTO.getPublicationYear(), bookDTO.getQuantity(), bookDTO.getCoverImageLink());
+        book.setAvailableQuantity(bookDTO.getAvailableQuantity());
         bookService.updateBook(book);
         return ResponseEntity.status(HttpStatus.CREATED).body(new Msg("Book was created successfully!"));
     }
@@ -104,6 +105,8 @@ public class BookController extends BaseController<Book>{
         book.setPages(bookDTO.getPages());
         book.setPublicationYear(bookDTO.getPublicationYear());
         book.setQuantity(bookDTO.getQuantity());
+        book.setAvailableQuantity(bookDTO.getAvailableQuantity());
+        book.setCoverImageLink(bookDTO.getCoverImageLink());
 
         bookService.updateBook(book);
         return ResponseEntity.ok(new Msg("Book was updated successfully!"));

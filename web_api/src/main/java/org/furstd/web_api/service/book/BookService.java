@@ -6,8 +6,10 @@ import org.furstd.web_api.dto.ListResponseDTO;
 import org.furstd.web_api.entity.AppUser;
 import org.furstd.web_api.entity.Author;
 import org.furstd.web_api.entity.Book;
+import org.furstd.web_api.entity.Reservation;
 import org.furstd.web_api.model.book.Genre;
 import org.furstd.web_api.repository.IBookRepository;
+import org.furstd.web_api.repository.IReservationRepository;
 import org.furstd.web_api.service.IFilterService;
 import org.furstd.web_api.specification.BookSpecification;
 import org.furstd.web_api.util.FilterCriteria;
@@ -23,6 +25,7 @@ import java.util.*;
 @RequiredArgsConstructor
 public class BookService implements IBookService, IFilterService<Book> {
     private final IBookRepository bookRepository;
+    private final IReservationRepository reservationRepository;
 
     public ListResponseDTO<Book> findAll(Specification<Book> spec, Pageable pageable) {
         Page<Book> books = bookRepository.findAll(spec, pageable);
@@ -46,6 +49,13 @@ public class BookService implements IBookService, IFilterService<Book> {
 
     @Override
     public void deleteBook(Book book) {
+        List<Reservation> reservations = reservationRepository.findAllByBooksContaining(book);
+
+        for (Reservation reservation : reservations) {
+            reservation.getBooks().remove(book);
+            reservationRepository.save(reservation);
+        }
+
         bookRepository.delete(book);
     }
 

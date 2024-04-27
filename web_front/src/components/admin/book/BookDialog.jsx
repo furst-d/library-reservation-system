@@ -3,7 +3,7 @@ import {
     DialogActions,
     DialogContent,
     DialogTitle, FormControl, InputLabel, MenuItem,
-    Select, styled,
+    Select,
     TextField
 } from "@mui/material";
 import ErrorForm, {ErrorItemStyle, ErrorListStyle} from "../../form/ErrorForm";
@@ -124,47 +124,53 @@ const BookDialog = ({bookId, languages, genres, authors, setOpenModel}) => {
     }
 
     const handleAdd = () => {
-        // axiosPrivate.post(`/users`, {
-        //     email: username,
-        //     password: password,
-        //     firstName: firstName,
-        //     lastName: lastName,
-        //     birthDate: birthDate,
-        //     roles: userRoles
-        // })
-        //     .then(res => {
-        //         localStorage.setItem("toast", "Registrace byla úspěšná");
-        //         window.location.reload();
-        //     })
-        //
-        //     .catch((error) => {
-        //         if(error.response) {
-        //             setStatus(error.response.status);
-        //             setLoading(false);
-        //         }
-        //     });
+        axiosPrivate.post(`/books`, {
+            title: title,
+            authorId: authorId,
+            genreId: genre,
+            languageId: language,
+            pages: pages,
+            publicationYear: publicationYear,
+            quantity: quantity,
+            availableQuantity: availableQuantity,
+            coverImageLink: coverImageLink
+        })
+            .then(res => {
+                localStorage.setItem("toast", "Registrace byla úspěšná");
+                window.location.reload();
+            })
+
+            .catch((error) => {
+                if(error.response) {
+                    setStatus(error.response.status);
+                    setLoading(false);
+                }
+            });
     }
 
     const handleUpdate = () => {
-        // axiosPrivate.put(`/users/${userId}`, {
-        //     email: username,
-        //     firstName: firstName,
-        //     lastName: lastName,
-        //     password: password,
-        //     birthDate: birthDate,
-        //     roles: userRoles
-        // })
-        //     .then(() => {
-        //         setOpenModel(false);
-        //         localStorage.setItem("toast", "Uživatel byl upraven");
-        //         window.location.reload();
-        //     })
-        //     .catch((error) => {
-        //         if(error.response) {
-        //             setStatus(error.response.status);
-        //             setLoading(false);
-        //         }
-        //     });
+        axiosPrivate.put(`/books/${bookId}`, {
+            title: title,
+            authorId: authorId,
+            genreId: genre,
+            languageId: language,
+            pages: pages,
+            publicationYear: publicationYear,
+            quantity: quantity,
+            availableQuantity: availableQuantity,
+            coverImageLink: coverImageLink
+        })
+            .then(res => {
+                localStorage.setItem("toast", "Kniha byla upravena");
+                window.location.reload();
+            })
+
+            .catch((error) => {
+                if(error.response) {
+                    setStatus(error.response.status);
+                    setLoading(false);
+                }
+            });
     }
 
     const handleGenreSelectBoxChange = (e) => {

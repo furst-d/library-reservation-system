@@ -8,16 +8,23 @@ import {toast} from "react-toastify";
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import BookDialog from "./BookDialog";
+import {axiosPrivate} from "../../../api/axios";
 
 const ReservationPreview = ({id, title, author, genre, language, pages, publicationYear, quantity, availableQuantity, books, setBooks, genres, languages, authors}) => {
     const [openEditModal, setOpenEditModal] = useState(false);
     const [openDeleteModal, setOpenDeleteModal] = useState(false);
 
-    const removeReservation = () => {
-        const updatedList = books.filter((user) => user.id !== id);
-        setBooks(updatedList);
-        toast.success("Rezervace byla odstraněna");
-        setOpenDeleteModal(false);
+    const removeBook = () => {
+        axiosPrivate.delete(`/books/${id}`)
+            .then(res => {
+                const updatedList = books.filter((user) => user.id !== id);
+                setBooks(updatedList);
+                toast.success("Kniha byla odstraněn");
+                setOpenDeleteModal(false);
+            })
+            .catch(() => {
+                toast.error("Při odstraňování uživatele došlo k chybě");
+            });
     }
 
     return (
@@ -36,7 +43,7 @@ const ReservationPreview = ({id, title, author, genre, language, pages, publicat
             </Dialog>
             <TableCell align="right"><AdminDeleteButton onClick={() => setOpenDeleteModal(true)}><DeleteIcon /></AdminDeleteButton></TableCell>
             <Dialog open={openDeleteModal} onClose={() => setOpenDeleteModal(false)}>
-                <ConfirmationDialog content={`Opravdu si přejete odebrat rezervaci?`} onAccept={removeReservation} onClose={() => setOpenDeleteModal(false)} />
+                <ConfirmationDialog content={`Opravdu si přejete odebrat knihu?`} onAccept={removeBook} onClose={() => setOpenDeleteModal(false)} />
             </Dialog>
         </>
     );
