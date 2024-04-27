@@ -8,6 +8,8 @@ import {toast} from "react-toastify";
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import {formatDate} from "../../../utils/date/dateFormatter";
+import {axiosPrivate} from "../../../api/axios";
+import ReservationDialog from "./ReservationDialog";
 
 
 const ReservationPreview = ({id, email, firstName, lastName, returnedAt, reservationDate, returnDate, penalty, bookCount, reservations, setReservations}) => {
@@ -15,11 +17,17 @@ const ReservationPreview = ({id, email, firstName, lastName, returnedAt, reserva
     const [openDeleteModal, setOpenDeleteModal] = useState(false);
 
     const removeReservation = () => {
-        const updatedList = reservations.filter((user) => user.id !== id);
-        setReservations(updatedList);
-        toast.success("Rezervace byla odstraněna");
-        setOpenDeleteModal(false);
-    }
+        axiosPrivate.delete(`/reservations/${id}`)
+            .then(() => {
+                const updatedList = reservations.filter((reservation) => reservation.id !== id);
+                setReservations(updatedList);
+                toast.success("Rezervace byla odstraněna");
+                setOpenDeleteModal(false);
+            })
+            .catch(() => {
+                toast.error("Při odstraňování rezervace došlo k chybě");
+            });
+    };
 
     return (
         <>
@@ -31,6 +39,9 @@ const ReservationPreview = ({id, email, firstName, lastName, returnedAt, reserva
             <TableCell align="right">{formatDate(returnDate)}</TableCell>
             <TableCell align="right">{penalty} Kč</TableCell>
             <TableCell align="right"><AdminEditButton onClick={() => setOpenEditModal(true)}><EditNoteIcon /></AdminEditButton></TableCell>
+            <Dialog open={openEditModal} onClose={() => setOpenEditModal(false)}>
+                <ReservationDialog setOpenModel={setOpenEditModal} reservationId={id} />
+            </Dialog>
             <TableCell align="right"><AdminDeleteButton onClick={() => setOpenDeleteModal(true)}><DeleteIcon /></AdminDeleteButton></TableCell>
             <Dialog open={openDeleteModal} onClose={() => setOpenDeleteModal(false)}>
                 <ConfirmationDialog content={`Opravdu si přejete odebrat rezervaci?`} onAccept={removeReservation} onClose={() => setOpenDeleteModal(false)} />

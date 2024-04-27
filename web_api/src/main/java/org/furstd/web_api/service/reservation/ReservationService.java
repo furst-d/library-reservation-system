@@ -81,10 +81,7 @@ public class ReservationService implements IReservationService, IFilterService<R
     }
 
     public void checkDates(Date reservationDate, Date returnDate) {
-        Date now = new Date();
-        if (returnDate.before(now)) {
-            throw new ForbiddenException("Return dates must be in the future!");
-        } else if (returnDate.before(reservationDate)) {
+        if (returnDate.before(reservationDate)) {
             throw new ForbiddenException("Return date must be after reservation date!");
         }
     }

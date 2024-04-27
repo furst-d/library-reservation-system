@@ -6,6 +6,7 @@ import org.furstd.web_api.dto.ListResponseDTO;
 import org.furstd.web_api.dto.ReservationDTO;
 import org.furstd.web_api.entity.AppUser;
 import org.furstd.web_api.entity.Book;
+import org.furstd.web_api.entity.Penalty;
 import org.furstd.web_api.entity.Reservation;
 import org.furstd.web_api.exceptions.NotFoundException;
 import org.furstd.web_api.model.util.Msg;
@@ -69,7 +70,31 @@ public class ReservationController extends BaseController<Reservation> {
 
         reservation.setReservationDate(reservationDTO.getReservationDate());
         reservation.setReturnDate(reservationDTO.getReturnDate());
+        reservation.setReturnedAt(reservationDTO.getReturnedAt());
         reservation.setBooks(books);
+
+        if (reservationDTO.getPenaltyAmountCzk() == 0) {
+            if (reservation.getPenalty() != null) {
+                reservation.setPenalty(null);
+            }
+        } else {
+            Penalty penalty;
+            if (reservation.getPenalty() != null) {
+                penalty = reservation.getPenalty();
+            } else {
+                penalty = new Penalty();
+            }
+
+            penalty.setAmountCzk(reservationDTO.getPenaltyAmountCzk());
+            penalty.setCreationDate(reservationDTO.getPenaltyCreationDate());
+            if (reservationDTO.getPenaltyPaymentDate() != null) {
+                penalty.setPaymentDate(reservationDTO.getPenaltyPaymentDate());
+                penalty.setPaid(true);
+            } else {
+                penalty.setPaid(false);
+            }
+            reservation.setPenalty(penalty);
+        }
 
         reservationService.updateReservation(reservation);
         return ResponseEntity.ok(new Msg("Reservation was updated successfully!"));

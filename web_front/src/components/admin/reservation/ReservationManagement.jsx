@@ -2,8 +2,6 @@ import React, {useEffect, useState} from 'react';
 import useFilter from "../../../hooks/useFilter";
 import {axiosPrivate} from "../../../api/axios";
 import LoadingSpinner from "../../styles/material-ui/components/LoadingSpinner";
-import {AdminAddButton} from "../../styles/admin/Button";
-import AddIcon from "@mui/icons-material/Add";
 import DataGrid from "../../data-grid/DataGrid";
 import Filter from "../../data-grid/Filter";
 import ReservationPreview from "./ReservationPreview";
@@ -13,7 +11,6 @@ const ReservationManagement = () => {
     const [loading, setLoading] = useState(true);
     const [page, setPage] = useState(0);
     const [totalRecords, setTotalRecords] = useState(0);
-    const [openAddModal, setOpenAddModal] = useState(false);
     const LIMIT = 10;
 
     const initialFiltersAndSorters = [
@@ -53,34 +50,31 @@ const ReservationManagement = () => {
             {loading ? (
                 <LoadingSpinner />
             ) : (
-                <>
-                    <AdminAddButton onClick={() => setOpenAddModal(true)}><AddIcon />Nová rezervace</AdminAddButton>
-                    <DataGrid
-                        data={reservations}
-                        filterComponent={<Filter onFilterChange={handleFilterChange}
-                                                 initialFilters={initialFiltersAndSorters} />}
-                        onPageChange={(newPage) => setPage(newPage - 1)}
-                        pageSize={LIMIT}
-                        currentPage={page + 1}
-                        totalPages={Math.ceil(totalRecords / LIMIT)}
-                        headers={['Email', 'Jméno', 'Počet knih', 'Vráceno', 'Datum rezervace', 'Zarezervováno do', 'Pokuta']}
-                        renderRow={(row) => (
-                            <ReservationPreview
-                                id={row.id}
-                                email={row.appUser.email}
-                                firstName={row.appUser.firstName}
-                                lastName={row.appUser.lastName}
-                                returnedAt={row.returnedAt}
-                                reservationDate={row.reservationDate}
-                                returnDate={row.returnDate}
-                                penalty={row.penalty ? row.penalty.amountCzk : 0}
-                                bookCount={row.books.length}
-                                reservations={reservations}
-                                setReservations={setReservations}
-                            />
-                        )}
-                    />
-                </>
+                <DataGrid
+                    data={reservations}
+                    filterComponent={<Filter onFilterChange={handleFilterChange}
+                                             initialFilters={initialFiltersAndSorters} />}
+                    onPageChange={(newPage) => setPage(newPage - 1)}
+                    pageSize={LIMIT}
+                    currentPage={page + 1}
+                    totalPages={Math.ceil(totalRecords / LIMIT)}
+                    headers={['Email', 'Jméno', 'Počet knih', 'Vráceno', 'Datum rezervace', 'Zarezervováno do', 'Pokuta']}
+                    renderRow={(row) => (
+                        <ReservationPreview
+                            id={row.id}
+                            email={row.appUser.email}
+                            firstName={row.appUser.firstName}
+                            lastName={row.appUser.lastName}
+                            returnedAt={row.returnedAt}
+                            reservationDate={row.reservationDate}
+                            returnDate={row.returnDate}
+                            penalty={row.penalty ? row.penalty.amountCzk : 0}
+                            bookCount={row.books.length}
+                            reservations={reservations}
+                            setReservations={setReservations}
+                        />
+                    )}
+                />
             )}
         </>
     );
