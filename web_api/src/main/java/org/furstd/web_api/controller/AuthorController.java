@@ -3,10 +3,12 @@ package org.furstd.web_api.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import org.furstd.web_api.dto.AuthorDTO;
+import org.furstd.web_api.dto.EnumValueDTO;
 import org.furstd.web_api.dto.ListResponseDTO;
 import org.furstd.web_api.entity.Author;
 import org.furstd.web_api.exceptions.NotFoundException;
 import org.furstd.web_api.model.author.Nationality;
+import org.furstd.web_api.model.book.Language;
 import org.furstd.web_api.model.util.Msg;
 import org.furstd.web_api.service.author.AuthorService;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +18,9 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Arrays;
+import java.util.List;
 
 @RequestMapping("authors")
 @RestController
@@ -38,6 +43,14 @@ public class AuthorController extends BaseController<Author> {
     public ResponseEntity<Object> getAuthor(@PathVariable int id) {
         return ResponseEntity.ok(authorService.findById(id)
                 .orElseThrow(() -> new NotFoundException(NOT_FOUND_MESSAGE)));
+    }
+
+    @RequestMapping("nationalities")
+    public ResponseEntity<Object> getNationalities() {
+        List<EnumValueDTO> nationalities = Arrays.stream(Nationality.values())
+                .map(nationality -> new EnumValueDTO(nationality.getId(), nationality.getLabel()))
+                .toList();
+        return ResponseEntity.ok(nationalities);
     }
 
     @PostMapping("")

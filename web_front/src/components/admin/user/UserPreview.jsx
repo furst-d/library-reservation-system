@@ -18,7 +18,7 @@ const UserPreview = ({id, email, firstName, lastName, birthDate, roles, users, s
 
     const removeUser = () => {
         axiosPrivate.delete(`/users/${id}`)
-            .then(res => {
+            .then(() => {
                 const updatedList = users.filter((user) => user.id !== id);
                 setUsers(updatedList);
                 toast.success("Uživatel byl odstraněn");

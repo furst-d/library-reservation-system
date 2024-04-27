@@ -6,6 +6,7 @@ import org.furstd.web_api.entity.Author;
 import org.furstd.web_api.entity.Book;
 import org.furstd.web_api.repository.IAuthorRepository;
 import org.furstd.web_api.service.IFilterService;
+import org.furstd.web_api.service.book.BookService;
 import org.furstd.web_api.specification.AuthorSpecification;
 import org.furstd.web_api.specification.BookSpecification;
 import org.furstd.web_api.util.FilterCriteria;
@@ -21,6 +22,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AuthorService implements IAuthorService, IFilterService<Author> {
     private final IAuthorRepository authorRepository;
+    private final BookService bookService;
 
     public ListResponseDTO<Author> findAll(Specification<Author> spec, Pageable pageable) {
         Page<Author> authors = authorRepository.findAll(spec, pageable);
@@ -39,6 +41,10 @@ public class AuthorService implements IAuthorService, IFilterService<Author> {
 
     @Override
     public void deleteAuthor(Author author) {
+        for (Book book : author.getBooks()) {
+            bookService.deleteBook(book);
+        }
+
         authorRepository.delete(author);
     }
 

@@ -7,12 +7,15 @@ import AddIcon from "@mui/icons-material/Add";
 import DataGrid from "../../data-grid/DataGrid";
 import Filter from "../../data-grid/Filter";
 import AuthorPreview from "./AuthorPreview";
+import {Dialog} from "@mui/material";
+import AuthorDialog from "./AuthorDialog";
 
 const AuthorManagement = () => {
     const [authors, setAuthors] = useState([]);
     const [loading, setLoading] = useState(true);
     const [page, setPage] = useState(0);
     const [totalRecords, setTotalRecords] = useState(0);
+    const [nationalities, setNationalities] = useState([]);
     const [openAddModal, setOpenAddModal] = useState(false);
     const LIMIT = 10;
 
@@ -40,6 +43,16 @@ const AuthorManagement = () => {
 
     }, [apiFilters, page]);
 
+    useEffect(() => {
+        axios.get('/authors/nationalities')
+            .then(response => {
+                setNationalities(response.data.payload.map(g => ({ value: g.id, label: g.label })));
+            })
+            .catch(error => {
+                console.error('Error loading nationalities:', error);
+            });
+    }, []);
+
     const handleFilterChange = (filters) => {
         updateFilters(filters);
         setPage(0);
@@ -52,6 +65,9 @@ const AuthorManagement = () => {
             ) : (
                 <>
                     <AdminAddButton onClick={() => setOpenAddModal(true)}><AddIcon />Nový autor</AdminAddButton>
+                    <Dialog open={openAddModal} onClose={() => setOpenAddModal(false)}>
+                        <AuthorDialog setOpenModel={setOpenAddModal} nationalities={nationalities} />
+                    </Dialog>
                     <DataGrid
                         data={authors}
                         filterComponent={<Filter onFilterChange={handleFilterChange}
@@ -67,9 +83,10 @@ const AuthorManagement = () => {
                                 firstName={row.firstName}
                                 lastName={row.lastName}
                                 birthDate={row.birthDate}
-                                nationality={row.nationality}
+                                nationality={row.nationality.label}
                                 authors={authors}
                                 setAuthors={setAuthors}
+                                nationalities={nationalities}
                             />
                         )}
                     />

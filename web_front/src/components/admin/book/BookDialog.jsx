@@ -56,14 +56,7 @@ const BookDialog = ({bookId, languages, genres, authors, setOpenModel}) => {
     }, [isEdit, bookId, setOpenModel]);
 
     const handleError = () => {
-        switch (status) {
-            case 401:
-                return (<ErrorItemStyle>Chybné uživatelské jméno nebo email.</ErrorItemStyle>)
-            case 403:
-                return (<ErrorItemStyle>Účet s tímto emailem již existuje.</ErrorItemStyle>)
-            default:
-                return (<ErrorItemStyle>Při zpracování požadavku došlo k chybě.</ErrorItemStyle>)
-        }
+        return (<ErrorItemStyle>Při zpracování požadavku došlo k chybě.</ErrorItemStyle>)
     }
 
     const validate = () => {
@@ -136,7 +129,7 @@ const BookDialog = ({bookId, languages, genres, authors, setOpenModel}) => {
             coverImageLink: coverImageLink
         })
             .then(res => {
-                localStorage.setItem("toast", "Registrace byla úspěšná");
+                localStorage.setItem("toast", "Kniha byla přidána");
                 window.location.reload();
             })
 

@@ -16,14 +16,14 @@ const ReservationPreview = ({id, title, author, genre, language, pages, publicat
 
     const removeBook = () => {
         axiosPrivate.delete(`/books/${id}`)
-            .then(res => {
-                const updatedList = books.filter((user) => user.id !== id);
+            .then(() => {
+                const updatedList = books.filter((book) => book.id !== id);
                 setBooks(updatedList);
-                toast.success("Kniha byla odstraněn");
+                toast.success("Kniha byla odstraněna");
                 setOpenDeleteModal(false);
             })
             .catch(() => {
-                toast.error("Při odstraňování uživatele došlo k chybě");
+                toast.error("Při odstraňování knihy došlo k chybě");
             });
     }
 
