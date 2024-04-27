@@ -62,6 +62,7 @@ const ReservationManagement = () => {
                     renderRow={(row) => (
                         <ReservationPreview
                             id={row.id}
+                            userId={row.appUser.id}
                             email={row.appUser.email}
                             firstName={row.appUser.firstName}
                             lastName={row.appUser.lastName}

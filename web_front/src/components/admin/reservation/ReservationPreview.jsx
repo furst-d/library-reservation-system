@@ -12,7 +12,7 @@ import {axiosPrivate} from "../../../api/axios";
 import ReservationDialog from "./ReservationDialog";
 
 
-const ReservationPreview = ({id, email, firstName, lastName, returnedAt, reservationDate, returnDate, penalty, bookCount, reservations, setReservations}) => {
+const ReservationPreview = ({id, userId, email, firstName, lastName, returnedAt, reservationDate, returnDate, penalty, bookCount, reservations, setReservations}) => {
     const [openEditModal, setOpenEditModal] = useState(false);
     const [openDeleteModal, setOpenDeleteModal] = useState(false);
 
@@ -31,7 +31,7 @@ const ReservationPreview = ({id, email, firstName, lastName, returnedAt, reserva
 
     return (
         <>
-            <TableCell component="th" scope="row"><NavLink to={`/admin/users/${id}`}>{email}</NavLink></TableCell>
+            <TableCell component="th" scope="row"><NavLink to={`/admin/users/${userId}`}>{email}</NavLink></TableCell>
             <TableCell align="right">{lastName}, {firstName}</TableCell>
             <TableCell align="right">{bookCount}</TableCell>
             <TableCell align="right">{returnedAt ? formatDate(returnedAt) : 'Nevráceno'}</TableCell>
@@ -52,6 +52,7 @@ const ReservationPreview = ({id, email, firstName, lastName, returnedAt, reserva
 
 ReservationPreview.propTypes = {
     id: PropTypes.number.isRequired,
+    userId: PropTypes.number.isRequired,
     email: PropTypes.string.isRequired,
     firstName: PropTypes.string.isRequired,
     lastName: PropTypes.string.isRequired,

@@ -54,7 +54,7 @@ const ProfilePage = ({loggedUser}) => {
                         </SubMenuWrapper>
                         <SubContentStyle>
                             <Routes>
-                                <Route path="/" element={<ProfileDetail loggedUser={loggedUser} />} />
+                                <Route path="/" element={<ProfileDetail user={loggedUser} />} />
                                 <Route path="reservations" element={<ProfileReservations />} />
                                 <Route path="*" element={<Navigate to="/" replace />} />
                             </Routes>

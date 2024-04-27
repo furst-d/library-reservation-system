@@ -16,6 +16,7 @@ import BookManagement from "../../components/admin/book/BookManagement";
 import AuthorManagement from "../../components/admin/author/AuthorManagement";
 import ReservationManagement from "../../components/admin/reservation/ReservationManagement";
 import PropTypes from "prop-types";
+import UserDetail from "../../components/admin/user/UserDetail";
 
 const AdminPanelPage = ({loggedUser}) => {
 
@@ -65,6 +66,8 @@ const AdminPanelPage = ({loggedUser}) => {
                 <SubContentStyle>
                     <Routes>
                         <Route path="/" element={<UserManagement loggedUser={loggedUser}/>}/>
+                        <Route path="users" element={<UserManagement loggedUser={loggedUser}/>}/>
+                        <Route path="users/:id" element={<UserDetail />}/>
                         <Route path="books" element={<BookManagement/>}/>
                         <Route path="authors" element={<AuthorManagement/>}/>
                         <Route path="reservations" element={<ReservationManagement />}/>
