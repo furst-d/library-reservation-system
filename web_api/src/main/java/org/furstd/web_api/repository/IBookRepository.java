@@ -47,7 +47,7 @@ public interface IBookRepository extends JpaRepository<Book, Integer>, JpaSpecif
             ") " +
             "GROUP BY b.id " +
             "ORDER BY reservation_count DESC", nativeQuery = true)
-    List<Book> findTopBooksForGenresNotReadByUser(@Param("genres") List<String> genres, @Param("userId") Long userId, Pageable pageable);
+    List<Book> findTopBooksForGenresNotReadByUser(@Param("genres") List<Integer> genres, @Param("userId") Long userId, Pageable pageable);
 
     @Query("SELECT b FROM Book b WHERE b.author IN :authors AND b.availableQuantity > 0 " +
             "AND b.id NOT IN (SELECT rb.id FROM Reservation r JOIN r.books rb WHERE r.appUser = :user) " +

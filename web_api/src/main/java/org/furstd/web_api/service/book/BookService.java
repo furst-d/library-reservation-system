@@ -60,22 +60,6 @@ public class BookService implements IBookService, IFilterService<Book> {
     }
 
     @Override
-    public BookRecommendationsDTO generateRecommendations(AppUser user) {
-        List<Genre> topGenres = findTopGenresForUser(user);
-        List<Author> topAuthors = findTopAuthorsForUser(user);
-
-        List<Book> genreBasedRecommendations = findTopBooksForGenresNotReadByUser(topGenres, user);
-        List<Book> authorBasedRecommendations = findTopBooksForAuthorsNotReadByUser(topAuthors, user);
-        List<Book> topBooks = findTopGloballyReservedBooks();
-
-        return new BookRecommendationsDTO(
-                genreBasedRecommendations,
-                authorBasedRecommendations,
-                topBooks
-        );
-    }
-
-    @Override
     public ListResponseDTO<Book> searchBooks(String phrase, Pageable pageable) {
         Page<Book> books = bookRepository.search(phrase, pageable);
         return new ListResponseDTO<>(books.getTotalElements(), books.getContent());
@@ -109,6 +93,22 @@ public class BookService implements IBookService, IFilterService<Book> {
         return spec;
     }
 
+    @Override
+    public BookRecommendationsDTO generateRecommendations(AppUser user) {
+        List<Genre> topGenres = findTopGenresForUser(user);
+        List<Author> topAuthors = findTopAuthorsForUser(user);
+
+        List<Book> genreBasedRecommendations = findTopBooksForGenresNotReadByUser(topGenres, user);
+        List<Book> authorBasedRecommendations = findTopBooksForAuthorsNotReadByUser(topAuthors, user);
+        List<Book> topBooks = findTopGloballyReservedBooks();
+
+        return new BookRecommendationsDTO(
+                genreBasedRecommendations,
+                authorBasedRecommendations,
+                topBooks
+        );
+    }
+
     private List<Genre> findTopGenresForUser(AppUser user) {
         Pageable pageable = PageRequest.of(0, 3);
         return bookRepository.findTopGenresForUser(user, pageable);
@@ -121,9 +121,9 @@ public class BookService implements IBookService, IFilterService<Book> {
 
     private List<Book> findTopBooksForGenresNotReadByUser(List<Genre> genres, AppUser user) {
         Pageable pageable = PageRequest.of(0, 5);
-        List<String> genreStrings = genres.stream().map(Enum::name).toList();
+        List<Integer> genreIds = genres.stream().map(Genre::getId).toList();
         Long userId = (long) user.getId();
-        return bookRepository.findTopBooksForGenresNotReadByUser(genreStrings, userId, pageable);
+        return bookRepository.findTopBooksForGenresNotReadByUser(genreIds, userId, pageable);
     }
 
     private List<Book> findTopBooksForAuthorsNotReadByUser(List<Author> authors, AppUser user) {
