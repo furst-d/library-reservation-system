@@ -11,6 +11,7 @@ import org.furstd.web_api.model.author.Nationality;
 import org.furstd.web_api.serializer.LanguageSerializer;
 import org.furstd.web_api.serializer.NationalitySerializer;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -36,9 +37,9 @@ public class Author {
     @JsonSerialize(using = NationalitySerializer.class)
     private Nationality nationality;
 
-    @OneToMany(mappedBy = "author")
     @JsonIgnore
-    private final List<Book> books = Collections.emptyList();
+    @OneToMany(mappedBy = "author")
+    private List<Book> books = new ArrayList<>();
 
     public Author(String firstName, String lastName, Date birthDate, Nationality nationality) {
         this.firstName = firstName;
