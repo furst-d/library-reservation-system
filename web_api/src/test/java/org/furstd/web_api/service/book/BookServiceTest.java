@@ -2,6 +2,7 @@ package org.furstd.web_api.service.book;
 
 import org.furstd.web_api.dto.BookRecommendationsDTO;
 import org.furstd.web_api.entity.AppUser;
+import org.furstd.web_api.entity.Author;
 import org.furstd.web_api.entity.Book;
 import org.furstd.web_api.model.book.Genre;
 import org.furstd.web_api.repository.IBookRepository;
@@ -36,7 +37,7 @@ class BookServiceTest {
     void generateRecommendationsTest() {
         AppUser user = new AppUser();
         List<Genre> topGenres = Arrays.asList(Genre.FANTASY, Genre.SCIENCE_FICTION);
-        List<Author> topAuthors = Arrays.asList(new Author(), new Author()); // Nastavte autory podle potřeby
+        List<Author> topAuthors = Arrays.asList(new Author(), new Author());
         List<Book> genreBasedRecommendations = Arrays.asList(new Book(), new Book());
         List<Book> authorBasedRecommendations = Arrays.asList(new Book(), new Book());
         List<Book> topBooks = Arrays.asList(new Book(), new Book());
@@ -88,13 +89,11 @@ class BookServiceTest {
         book2.setAuthor(dominantAuthor);
         List<Book> authorBasedRecommendations = Arrays.asList(book1, book2);
 
-        // Mockování odpovědí repository
         when(bookRepository.findTopAuthorsForUser(any(AppUser.class), any(Pageable.class)))
                 .thenReturn(topAuthors);
         when(bookRepository.findTopBooksForAuthorsNotReadByUser(anyList(), any(AppUser.class), any(Pageable.class)))
                 .thenReturn(authorBasedRecommendations);
 
-        // Mockování pro žánry a globálně rezervované knihy, pokud je potřeba
         when(bookRepository.findTopGenresForUser(any(AppUser.class), any(Pageable.class)))
                 .thenReturn(Collections.emptyList());
         when(bookRepository.findTopReservedBooks(any(Pageable.class)))
@@ -102,11 +101,9 @@ class BookServiceTest {
 
         BookRecommendationsDTO recommendations = bookService.generateRecommendations(user);
 
-        // Ověření, že doporučení na základě autorů obsahuje očekávané knihy
         assertEquals(2, recommendations.getAuthorBasedRecommendations().size());
         assertTrue(recommendations.getAuthorBasedRecommendations().containsAll(authorBasedRecommendations));
 
-        // Ověření, že ostatní seznamy doporučení jsou prázdné
         assertTrue(recommendations.getGenreBasedRecommendations().isEmpty());
         assertTrue(recommendations.getTopBooks().isEmpty());
     }

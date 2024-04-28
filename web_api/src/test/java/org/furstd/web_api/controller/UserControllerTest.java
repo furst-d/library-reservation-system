@@ -1,16 +1,16 @@
 package org.furstd.web_api.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.furstd.web_api.dto.AppUserDTO;
 import org.furstd.web_api.dto.AuthenticationResponseDTO;
 import org.furstd.web_api.dto.CreateAppUserDTO;
 import org.furstd.web_api.dto.LoginDTO;
 import org.furstd.web_api.entity.AppUser;
+import org.furstd.web_api.entity.Role;
 import org.furstd.web_api.security.configuration.CustomAuthenticationEntryPoint;
 import org.furstd.web_api.security.configuration.SecurityConfiguration;
 import org.furstd.web_api.service.jwt.IJwtService;
 import org.furstd.web_api.service.role.IRoleService;
-import org.furstd.web_api.service.user.IUserService;
+import org.furstd.web_api.service.user.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -21,6 +21,7 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -28,7 +29,6 @@ import java.util.Optional;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(UserController.class)
@@ -39,7 +39,7 @@ class UserControllerTest {
     MockMvc mockMvc;
 
     @MockBean
-    private IUserService userService;
+    private UserService userService;
 
     @MockBean
     private IRoleService roleService;
@@ -77,9 +77,12 @@ class UserControllerTest {
     @Test
     @WithMockUser(username="admin", authorities={"ADMIN"})
     void updateUserSuccessTest() throws Exception {
-        AppUserDTO userDTO = new AppUserDTO("updateduser@example.com", "newpassword", "Updated", "User", new Date());
+        CreateAppUserDTO userDTO = new CreateAppUserDTO("updateduser@example.com", "newpassword", "Updated", "User", new Date(), Arrays.asList("USER", "EDITOR"));
         AppUser existingUser = new AppUser("user@example.com", "password", "User", "User", new Date());
+        List<Role> roles = Arrays.asList(new Role("USER"), new Role("EDITOR"));
+
         given(userService.findById(anyInt())).willReturn(Optional.of(existingUser));
+        given(roleService.findByNames(any(List.class))).willReturn(roles);
 
         mockMvc.perform(put("/users/{id}", 1)
                         .contentType(MediaType.APPLICATION_JSON)
