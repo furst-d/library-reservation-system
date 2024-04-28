@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from "prop-types";
 import BookRecommendationPreview from "./BookRecommendationPreview";
 import styled from "styled-components";
-import BookPreview from "./BookPreview";
 
 const BookRecommendation = ({title, books}) => {
     return (
