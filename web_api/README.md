@@ -75,26 +75,4 @@ Configure `application.yml` for your application to connect to the PostgreSQL da
 
 - **JWT Secret**: Set a secret key for JWT signing with `jwt.secret`.
 
-1. **Clone** the repository to your machine.
-2. **Navigate** to the project directory.
-3. **Start the application** using the Gradle wrapper:
-
-    ```bash
-    ./gradlew bootRun
-    ```
-
 The service will start and be accessible at `http://localhost:8080`.
-
-
-## Usage
-
-With the application running, you can access various endpoints such as:
-- `/api/v1/auth/register` for user registration.
-- `/api/v1/auth/login` for user login.
-- `/api/v1/books` to retrieve all books (authentication required).
-- `/api/v1/books/{id}` to get details of a specific book by ID (authentication required).
-- `/api/v1/reservations` to create or view reservations (authentication required).
-
-## License
-
-This project is open-sourced under the [MIT License](LICENSE).
