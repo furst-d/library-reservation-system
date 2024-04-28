@@ -11,7 +11,7 @@ import ProfileSettingsPage from "../../pages/project/ProfileSettingsPage";
 import LoginPage from "../../pages/project/LoginPage";
 import RegisterPage from "../../pages/project/RegisterPage";
 import AdminPanelPage from "../../pages/project/AdminPanelPage";
-import {isAdmin, isEditor} from "../../utils/auth/authManager";
+import {isEditor} from "../../utils/auth/authManager";
 import BookDetailPage from "../../pages/project/BookDetailPage";
 import AuthorDetailPage from "../../pages/project/AuthorDetailPage";
 import ShoppingCartPage from "../../pages/project/ShoppingCartPage";
@@ -23,7 +23,7 @@ const PagesProvider = ({loggedUser}) => {
             <Container>
                 <ContentWrapper>
                     <Routes>
-                        <Route path="/" element={<BookCatalogPage />} />
+                        <Route path="/" element={<BookCatalogPage loggedUser={loggedUser} />} />
                         <Route path="/books/:id" element={<BookDetailPage loggedUser={loggedUser} />} />
                         <Route path="/authors" element={<AuthorCatalogPage />} />
                         <Route path="/authors/:id" element={<AuthorDetailPage />} />

@@ -6,21 +6,25 @@ import BookPreview from "./BookPreview";
 
 const BookRecommendation = ({title, books}) => {
     return (
-        <BookRecommendationPreviewStyle>
-            <h3>{title}</h3>
-            <BookRecommendationWrapperStyle>
-                {books.map(book => (
-                    <BookRecommendationPreview
-                        key={book.id}
-                        id={book.id}
-                        title={book.title}
-                        authorId={book.author.id}
-                        authorFirstName={book.author.firstName}
-                        authorLastName={book.author.lastName}
-                        coverImageLink={book.coverImageLink} />
-                ))}
-            </BookRecommendationWrapperStyle>
-        </BookRecommendationPreviewStyle>
+        <>
+            {books.length > 0 && (
+                <BookRecommendationPreviewStyle>
+                    <h3>{title}</h3>
+                    <BookRecommendationWrapperStyle>
+                        {books.map(book => (
+                            <BookRecommendationPreview
+                                key={book.id}
+                                id={book.id}
+                                title={book.title}
+                                authorId={book.author.id}
+                                authorFirstName={book.author.firstName}
+                                authorLastName={book.author.lastName}
+                                coverImageLink={book.coverImageLink} />
+                        ))}
+                    </BookRecommendationWrapperStyle>
+                </BookRecommendationPreviewStyle>
+            )}
+        </>
     );
 };
 

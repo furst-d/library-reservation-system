@@ -4,14 +4,14 @@ import BookCatalog from "../../components/book/BookCatalog";
 import BookRecommendations from "../../components/book/BookRecommendations";
 import styled from "styled-components";
 
-const BookCatalogPage = () => {
+const BookCatalogPage = ({loggedUser}) => {
     return (
         <HelmetProvider>
             <Helmet>
                 <title>Seznam knih</title>
             </Helmet>
             <BookWrapperStyle>
-                <BookRecommendations />
+                {loggedUser && <BookRecommendations />}
                 <BookCatalog />
             </BookWrapperStyle>
         </HelmetProvider>
