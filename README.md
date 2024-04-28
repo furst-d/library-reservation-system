@@ -24,8 +24,3 @@ The repository is divided into two main directories:
 ## Getting Started
 
 To set up the project locally, you need to set up both the frontend and backend parts. Follow the instructions in the respective README files in `web_api` and `web_front` directories to get each part up and running.
-
-### Quick Links
-
-- [Backend Setup](web_api/README.md)
-- [Frontend Setup](web_front/README.md)
