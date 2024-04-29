@@ -29,4 +29,5 @@ This React application serves as the frontend for the Library Reservation System
 
 Run the following commands to start the frontend application:
 - Install dependencies: `npm install`
+- Copy .env.example to .env.local and update the REACT_APP_API_URL variable with the URL of the backend API and REACT_APP_AES_ENCRYPT_KEY with the encryption key.
 - Start the development server: `npm start`
