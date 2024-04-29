@@ -1,0 +1,5 @@
+databaseChangeLog:
+  - include:
+      file: classpath:/db/changelog/01-create-test-table.yaml
+  - include:
+      file: classpath:/db/changelog/02-remove-test-table.yaml
