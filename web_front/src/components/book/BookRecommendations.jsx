@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import BookRecommendation from "./BookRecommendation";
-import axios, {axiosPrivate} from "../../api/axios";
+import {axiosPrivate} from "../../api/axios";
 import LoadingSpinner from "../styles/material-ui/components/LoadingSpinner";
 import styled from "styled-components";
 
